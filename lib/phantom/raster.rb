@@ -35,7 +35,7 @@ module Phantom
       Dir::mktmpdir(nil, File.dirname(__FILE__)) do |dir|
         apngasm.save_pngs(dir)
         png_frames.each_with_index do |png_frame, i|
-          duration = png_frame.delay_numerator / png_frame.delay_denominator
+          duration = png_frame.delay_numerator.to_f / png_frame.delay_denominator.to_f
           @frames << create_frame_from_png("#{dir}/#{i}.png", id, duration)
         end
       end
@@ -52,7 +52,7 @@ module Phantom
     def save_rasterized(path)
       apngasm = APNGAsm.new
 
-      # TODO
+      # TODO svg -> apng
       Dir::mktmpdir(nil, File.dirname(__FILE__)) do |dir|
         @frames.each do |frame|
 
