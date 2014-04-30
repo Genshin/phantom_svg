@@ -17,27 +17,15 @@ module Phantom
     def load_file(path)
       create_frame(path) if File.extname(path) == '.svg'
 
-      # TODO
-      load_raster(path) if File.extname(path) == '.png'
-
-      # TODO: もしフレームがあればframesに入れる
-      # @frames << Phantom::SVG::Frame.new()
+      load_raster(path, @frames.size) if File.extname(path) == '.png'
     end
 
     def create_frame(path)
-      frame = Phantom::SVG::Frame.new
+      @frames << Phantom::SVG::Frame.new(path)
 
-      data = Nokogiri::XML(File.read(path))
-      data.css('svg').each do |svg|
-        frame.width = svg.get_attribute('width')
-        frame.height = svg.get_attribute('height')
-      end
-      data.css('g').each do |g|
-        frame.surface = g
-        break
-      end
-
-      @frames << frame
+      # TODO: もしフレームがあればframesに入れる
+      # すでにフレームが存在するSVGファイルへのフレーム追加の対処
+      # @frames << Phantom::SVG::Frame.new()
     end
 
     # Creates a blank frame when no arguments are passed
@@ -45,20 +33,29 @@ module Phantom
     def add_frame(frame = nil)
       @frames << Phantom::SVG::Frame.new if frame.nil?
 
-      # TODO もしPhantom::SVGなら情報をframeオブジェに入れてframesに追加
       if frame.instance_of?(Phantom::SVG)
         frame.frames.each do |f|
           @frames << f
         end
       end
 
+      @frames << frame if frame.instance_of?(Phantom::SVG::Frame)
+
       load_file(frame) if frame.instance_of?(String)
     end
 
+    def set_size
+      @width = 0
+      @height = 0
+      frames.each do |frame|
+        @width = frame.width.to_f if frame.width.to_f > @width
+        @height = frame.height.to_f if frame.height.to_f > @height
+      end
+    end
+
     def save(path)
-      # TODO
-      # surface = Cairo::SVGSurface.new(path, @width, @height)
-      surface = Cairo::SVGSurface.new(path, 100, 100)
+      set_size
+      surface = Cairo::SVGSurface.new(path, @width, @height)
       surface.finish
 
       data = write_data(path)
@@ -68,23 +65,22 @@ module Phantom
     end
 
     def write_data(path)
+      # TODO コード整理
       data = Nokogiri::XML(File.read(path))
       data.css('g').remove
       html = ""
       @frames.each_with_index do |frame, i|
         data.css('svg').each do |svg|
           g_tag = Nokogiri::XML::Node::new('g', data)
-          g_tag.inner_html = "<set to='0' attributeName='opacity' />
-                              <set to='1' from='0' begin='frame#{i}.begin'
+          g_tag.inner_html = "<set to='0' attributeName='opacity' /> <set to='1' from='0' begin='frame#{i}.begin'
                                end='frame#{i}.end' attributeName='opacity' />"
           g_tag.add_child(frame.surface)
           svg.add_child(g_tag)
 
           if i == 0
-            # TODO dur
-            html << "<animate id='frame#{i}'' begin='0s; frame#{@frames.size - 1}.end'' dur='1s' />"
+            html << "<animate id='frame#{i}' begin='0s; frame#{@frames.size - 1}.end' dur='#{frame.duration}s' />"
           else
-            html << "<animate id='frame#{i}' begin='frame#{i - 1}.end' dur='1s' />"
+            html << "<animate id='frame#{i}' begin='frame#{i - 1}.end' dur='#{frame.duration}s' />"
           end
         end
       end
