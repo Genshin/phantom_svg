@@ -11,6 +11,7 @@ module Phantom
 
     def initialize(path = nil)
       @frames = []
+      @namespaces = {}
       load_file(path) if path
     end
 
@@ -30,23 +31,35 @@ module Phantom
     end
 
     def create_frame_from_xml(path, xml)
+      # TODO コード整理
       id = path.slice(0..path.length - 5)
       g_ids = []
+      durs = []
 
-      # TODO: もしフレームがあればframesに入れる
-      # すでにフレームが存在するSVGファイルへのフレーム追加の対処
-      # @frames << Phantom::SVG::Frame.new()
+      width = 0
+      height = 0
+      xml.css('svg').each do |svg|
+        width = svg.get_attribute('width')
+        height = svg.get_attribute('height')
+      end
 
       xml.css('animate').each do |anim|
         g_ids << anim.values[0].slice(5..anim.values[0].length - 1)
+        dur = anim.get_attribute('dur')
+        durs << dur.delete('s')
       end
 
       xml.css('g').each do |g|
         unless g_ids.index(g.values[0]).nil?
           g.children.each do |child|
             if child.values[0] == 'contents'
-              # TODO
-              # child.child
+              frame = Phantom::SVG::Frame.new
+              frame.surface = child.child
+              frame.width = width
+              frame.height = height
+              frame.duration = durs[g_ids.index(g.values[0])]
+              frame.set_namespace(xml.namespaces)
+              @frames << frame
             end
           end
         end
@@ -94,18 +107,24 @@ module Phantom
       data = write_data(path)
 
       File.write(path, data)
-      clean(path)
+      # clean(path)
     end
 
     def write_data(path)
+      data = Nokogiri::XML(File.read(path))
+      p data.namespaces
+
       # TODO コード整理
       id = path.slice(0..path.length - 5)
 
-      data = Nokogiri::XML(File.read(path))
       data.css('g').remove
       html = ""
       @frames.each_with_index do |frame, i|
         data.css('svg').each do |svg|
+          frame.namespaces.each do |key, value|
+            svg.set_attribute(key, value)
+          end
+
           g_tag = Nokogiri::XML::Node::new('g', data)
           g_tag.set_attribute('id', "#{id}_frame#{i}")
           g_tag.inner_html = "<set to='0' attributeName='opacity' /> <set to='1' from='0' begin='anim_#{id}_frame#{i}.begin'
@@ -113,8 +132,7 @@ module Phantom
           
           g_tag_child = Nokogiri::XML::Node::new('g', data)
           g_tag_child.set_attribute('id', 'contents')
-          g_tag_child.add_child(frame.surface)
-
+          g_tag_child.add_child(frame.surface.to_s)
           g_tag.add_child(g_tag_child)
           svg.add_child(g_tag)
 
@@ -139,11 +157,11 @@ module Phantom
       data
     end
 
-    def clean(path)
-      data = File.open(path).read
-      data.gsub!('<default:g>', '')
-      data.gsub!('</default:g>', '')
-      File.write(path, data)
-    end
+    # def clean(path)
+    #   data = File.open(path).read
+    #   data.gsub!('<default:', '<')
+    #   data.gsub!('</default:', '</')
+    #   File.write(path, data)
+    # end
   end
 end
