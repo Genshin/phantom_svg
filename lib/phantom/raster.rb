@@ -1,5 +1,6 @@
 require 'rapngasm'
 require 'gdk3'
+require 'rsvg2'
 require_relative 'svg/frame.rb'
 
 module Phantom
@@ -18,6 +19,15 @@ module Phantom
     end
 
     def create_frame_from_png(path, id, duration = nil)
+      # handle = RSVG::Handle.new_from_file(path)
+
+      # antom::SVG::Frame.new
+      # frame.path = path
+      # frame.width = handle.dimentions.width
+      # frame.height = handle.dimentions.height
+      # frame.surface = get_base64(path, id)
+      # frame.duration = duration unless duration.nil?
+
       pixbuf = Gdk::Pixbuf.new(path)
 
       frame = Phantom::SVG::Frame.new
@@ -52,15 +62,27 @@ module Phantom
     def save_rasterized(path)
       apngasm = APNGAsm.new
 
-      # TODO svg -> apng
       Dir::mktmpdir(nil, File.dirname(__FILE__)) do |dir|
         @frames.each do |frame|
-
+          # if File.extname(frame.path) == '.svg'
+            convert_to_png(dir, frame)
+            apngasm.add_frame_from_file("#{dir}/#{File.basename(frame.path, '.svg')}.png")
+          # else
+            # apngasm.add_frame_from_file(frame.path)
+          # end
         end
       end
 
       apngasm.assemble(path)
       apngasm.reset
+    end
+
+    def convert_to_png(dir, frame)
+      handle = RSVG::Handle.new_from_file(frame.path)
+      surface = Cairo::ImageSurface.new(Cairo::FORMAT_ARGB32, frame.width.to_i, frame.height.to_i)
+      context = Cairo::Context.new(surface)
+      context.render_rsvg_handle(handle)
+      surface.write_to_png("#{dir}/#{File.basename(frame.path, '.svg')}.png")
     end
   end
 end
