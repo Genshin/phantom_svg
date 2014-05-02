@@ -16,7 +16,6 @@ module Phantom
     def create_frame_from_xml(path)
       xml = Nokogiri::XML(File.read(path))
 
-      # TODO コード整理
       id = path.slice(0..path.length - 5)
 
       width = 0
@@ -61,10 +60,8 @@ module Phantom
     def write_all_data(path)
       xml = Nokogiri::XML(File.read(path))
 
-      # TODO コード整理
       id = path.slice(0..path.length - 5)
 
-      xml.css('g').remove
       html = ""
       @frames.each_with_index do |frame, i|
         set_namespaces(xml, frame)

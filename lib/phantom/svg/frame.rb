@@ -23,11 +23,7 @@ module Phantom
         data.css('svg').each do |svg|
           @width = svg.get_attribute('width')
           @height = svg.get_attribute('height')
-        end
-
-        data.css('g').each do |g|
-          @surface = g
-          break
+          @surface = svg.children
         end
       end
 
