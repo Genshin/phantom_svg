@@ -11,17 +11,17 @@ module Phantom
 
     def initialize(path = nil)
       @frames = []
-      @namespaces = {}
+
       load_file(path) if path
     end
 
     def load_file(path)
-      create_frame_from_file(path) if File.extname(path) == '.svg'
+      create_frame(path) if File.extname(path) == '.svg'
 
       load_raster(path, @frames.size) if File.extname(path) == '.png'
     end
 
-    def create_frame_from_file(path)
+    def create_frame(path)
       xml = Nokogiri::XML(File.read(path))      
       if has_frame?(xml)
         create_frame_from_xml(path, xml)
@@ -107,12 +107,10 @@ module Phantom
       data = write_data(path)
 
       File.write(path, data)
-      # clean(path)
     end
 
     def write_data(path)
       data = Nokogiri::XML(File.read(path))
-      p data.namespaces
 
       # TODO コード整理
       id = path.slice(0..path.length - 5)
@@ -156,12 +154,5 @@ module Phantom
 
       data
     end
-
-    # def clean(path)
-    #   data = File.open(path).read
-    #   data.gsub!('<default:', '<')
-    #   data.gsub!('</default:', '</')
-    #   File.write(path, data)
-    # end
   end
 end

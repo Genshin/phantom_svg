@@ -2,6 +2,7 @@ require 'rapngasm'
 require 'gdk3'
 require 'rsvg2'
 require_relative 'svg/frame.rb'
+require 'nokogiri'
 
 module Phantom
   module Raster
@@ -22,7 +23,6 @@ module Phantom
       # handle = RSVG::Handle.new_from_file(path)
 
       # antom::SVG::Frame.new
-      # frame.path = path
       # frame.width = handle.dimentions.width
       # frame.height = handle.dimentions.height
       # frame.surface = get_base64(path, id)
@@ -31,7 +31,6 @@ module Phantom
       pixbuf = Gdk::Pixbuf.new(path)
 
       frame = Phantom::SVG::Frame.new
-      frame.path = path
       frame.width = pixbuf.width
       frame.height = pixbuf.height
       frame.surface = get_base64(path, id, pixbuf.width, pixbuf.height)
@@ -60,16 +59,14 @@ module Phantom
     end
 
     def save_rasterized(path)
+      set_size
+
       apngasm = APNGAsm.new
 
       Dir::mktmpdir(nil, File.dirname(__FILE__)) do |dir|
-        @frames.each do |frame|
-          # if File.extname(frame.path) == '.svg'
-            convert_to_png(dir, frame)
-            apngasm.add_frame_from_file("#{dir}/#{File.basename(frame.path, '.svg')}.png")
-          # else
-            # apngasm.add_frame_from_file(frame.path)
-          # end
+        @frames.each_with_index do |frame, i|
+          create_tmp_file("#{dir}/tmp#{i}", frame)
+          apngasm.add_frame_from_file("#{dir}/tmp#{i}.png", frame.duration.to_f * 1000, 1000)
         end
       end
 
@@ -77,12 +74,33 @@ module Phantom
       apngasm.reset
     end
 
-    def convert_to_png(dir, frame)
-      handle = RSVG::Handle.new_from_file(frame.path)
-      surface = Cairo::ImageSurface.new(Cairo::FORMAT_ARGB32, frame.width.to_i, frame.height.to_i)
+    def create_tmp_file(path, frame)
+      create_tmp_svg("#{path}.svg", frame)
+      create_tmp_png(path, frame)
+    end
+
+    def create_tmp_svg(path, frame)
+      surface = Cairo::SVGSurface.new(path, @width, @height)
+      surface.finish
+
+      data = Nokogiri::XML(File.read(path))
+      data.css('g').each do |g|
+        g.add_child(frame.surface.to_s)
+      end
+
+      File.write(path, data)
+    end
+
+    def create_tmp_png(path, frame)
+      handle = RSVG::Handle.new_from_file("#{path}.svg")
+
+      surface = Cairo::ImageSurface.new(Cairo::FORMAT_ARGB32, @width, @height)
       context = Cairo::Context.new(surface)
+      context.scale(@width / handle.dimensions.width, @height / handle.dimensions.height)
       context.render_rsvg_handle(handle)
-      surface.write_to_png("#{dir}/#{File.basename(frame.path, '.svg')}.png")
+
+      surface.write_to_png("#{path}.png")
+      surface.finish
     end
   end
 end

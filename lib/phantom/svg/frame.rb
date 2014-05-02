@@ -3,12 +3,14 @@ require 'nokogiri'
 module Phantom
   module SVG
     class Frame
-      attr_accessor :duration, :surface, :width, :height, :path, :namespaces
+      attr_accessor :duration, :surface, :width, :height, :namespaces
 
-      def initialize(path = nil)
-        @path = path
-        @duration = 1
-        @namespaces = {}
+      def initialize(path = nil, options = {})
+        @duration = options[:duration] || 1
+        @surface = options[:surface]
+        @width = options[:width] || 64
+        @height = options[:height] || 64 
+        @namespaces = options[:namespaces] || {}
 
         set_data_from_file(path) if path
       end
