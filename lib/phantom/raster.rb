@@ -2,7 +2,6 @@ require 'rapngasm'
 require 'gdk3'
 require 'rsvg2'
 require_relative 'svg/frame.rb'
-require 'nokogiri'
 
 module Phantom
   module Raster
@@ -75,23 +74,11 @@ module Phantom
     end
 
     def create_tmp_file(path, frame)
-      create_tmp_svg("#{path}.svg", frame)
-      create_tmp_png(path, frame)
+      save_frame("#{path}.svg", frame, @width, @height)
+      convert_to_png(path, frame)
     end
 
-    def create_tmp_svg(path, frame)
-      surface = Cairo::SVGSurface.new(path, @width, @height)
-      surface.finish
-
-      data = Nokogiri::XML(File.read(path))
-      data.css('g').each do |g|
-        g.add_child(frame.surface.to_s)
-      end
-
-      File.write(path, data)
-    end
-
-    def create_tmp_png(path, frame)
+    def convert_to_png(path, frame)
       handle = RSVG::Handle.new_from_file("#{path}.svg")
 
       surface = Cairo::ImageSurface.new(Cairo::FORMAT_ARGB32, @width, @height)

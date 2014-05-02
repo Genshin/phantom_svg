@@ -18,7 +18,7 @@ module Phantom
       def set_data_from_file(path)
         data = Nokogiri::XML(File.read(path))
 
-        set_namespace(data.namespaces)
+        set_namespaces(data.namespaces)
 
         data.css('svg').each do |svg|
           @width = svg.get_attribute('width')
@@ -31,7 +31,7 @@ module Phantom
         end
       end
 
-      def set_namespace(data)
+      def set_namespaces(data)
         data.each do |key, value|
           @namespaces[key] = value
         end
