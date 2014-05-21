@@ -62,38 +62,44 @@ module Phantom
 
       id = path.slice(0..path.length - 5)
 
-      html = ""
+      tmp_dur = 0
+      total_dur = 0
+      key_times_str = "0;"
+      values_str = ""
+      @frames.each do |frame|
+        total_dur = total_dur + frame.duration
+      end
       @frames.each_with_index do |frame, i|
-        set_namespaces(xml, frame)
+        tmp_dur = tmp_dur.to_f + frame.duration.to_f / total_dur.to_f
+        values_str << "#{-@width * i};"
+        key_times_str << "#{tmp_dur.round(2)};" if i != @frames.length - 1
+      end
 
-        xml.css('svg').each do |svg|
+      xml.css('svg').each do |svg|
+        svg_tag = Nokogiri::XML::Node::new('svg', xml)
+        svg_tag.set_attribute('overflow', 'visible')
+        svg_tag.inner_html = "<animate
+                              attributeName='x'
+                              begin='0s' dur='#{total_dur}s' repeatCount='indefinite'
+                              keyTimes='#{key_times_str}'
+                              calcMode='discrete'
+                              values='#{values_str}' />"
+
+        @frames.each_with_index do |frame, i|
+          set_namespaces(xml, frame)
           g_tag = Nokogiri::XML::Node::new('g', xml)
           g_tag.set_attribute('id', "#{id}_frame#{i}")
-          g_tag.inner_html = "<set to='0' attributeName='opacity' /> <set to='1' from='0' begin='anim_#{id}_frame#{i}.begin'
-                                    end='anim_#{id}_frame#{i}.end' attributeName='opacity' />"
-          
+          to_str = "#{@width * i}".gsub('.', ',')
+          g_tag.inner_html = "<animateMotion from='0,0' to='#{to_str}' fill='freeze' dur='0.001'/>"
+
           g_tag_child = Nokogiri::XML::Node::new('g', xml)
           g_tag_child.set_attribute('id', 'contents')
           g_tag_child.add_child(frame.surface.to_s)
           g_tag.add_child(g_tag_child)
-          svg.add_child(g_tag)
-
-          if @frames.size == 1
-            html << "<animate id='anim_#{id}_frame#{i}' begin='0s' dur='#{frame.duration}s' repeatCount='indefinite' />"
-          elsif i == 0
-            html << "<animate id='anim_#{id}_frame#{i}' begin='0s; anim_#{id}_frame#{@frames.size - 1}.end' dur='#{frame.duration}s' />"
-          else
-            html << "<animate id='anim_#{id}_frame#{i}' begin='anim_#{id}_frame#{i - 1}.end' dur='#{frame.duration}s' />"
-          end
+          svg_tag.add_child(g_tag)
         end
-      end
 
-      anim_tag = Nokogiri::XML::Node::new('g', xml)
-      anim_tag.set_attribute('id', 'frames')
-      anim_tag.inner_html = html
-
-      xml.css('svg').each do |svg|
-        svg.add_child(anim_tag)
+        svg.add_child(svg_tag)
       end
 
       xml
