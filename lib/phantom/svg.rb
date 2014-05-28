@@ -23,7 +23,7 @@ module Phantom
         load_raster(path, @frames.size) if File.extname(path) == '.png'
       end
 
-      def create_frame(path, options = {})    
+      def create_frame(path, options = {})
         if has_frame?(path)
           create_frame_from_xml(path)
         else

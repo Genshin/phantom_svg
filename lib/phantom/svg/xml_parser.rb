@@ -60,15 +60,10 @@ module Phantom
     def write_all_data(path)
       xml = Nokogiri::XML(File.read(path))
 
-      id = path.slice(0..path.length - 5)
+      id = File.basename(path, '.svg')
 
-      tmp_dur = 0
-      total_dur = 0
-      key_times_str = "0;"
-      values_str = ""
-      @frames.each do |frame|
-        total_dur = total_dur + frame.duration
-      end
+      html = ""
+      @ids = []
       @frames.each_with_index do |frame, i|
         tmp_dur = tmp_dur.to_f + frame.duration.to_f / total_dur.to_f
         values_str << "#{-@width * i};"
@@ -94,7 +89,17 @@ module Phantom
 
           g_tag_child = Nokogiri::XML::Node::new('g', xml)
           g_tag_child.set_attribute('id', 'contents')
-          g_tag_child.add_child(frame.surface.to_s)
+
+          if frame.surface.class != String
+            frame.surface.children.each do |child|
+              add_suffix(child, "#{id}_frame#{i}")
+            end
+            new_surface = rewrite_id(frame.surface.to_s, "#{id}_frame#{i}")
+            g_tag_child.add_child(new_surface)
+          else
+            g_tag_child.add_child(frame.surface.to_s)
+          end
+
           g_tag.add_child(g_tag_child)
           svg_tag.add_child(g_tag)
         end
@@ -103,6 +108,27 @@ module Phantom
       end
 
       xml
+    end
+
+    def add_suffix(contents, suffix)
+      if contents.children.length != 0
+        for i in 0..contents.children.length - 1
+          add_suffix(contents.children[i], suffix)
+        end
+      end
+
+      if contents.has_attribute?('id')
+        name = contents.get_attribute('id')
+        @ids << name
+        contents.set_attribute('id', "#{name}_#{suffix}");
+      end
+    end
+
+    def rewrite_id(surface, suffix)
+      @ids.each do |id|
+        surface.gsub!("url(##{id})", "url(##{id}_#{suffix})")
+      end
+      surface
     end
 
     def write_frame_data(path, frame)

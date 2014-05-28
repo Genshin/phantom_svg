@@ -65,7 +65,7 @@ module Phantom
       Dir::mktmpdir(nil, File.dirname(__FILE__)) do |dir|
         @frames.each_with_index do |frame, i|
           create_tmp_file("#{dir}/tmp#{i}", frame)
-          apngasm.add_frame_from_file("#{dir}/tmp#{i}.png", frame.duration.to_f * 1000, 1000)
+          apngasm.add_frame_file("#{dir}/tmp#{i}.png", frame.duration.to_f * 1000, 1000)
         end
       end
 
