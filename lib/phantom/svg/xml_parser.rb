@@ -16,8 +16,6 @@ module Phantom
     def create_frame_from_xml(path)
       xml = Nokogiri::XML(File.read(path))
 
-      id = path.slice(0..path.length - 5)
-
       width = 0
       height = 0
       xml.css('svg').each do |svg|
@@ -57,30 +55,35 @@ module Phantom
       end
     end
 
+    def set_id(path)
+      id = if File.extname(path) == '.svg'
+             File.basename(path, '.svg')
+           else
+             File.basename(path, '.png')
+           end
+    end
+
     def write_all_data(path)
       xml = Nokogiri::XML(File.read(path))
 
-      id = File.basename(path, '.svg')
+      id = set_id(path)
 
       html = ""
-      @ids = []
       @frames.each_with_index do |frame, i|
         set_namespaces(xml, frame)
 
         xml.css('svg').each do |svg|
           g_tag = Nokogiri::XML::Node::new('g', xml)
           g_tag.set_attribute('id', "#{id}_frame#{i}")
-          g_tag.inner_html = "<set to='0' attributeName='opacity' /> <set to='1' from='0' begin='anim_#{id}_frame#{i}.begin'
-                                    end='anim_#{id}_frame#{i}.end' attributeName='opacity' />"
+          g_tag.inner_html = "<set to='0' attributeName='opacity' />
+                              <set to='1' from='0' begin='anim_#{id}_frame#{i}.begin'
+                               end='anim_#{id}_frame#{i}.end' attributeName='opacity' />"
           
           g_tag_child = Nokogiri::XML::Node::new('g', xml)
           g_tag_child.set_attribute('id', 'contents')
 
           if frame.surface.class != String
-            frame.surface.children.each do |child|
-              add_suffix(child, "#{id}_frame#{i}")
-            end
-            new_surface = rewrite_id(frame.surface.to_s, "#{id}_frame#{i}")
+            new_surface = rewrite_id(frame.surface, "#{id}_frame#{i}")
             g_tag_child.add_child(new_surface)
           else
             g_tag_child.add_child(frame.surface.to_s)
@@ -110,25 +113,34 @@ module Phantom
       xml
     end
 
-    def add_suffix(contents, suffix)
+    def rewrite_id(surface, suffix)
+      ids = []
+
+      surface.children.each do |child|
+        ids = add_suffix(child, suffix, ids)
+      end
+
+      new_surface = surface.to_s
+      ids.each do |id|
+        new_surface.gsub!("url(##{id})", "url(##{id}_#{suffix})")
+      end
+      new_surface
+    end
+
+    def add_suffix(contents, suffix, ids)
       if contents.children.length != 0
-        for i in 0..contents.children.length - 1
-          add_suffix(contents.children[i], suffix)
+        contents.children.each do |child|
+          add_suffix(child, suffix, ids)
         end
       end
 
       if contents.has_attribute?('id')
         name = contents.get_attribute('id')
-        @ids << name
+        ids << name
         contents.set_attribute('id', "#{name}_#{suffix}");
       end
-    end
 
-    def rewrite_id(surface, suffix)
-      @ids.each do |id|
-        surface.gsub!("url(##{id})", "url(##{id}_#{suffix})")
-      end
-      surface
+      ids
     end
 
     def write_frame_data(path, frame)
