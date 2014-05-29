@@ -9,6 +9,8 @@
 /test/version_tmp/
 /tmp/
 
+Gemfile.lock
+
 ## Specific to RubyMotion:
 .dat*
 .repl_history
@@ -35,3 +37,6 @@ build/
 
 # Mac
 .DS_Store
+
+*.swp
+*.swo
