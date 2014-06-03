@@ -2,12 +2,14 @@ require 'phantom/svg'
 
 # Set Current directory.
 Dir::chdir(File.dirname(__FILE__))
-SourcePath = "images/ninja.svg"
+
+# Parameter.
+Source = "images/ninja.svg"
 
 # Test start.
-describe Phantom::SVG::Base, "when load " + SourcePath do
+describe Phantom::SVG::Base, "when load no animation svg (Source: \"" + Source + "\")" do
   before do
-    @loader = Phantom::SVG::Base.new(SourcePath)
+    @loader = Phantom::SVG::Base.new(Source)
   end
 
   it "frames should have 1 frames." do
