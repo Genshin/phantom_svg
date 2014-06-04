@@ -12,32 +12,32 @@ describe Phantom::SVG::Base, 'when load no animation svg (SOURCE: \'' + SOURCE +
     @loader = Phantom::SVG::Base.new(SOURCE)
   end
 
-  it 'frames should have 1 frames.' do
-    @loader.frames.should have(1).frames
+  it 'frames vector size equal 1.' do
+    expect(@loader.frames.size).to eq(1)
   end
 
-  it 'frame duration should equal 1.' do
-    @loader.frames[0].duration.should eql(1)
+  it 'frame duration equal 1.' do
+    expect(@loader.frames[0].duration).to eq(1)
   end
 
-  it 'frame surface should not be nil.' do
-    @loader.frames[0].surface.should_not be_nil
+  it 'frame surface is not nil.' do
+    expect(@loader.frames[0].surface).not_to be_nil
   end
 
-  it 'frame surface should not be empty.' do
-    @loader.frames[0].surface.should_not be_empty
+  it 'frame surface is not empty.' do
+    expect(@loader.frames[0].surface).not_to be_empty
   end
 
-  it 'frame width should equal \'64px\'.' do
-    @loader.frames[0].width.should eql('64px')
+  it 'frame width equal \'64px\'.' do
+    expect(@loader.frames[0].width).to eq('64px')
   end
 
-  it 'frame height should equal \'64px\'.' do
-    @loader.frames[0].height.should eql('64px')
+  it 'frame height equal \'64px\'.' do
+    expect(@loader.frames[0].height).to eq('64px')
   end
 
-  it 'frame namespaces should not be empty.' do
-    @loader.frames[0].namespaces.should_not be_empty
+  it 'frame namespaces is not empty.' do
+    expect(@loader.frames[0].namespaces).not_to be_empty
   end
 
   after do
