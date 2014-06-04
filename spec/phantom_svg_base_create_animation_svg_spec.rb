@@ -8,7 +8,7 @@ DESTINATION = DESTINATION_DIR + 'stuck_out_tongue.svg'
 # Set Current directory.
 Dir.chdir(File.dirname(__FILE__))
 
-File.exist?(DESTINATION_DIR) || Dir.mkdir(DESTINATION_DIR)
+FileUtils.mkdir_p(DESTINATION_DIR)
 
 # Test start.
 describe Phantom::SVG::Base, 'when create animation svg (SOURCE: \'' + SOURCE + '\')' do
