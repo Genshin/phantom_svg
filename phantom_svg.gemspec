@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.platform      = Gem::Platform::RUBY
-  s.name          = 'Phantom SVG'
+  s.name          = 'phantom_svg'
   s.version       = '0.0.1'
   s.license       = 'LGPL-3.0'
   s.summary       = 'Hight End SVG manipulation tools for Ruby'
