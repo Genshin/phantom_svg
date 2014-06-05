@@ -64,26 +64,26 @@ describe Phantom::SVG::Base do
     it 'save file size is not equal 0.' do
       files = Dir.glob(@source).sort_by { |k| k[/\d+/].to_i }
       files.each do |file|
-        @loader.create_frame(file)
+        @loader.add_frame_from_file(file)
       end
-      write_size = @loader.save(@destination)
+      write_size = @loader.save_svg(@destination)
       expect(write_size).not_to eq(0)
     end
 
     it 'animation svg file frames size equal 12.' do
-      @loader.load_file(@destination)
+      @loader.add_frame_from_file(@destination)
       expect(@loader.frames.size).to eq(12)
     end
 
     it 'frame surface length is not equal 1.' do
-      @loader.load_file(@destination)
+      @loader.add_frame_from_file(@destination)
 
       range = 0..(@loader.frames.length - 1)
       range.each do |i|
         frame = @loader.frames[i]
         expect(frame.surface.to_s.length).not_to eq(1)
 
-        @loader.save_frame(@destination_dir + i.to_s + '.svg', frame)
+        @loader.save_png_frame(@destination_dir + i.to_s + '.svg', frame)
       end
     end
 
