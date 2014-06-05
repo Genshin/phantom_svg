@@ -91,4 +91,22 @@ describe Phantom::SVG::Base do
       # nop
     end
   end
+
+  describe 'when create animation svg from file of json and xml' do
+    it 'todo' do
+      expect(0).to eq(1)
+    end
+  end
+
+  describe 'when convert animation svg to apng' do
+    it 'todo' do
+      expect(0).to eq(1)
+    end
+  end
+
+  describe 'when convert apng to animation svg' do
+    it 'todo' do
+      expect(0).to eq(1)
+    end
+  end
 end
