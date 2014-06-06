@@ -19,12 +19,8 @@ module Phantom
 
       def add_frame_from_file(path, options = {})
         case File.extname(path)
-        when '.svg'
-          if has_frame?(path) then  create_frame_from_xml(path)
-          else                      @frames << Phantom::SVG::Frame.new(path, options)
-          end
-        when '.png'
-          load_raster(path, @frames.size)
+        when '.svg' then load_from_svg(path, options)
+        when '.png' then load_from_png(path, options)
         else
           # nop
         end
@@ -67,6 +63,19 @@ module Phantom
         data = write_frame_data(path, frame)
 
         File.write(path, data)
+      end
+
+      private
+      def load_from_svg(path, options)
+        if has_frame?(path)
+          create_frame_from_xml(path)
+        else
+          @frames << Phantom::SVG::Frame.new(path, options)
+        end
+      end
+
+      def load_from_png(path, options)
+        load_raster(path, @frames.size)
       end
     end
   end
