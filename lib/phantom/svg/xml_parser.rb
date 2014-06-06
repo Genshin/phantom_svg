@@ -35,7 +35,7 @@ module Phantom
           g.children.each do |child|
             if child.values[0] == 'contents'
               frame = Phantom::SVG::Frame.new
-              frame.surface = child.child
+              frame.surface = child.children
               frame.width = width
               frame.height = height
               frame.duration = durs[g_ids.index(g.values[0])]
