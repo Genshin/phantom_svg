@@ -33,7 +33,7 @@ module Phantom
       def add_frame(frame = nil, options = {})
         if    frame.nil?                              then @frames << Phantom::SVG::Frame.new
         elsif frame.instance_of?(Phantom::SVG::Frame) then @frames << frame
-        elsif frame.instance_of?(Phantom::SVG::Base)  then frame.frames.each { |f| @frames << f }
+        elsif frame.instance_of?(Phantom::SVG::Base)  then @frames += frame.frames
         elsif frame.instance_of?(String)              then add_frame_from_file(frame, options)
         else  # nop
         end
@@ -81,7 +81,7 @@ module Phantom
       end
 
       def load_from_json(path, options)
-        Phantom::Spec::JsonSpecReader.new.read(path)
+        @frames += Phantom::Spec::JsonSpecReader.new.read(path)
       end
     end
   end

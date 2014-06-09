@@ -96,14 +96,32 @@ describe Phantom::SVG::Base do
     before(:all) do
       @emoji_name = 'stuck_out_tongue'
       @source = SPEC_SOURCE_DIR + '/' + @emoji_name + '/animation.json'
+      @destination = SPEC_TEMP_DIR + '/' + 'json2asvg.svg'
     end
 
     before do
       @loader = Phantom::SVG::Base.new(@source)
     end
 
-    it 'todo' do
-      expect(0).to eq(1)
+    it 'frames size equal 12.' do
+      expect(@loader.frames.size).to eq(12)
+    end
+
+    it 'frames parameter is good.' do
+      @loader.frames.each do |frame|
+        expect(frame.duration.instance_of?(Float)).to eq(true)
+        expect(frame.width).to eq('64px')
+        expect(frame.height).to eq('64px')
+        expect(frame.surface).not_to be_nil
+        expect(frame.surface).not_to be_empty
+        expect(frame.surface.to_s.length).not_to eq(1)
+        expect(frame.namespaces).not_to be_empty
+      end
+    end
+
+    it 'can save animation svg.' do
+      write_size = @loader.save_svg(@destination)
+      expect(write_size).not_to eq(0)
     end
   end
 
