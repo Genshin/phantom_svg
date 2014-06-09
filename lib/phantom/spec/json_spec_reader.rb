@@ -52,29 +52,29 @@ module Phantom
 
         results = []
         options = {}
-        range = 0..(@frames.length - 1)
-        range.each do |i|
-          frame = @frames[i]
-          if !File.exist?(frame[:name])
-            if File.extname(frame[:name]).empty?
-              if File.exist?(frame[:name] + '.svg')
-                frame[:name] += '.svg'
-              elsif File.exist?(frame[:name] + '.png')
-                frame[:name] += '.png'
+        i = 0
+        @frames.each do |frame|
+          create_file_list(frame[:name]).each do |file|
+            if !File.exist?(file)
+              if File.extname(file).empty?
+                if File.exist?(file + '.svg')
+                  file += '.svg'
+                elsif File.exist?(file + '.png')
+                  file += '.png'
+                else
+                end
               else
-                next
               end
-            else
-              next
             end
-          end
 
-          options[:duration] = 
-            if frame[:delay] != nil then  frame[:delay]
-            elsif !@delays.empty?   then  @delays[i % @delays.length]
-            else                          @default_delay
-            end
-          results << Phantom::SVG::Frame.new(frame[:name], options)
+            options[:duration] = 
+              if frame[:delay] != nil then  frame[:delay]
+              elsif !@delays.empty?   then  @delays[i % @delays.length]
+              else                          @default_delay
+              end
+            results << Phantom::SVG::Frame.new(file, options)
+            i += 1
+          end
         end
 
         Dir.chdir(old_dir)
@@ -86,6 +86,12 @@ module Phantom
       def str2delay(str)
         tmp = str.to_s.split('/', 2)
         tmp[0].to_f / (tmp.length > 1 ? tmp[1].to_f : 1000.0)
+      end
+
+      def create_file_list(path)
+        results = Dir.glob(path).sort_by { |k| k[/\d+/].to_i }
+        if results.empty? then results << path end
+        results
       end
     end # class JsonSpecReader
   end # module Spec

@@ -95,19 +95,18 @@ describe Phantom::SVG::Base do
   describe 'when create animation svg from file of json' do
     before(:all) do
       @emoji_name = 'stuck_out_tongue'
-      @source = SPEC_SOURCE_DIR + '/' + @emoji_name + '/animation.json'
-      @destination = SPEC_TEMP_DIR + '/' + 'json2asvg.svg'
+      @source_dir = SPEC_SOURCE_DIR + '/' + @emoji_name
+      @destination_dir = SPEC_TEMP_DIR
     end
 
     before do
-      @loader = Phantom::SVG::Base.new(@source)
+      @loader = Phantom::SVG::Base.new()
     end
 
-    it 'frames size equal 12.' do
+    it 'load frames from "test1.json".' do
+      test_name = 'test1'
+      @loader.add_frame_from_file(@source_dir + '/' + test_name + '.json')
       expect(@loader.frames.size).to eq(12)
-    end
-
-    it 'frames parameter is good.' do
       @loader.frames.each do |frame|
         expect(frame.duration.instance_of?(Float)).to eq(true)
         expect(frame.width).to eq('64px')
@@ -117,10 +116,24 @@ describe Phantom::SVG::Base do
         expect(frame.surface.to_s.length).not_to eq(1)
         expect(frame.namespaces).not_to be_empty
       end
+      write_size = @loader.save_svg(@destination_dir + '/json_' + test_name + '.svg')
+      expect(write_size).not_to eq(0)
     end
 
-    it 'can save animation svg.' do
-      write_size = @loader.save_svg(@destination)
+    it 'load frames from "test2.json".' do
+      test_name = 'test2'
+      @loader.add_frame_from_file(@source_dir + '/' + test_name + '.json')
+      expect(@loader.frames.size).to eq(12)
+      @loader.frames.each do |frame|
+        expect(frame.duration.instance_of?(Float)).to eq(true)
+        expect(frame.width).to eq('64px')
+        expect(frame.height).to eq('64px')
+        expect(frame.surface).not_to be_nil
+        expect(frame.surface).not_to be_empty
+        expect(frame.surface.to_s.length).not_to eq(1)
+        expect(frame.namespaces).not_to be_empty
+      end
+      write_size = @loader.save_svg(@destination_dir + '/json_' + test_name + '.svg')
       expect(write_size).not_to eq(0)
     end
   end
