@@ -83,7 +83,7 @@ describe Phantom::SVG::Base do
         frame = @loader.frames[i]
         expect(frame.surface.to_s.length).not_to eq(1)
 
-        @loader.save_png_frame(@destination_dir + i.to_s + '.svg', frame)
+        @loader.save_svg_frame(@destination_dir + i.to_s + '.svg', frame)
       end
     end
 

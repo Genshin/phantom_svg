@@ -58,7 +58,7 @@ module Phantom
         File.write(path, data)
       end
 
-      def save_png_frame(path, frame, width = frame.width.to_f, height = frame.height.to_f)
+      def save_svg_frame(path, frame, width = frame.width.to_f, height = frame.height.to_f)
         surface = Cairo::SVGSurface.new(path, width, height)
         surface.finish
 
