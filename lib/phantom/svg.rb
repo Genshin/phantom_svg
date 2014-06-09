@@ -3,6 +3,7 @@ require 'cairo'
 require_relative 'raster.rb'
 require_relative 'svg/frame.rb'
 require_relative 'svg/xml_parser.rb'
+require_relative 'spec/json_spec_reader.rb'
 
 module Phantom
   module SVG
@@ -19,8 +20,9 @@ module Phantom
 
       def add_frame_from_file(path, options = {})
         case File.extname(path)
-        when '.svg' then load_from_svg(path, options)
-        when '.png' then load_from_png(path, options)
+        when '.svg'   then load_from_svg(path, options)
+        when '.png'   then load_from_png(path, options)
+        when '.json'  then load_from_json(path, options)
         else
           # nop
         end
@@ -76,6 +78,10 @@ module Phantom
 
       def load_from_png(path, options)
         load_raster(path, @frames.size)
+      end
+
+      def load_from_json(path, options)
+        Phantom::Spec::JsonSpecReader.new.read(path)
       end
     end
   end

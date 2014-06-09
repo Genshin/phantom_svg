@@ -93,6 +93,15 @@ describe Phantom::SVG::Base do
   end
 
   describe 'when create animation svg from file of json' do
+    before(:all) do
+      @emoji_name = 'stuck_out_tongue'
+      @source = SPEC_SOURCE_DIR + '/' + @emoji_name + '/animation.json'
+    end
+
+    before do
+      @loader = Phantom::SVG::Base.new(@source)
+    end
+
     it 'todo' do
       expect(0).to eq(1)
     end
