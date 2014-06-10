@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<animation name="myanimation" loops="0" skip_first="false" default_delay="100/1000">
+  <frame src="0" delay="1000" />
+  <frame src="1" />
+  <frame src="2" />
+  <frame src="3" />
+  <frame src="4" />
+  <frame src="5" />
+  <frame src="6" />
+  <frame src="7" />
+  <frame src="8" />
+  <frame src="9" />
+  <frame src="10" />
+  <frame src="11" delay="4/2" />
+</animation>

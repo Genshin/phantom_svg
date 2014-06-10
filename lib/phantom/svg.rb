@@ -4,6 +4,7 @@ require_relative 'raster.rb'
 require_relative 'svg/frame.rb'
 require_relative 'svg/xml_parser.rb'
 require_relative 'spec/json_spec_reader.rb'
+require_relative 'spec/xml_spec_reader.rb'
 
 module Phantom
   module SVG
@@ -23,6 +24,7 @@ module Phantom
         when '.svg'   then load_from_svg(path, options)
         when '.png'   then load_from_png(path, options)
         when '.json'  then load_from_json(path, options)
+        when '.xml'   then load_from_xml(path, options)
         else
           # nop
         end
@@ -83,6 +85,10 @@ module Phantom
 
       def load_from_json(path, options)
         @frames += Phantom::Spec::JSONSpecReader.new.read(path)
+      end
+
+      def load_from_xml(path, options)
+        @frames += Phantom::Spec::XMLSpecReader.new.read(path)
       end
     end
   end

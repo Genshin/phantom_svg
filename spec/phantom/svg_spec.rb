@@ -139,8 +139,48 @@ describe Phantom::SVG::Base do
   end
 
   describe 'when create animation svg from file of xml' do
-    it 'todo' do
-      expect(0).to eq(1)
+    before(:all) do
+      @emoji_name = 'stuck_out_tongue'
+      @source_dir = SPEC_SOURCE_DIR + '/' + @emoji_name
+      @destination_dir = SPEC_TEMP_DIR
+    end
+
+    before do
+      @loader = Phantom::SVG::Base.new
+    end
+
+    it 'load frames from "test1.xml".' do
+      test_name = 'test1'
+      @loader.add_frame_from_file(@source_dir + '/' + test_name + '.xml')
+      expect(@loader.frames.size).to eq(12)
+      @loader.frames.each do |frame|
+        expect(frame.duration.instance_of?(Float)).to eq(true)
+        expect(frame.width).to eq('64px')
+        expect(frame.height).to eq('64px')
+        expect(frame.surface).not_to be_nil
+        expect(frame.surface).not_to be_empty
+        expect(frame.surface.to_s.length).not_to eq(1)
+        expect(frame.namespaces).not_to be_empty
+      end
+      write_size = @loader.save_svg(@destination_dir + '/xml_' + test_name + '.svg')
+      expect(write_size).not_to eq(0)
+    end
+
+    it 'load frames from "test2.xml".' do
+      test_name = 'test2'
+      @loader.add_frame_from_file(@source_dir + '/' + test_name + '.xml')
+      expect(@loader.frames.size).to eq(12)
+      @loader.frames.each do |frame|
+        expect(frame.duration.instance_of?(Float)).to eq(true)
+        expect(frame.width).to eq('64px')
+        expect(frame.height).to eq('64px')
+        expect(frame.surface).not_to be_nil
+        expect(frame.surface).not_to be_empty
+        expect(frame.surface.to_s.length).not_to eq(1)
+        expect(frame.namespaces).not_to be_empty
+      end
+      write_size = @loader.save_svg(@destination_dir + '/xml_' + test_name + '.svg')
+      expect(write_size).not_to eq(0)
     end
   end
 
