@@ -2,10 +2,11 @@
 require 'json'
 
 require_relative '../svg/frame.rb'
+require_relative 'abstract_spec_reader.rb'
 
 module Phantom
   module Spec
-    class JSONSpecReader
+    class JSONSpecReader < AbstractSpecReader
       # Construct JSONSpecReader object.
       def initialize
         @name = ''
@@ -116,6 +117,6 @@ module Phantom
         tmp = str.to_s.split('/', 2)
         tmp[0].to_f / (tmp.length > 1 ? tmp[1].to_f : 1000.0)
       end
-    end # class JSONSpecReader
+    end # class JSONSpecReader < AbstractSpecReader
   end # module Spec
 end # module Phantom
