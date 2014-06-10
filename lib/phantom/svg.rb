@@ -81,7 +81,7 @@ module Phantom
       end
 
       def load_from_json(path, options)
-        @frames += Phantom::Spec::JsonSpecReader.new.read(path)
+        @frames += Phantom::Spec::JSONSpecReader.new.read(path)
       end
     end
   end
