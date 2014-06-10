@@ -116,6 +116,6 @@ module Phantom
         tmp = str.to_s.split('/', 2)
         tmp[0].to_f / (tmp.length > 1 ? tmp[1].to_f : 1000.0)
       end
-    end # class JsonSpecReader
+    end # class JSONSpecReader
   end # module Spec
 end # module Phantom
