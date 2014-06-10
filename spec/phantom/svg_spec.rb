@@ -155,4 +155,16 @@ describe Phantom::SVG::Base do
       expect(0).to eq(1)
     end
   end
+
+  describe 'loops test' do
+    it 'todo' do
+      expect(0).to eq(1)
+    end
+  end
+
+  describe 'skip_first test' do
+    it 'todo' do
+      expect(0).to eq(1)
+    end
+  end
 end
