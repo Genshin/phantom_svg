@@ -68,6 +68,7 @@ module Phantom
       end
 
       private
+
       def load_from_svg(path, options)
         if has_frame?(path)
           create_frame_from_xml(path)

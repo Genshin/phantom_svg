@@ -100,7 +100,7 @@ describe Phantom::SVG::Base do
     end
 
     before do
-      @loader = Phantom::SVG::Base.new()
+      @loader = Phantom::SVG::Base.new
     end
 
     it 'load frames from "test1.json".' do
