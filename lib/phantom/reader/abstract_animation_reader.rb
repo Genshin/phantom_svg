@@ -1,8 +1,8 @@
 
 module Phantom
-  module Spec
-    class AbstractSpecReader
-      # Construct AbstractSpecReader object.
+  module Reader
+    class AbstractAnimationReader
+      # Construct AbstractAnimationReader object.
       def initialize
         @name = ''
         @loops = 0
@@ -12,17 +12,17 @@ module Phantom
         @delays = []
       end
 
-      # Read and create frames from spec file.
+      # Read and create frames from animation information file.
       # Return array of Phantom::SVG::Frame.
       def read(path)
         # Read parameter from spec file.
         read_parameter(path)
 
-        # Change current directory to spec file's directory.
+        # Change current directory to animation information file's directory.
         old_dir = Dir.pwd
         Dir.chdir(File.dirname(path))
 
-        # Create frames from spec file parameter.
+        # Create frames from animation information file parameter.
         result = create_frames
 
         # Change current directory to default.
@@ -116,6 +116,6 @@ module Phantom
       def add_delay(delay)
         @delays << str2delay(delay)
       end
-    end # class AbstractSpecReader
-  end # module Spec
+    end # class AbstractAnimationReader
+  end # module Reader
 end # module Phantom

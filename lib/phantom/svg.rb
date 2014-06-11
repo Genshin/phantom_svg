@@ -3,8 +3,8 @@ require 'cairo'
 require_relative 'raster.rb'
 require_relative 'svg/frame.rb'
 require_relative 'svg/xml_parser.rb'
-require_relative 'spec/json_spec_reader.rb'
-require_relative 'spec/xml_spec_reader.rb'
+require_relative 'reader/json_animation_reader.rb'
+require_relative 'reader/xml_animation_reader.rb'
 
 module Phantom
   module SVG
@@ -84,11 +84,11 @@ module Phantom
       end
 
       def load_from_json(path, options)
-        @frames += Phantom::Spec::JSONSpecReader.new.read(path)
+        @frames += Phantom::Reader::JSONAnimationReader.new.read(path)
       end
 
       def load_from_xml(path, options)
-        @frames += Phantom::Spec::XMLSpecReader.new.read(path)
+        @frames += Phantom::Reader::XMLAnimationReader.new.read(path)
       end
     end
   end

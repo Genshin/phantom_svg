@@ -2,14 +2,14 @@
 require 'json'
 
 require_relative '../svg/frame.rb'
-require_relative 'abstract_spec_reader.rb'
+require_relative 'abstract_animation_reader.rb'
 
 module Phantom
-  module Spec
-    class JSONSpecReader < AbstractSpecReader
+  module Reader
+    class JSONAnimationReader < AbstractAnimationReader
       private
 
-      # Read parameter from spec file.
+      # Read parameter from animation information file.
       def read_parameter(path)
         open(path) do |file|
           JSON.load(file).each do |key, val|
@@ -34,6 +34,6 @@ module Phantom
           end
         end
       end
-    end # class JSONSpecReader < AbstractSpecReader
-  end # module Spec
+    end # class JSONAnimationReader < AbstractAnimationReader
+  end # module Reader
 end # module Phantom
