@@ -2,19 +2,18 @@
 module Phantom
   module Reader
     class AbstractAnimationReader
+      attr_accessor :frames
+
       # Construct AbstractAnimationReader object.
       def initialize
-        @name = ''
-        @loops = 0
-        @skip_first = false
-        @default_delay = 100.0 / 1000.0
-        @frame_infos = []
-        @delays = []
+        reset
       end
 
       # Read and create frames from animation information file.
       # Return array of Phantom::SVG::Frame.
-      def read(path)
+      def read(path, do_reset = true)
+        reset if do_reset
+
         # Read parameter from spec file.
         read_parameter(path)
 
@@ -23,30 +22,37 @@ module Phantom
         Dir.chdir(File.dirname(path))
 
         # Create frames from animation information file parameter.
-        result = create_frames
+        create_frames
 
         # Change current directory to default.
         Dir.chdir(old_dir)
 
         # Return frames.
-        result
+        @frames
       end
 
       private
 
+      # Reset fields.
+      def reset
+        @name = ''
+        @loops = 0
+        @skip_first = false
+        @default_delay = 100.0 / 1000.0
+        @frame_infos = []
+        @delays = []
+        @frames = []
+      end
+
       # Create frames from parameter.
-      # Return array of Phantom::SVG::Frame.
       def create_frames
-        result = []
         i = 0
         @frame_infos.each do |frame_info|
           create_file_list(frame_info[:name]).each do |file|
-            result << Phantom::SVG::Frame.new(file, create_options(i, frame_info[:delay]))
+            @frames << Phantom::SVG::Frame.new(file, create_options(i, frame_info[:delay]))
             i += 1
           end
         end
-
-        result
       end
 
       # Create frame options.
