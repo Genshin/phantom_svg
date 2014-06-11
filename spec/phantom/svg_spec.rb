@@ -191,8 +191,20 @@ describe Phantom::SVG::Base do
   end
 
   describe 'when convert apng to animation svg' do
-    it 'todo' do
-      expect(0).to eq(1)
+    before(:all) do
+      @apng_name = 'apngasm'
+      @source = SPEC_SOURCE_DIR + '/' + @apng_name + '.png'
+      @destination_dir = SPEC_TEMP_DIR + '/' + @apng_name
+      @destination = @destination_dir + '/' + @apng_name + '.svg'
+      FileUtils.mkdir_p(@destination_dir)
+    end
+
+    before do
+      @loader = Phantom::SVG::Base.new(@source)
+    end
+
+    it 'apng file frames size equal 34.' do
+      expect(@loader.frames.size).to eq(34)
     end
   end
 

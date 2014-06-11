@@ -1,6 +1,7 @@
 require 'rapngasm'
 require 'gdk3'
 require 'rsvg2'
+require 'tmpdir'
 require_relative 'svg/frame.rb'
 
 module Phantom
