@@ -6,6 +6,7 @@ require_relative 'abstract_animation_reader.rb'
 
 module Phantom
   module Reader
+    # AnimationReader for XML.
     class XMLAnimationReader < AbstractAnimationReader
       private
 

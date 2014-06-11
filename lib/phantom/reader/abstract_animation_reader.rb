@@ -1,6 +1,7 @@
 
 module Phantom
   module Reader
+    # AnimationReader base.
     class AbstractAnimationReader
       attr_accessor :frames
 
