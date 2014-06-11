@@ -200,11 +200,35 @@ describe Phantom::SVG::Base do
     end
 
     before do
-      @loader = Phantom::SVG::Base.new(@source)
+      @loader = Phantom::SVG::Base.new
     end
 
-    it 'apng file frames size equal 34.' do
+    it 'load apng and save animation svg.' do
+      @loader.add_frame_from_file(@source)
       expect(@loader.frames.size).to eq(34)
+      
+      write_size = @loader.save_svg(@destination)
+      expect(write_size).not_to eq(0)
+
+      range = 0..(@loader.frames.length - 1)
+      range.each do |i|
+        frame = @loader.frames[i]
+        write_size = @loader.save_svg_frame(@destination_dir + '/' + i.to_s + '.svg', frame)
+        expect(write_size).not_to eq(0)
+      end
+    end
+
+    it 'new svg load test.' do
+      @loader.add_frame_from_file(@destination)
+      expect(@loader.frames.size).to eq(34)
+
+      @loader.frames.each do |frame|
+        expect(frame.duration).to eq('0.1')
+        expect(frame.width).to eq('64')
+        expect(frame.height).to eq('64')
+        expect(frame.surface.to_s.length).not_to eq(0)
+        expect(frame.namespaces.length).not_to eq(0)
+      end
     end
   end
 
