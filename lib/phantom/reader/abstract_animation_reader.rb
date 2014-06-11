@@ -93,22 +93,6 @@ module Phantom
         end
       end
 
-      def set_name(name)
-        @name = name.to_s
-      end
-
-      def set_loops(loops)
-        @loops = loops.to_i
-      end
-
-      def set_skip_first(skip_first)
-        @skip_first = (skip_first.to_s == 'true' ? true : false)
-      end
-
-      def set_default_delay(default_delay)
-        @default_delay = str2delay(default_delay)
-      end
-
       def add_frame_info(name, delay = nil)
         @frame_infos << { name: name.to_s, delay: str2delay(delay) }
       end
