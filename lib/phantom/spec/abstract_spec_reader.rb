@@ -83,6 +83,16 @@ module Phantom
         tmp[0].to_f / (tmp.length > 1 ? tmp[1].to_f : 1000.0)
       end
 
+      def set_parameter(key, val)
+        case key
+        when 'name'           then  @name = val.to_s
+        when 'loops'          then  @loops = val.to_i
+        when 'skip_first'     then  @skip_first = (val.to_s == 'true' ? true : false)
+        when 'default_delay'  then  @default_delay = str2delay(val)
+        else                        # nop
+        end
+      end
+
       def set_name(name)
         @name = name.to_s
       end

@@ -12,20 +12,16 @@ module Phantom
       # Read parameter from spec file.
       def read_parameter(path)
         xml = REXML::Document.new(open(path))
+
         animation = xml.elements['animation']
-        unless animation.nil?
-          animation.attributes.each do |key, val|
-            case key
-            when 'name'           then  set_name(val)
-            when 'loops'          then  set_loops(val)
-            when 'skip_first'     then  set_skip_first(val)
-            when 'default_delay'  then  set_default_delay(val)
-            else                        # nop
-            end
-          end
-          animation.elements.each('frame') do |element|
-            add_frame_info(element.attributes['src'], element.attributes['delay'])
-          end
+        return if animation.nil?
+
+        animation.attributes.each do |key, val|
+          set_parameter(key, val)
+        end
+
+        animation.elements.each('frame') do |element|
+          add_frame_info(element.attributes['src'], element.attributes['delay'])
         end
       end
     end # class XMLSpecReader < AbstractSpecReader

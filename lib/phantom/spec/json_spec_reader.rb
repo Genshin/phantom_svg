@@ -14,13 +14,9 @@ module Phantom
         open(path) do |file|
           JSON.load(file).each do |key, val|
             case key
-            when 'name'           then  set_name(val)
-            when 'loops'          then  set_loops(val)
-            when 'skip_first'     then  set_skip_first(val)
-            when 'default_delay'  then  set_default_delay(val)
             when 'frames'         then  read_frame_infos(val)
             when 'delays'         then  val.each { |delay| add_delay(delay) }
-            else                        # nop
+            else                        set_parameter(key, val)
             end
           end
         end
