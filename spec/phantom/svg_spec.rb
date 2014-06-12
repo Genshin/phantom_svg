@@ -62,10 +62,7 @@ describe Phantom::SVG::Base do
     end
 
     it 'save file size is not equal 0.' do
-      files = Dir.glob(@source).sort_by { |k| k[/\d+/].to_i }
-      files.each do |file|
-        @loader.add_frame_from_file(file)
-      end
+      @loader.add_frame_from_file(@source)
       write_size = @loader.save_svg(@destination)
       expect(write_size).not_to eq(0)
     end
@@ -206,7 +203,7 @@ describe Phantom::SVG::Base do
     it 'load apng and save animation svg.' do
       @loader.add_frame_from_file(@source)
       expect(@loader.frames.size).to eq(34)
-      
+
       write_size = @loader.save_svg(@destination)
       expect(write_size).not_to eq(0)
 

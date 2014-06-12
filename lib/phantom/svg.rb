@@ -20,13 +20,14 @@ module Phantom
       end
 
       def add_frame_from_file(path, options = {})
-        case File.extname(path)
-        when '.svg'   then load_from_svg(path, options)
-        when '.png'   then load_from_png(path, options)
-        when '.json'  then load_from_json(path, options)
-        when '.xml'   then load_from_xml(path, options)
-        else
-          # nop
+        create_file_list(path).each do |file|
+          case File.extname(file)
+          when '.svg'   then  load_from_svg(file, options)
+          when '.png'   then  load_from_png(file, options)
+          when '.json'  then  load_from_json(file, options)
+          when '.xml'   then  load_from_xml(file, options)
+          else                # nop
+          end
         end
       end
 
@@ -89,6 +90,12 @@ module Phantom
 
       def load_from_xml(path, options)
         @frames += Phantom::Reader::XMLAnimationReader.new.read(path)
+      end
+
+      def create_file_list(path)
+        result = Dir.glob(path).sort_by { |k| k[/\d+/].to_i }
+        result << path if result.empty?
+        result
       end
     end
   end
