@@ -182,8 +182,21 @@ describe Phantom::SVG::Base do
   end
 
   describe 'when convert animation svg to apng' do
-    it 'todo' do
-      expect(0).to eq(1)
+    before(:all) do
+      @emoji_name = 'stuck_out_tongue'
+      @source = SPEC_SOURCE_DIR + '/' + @emoji_name + '/*.svg'
+      @destination = SPEC_TEMP_DIR + '/svg2apng.png'
+    end
+
+    before do
+      options = { duration: 0.5 }
+      @loader = Phantom::SVG::Base.new(@source, options)
+    end
+
+    it 'succeeded convert.' do
+      expect(@loader.frames.size).to eq(12)
+      is_succeeded = @loader.save_apng(@destination)
+      expect(is_succeeded).to eq(true)
     end
   end
 

@@ -70,12 +70,14 @@ module Phantom
         end
       end
 
-      apngasm.assemble(path)
-      apngasm.reset
+      result = apngasm.assemble(path)
+      #apngasm.reset
+
+      result
     end
 
     def create_tmp_file(path, frame)
-      save_frame("#{path}.svg", frame, @width, @height)
+      save_svg_frame("#{path}.svg", frame, @width, @height)
       convert_to_png(path, frame)
     end
 

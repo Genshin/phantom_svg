@@ -70,6 +70,10 @@ module Phantom
         File.write(path, data)
       end
 
+      def save_apng(path)
+        save_rasterized(path)
+      end
+
       private
 
       def load_from_svg(path, options)
