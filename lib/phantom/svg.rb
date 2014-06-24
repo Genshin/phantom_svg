@@ -3,6 +3,8 @@ require 'cairo'
 require_relative 'raster.rb'
 require_relative 'svg/frame.rb'
 require_relative 'svg/xml_parser.rb'
+require_relative 'parser/svg_reader.rb'
+require_relative 'parser/svg_writer.rb'
 require_relative 'reader/json_animation_reader.rb'
 require_relative 'reader/xml_animation_reader.rb'
 
@@ -11,10 +13,12 @@ module Phantom
     class Base
       include Phantom::Raster
       include Phantom::XMLParser
-      attr_accessor :frames
+      attr_accessor :frames, :width, :height
 
       def initialize(path = nil, options = {})
         @frames = []
+        @loops = 0
+        @skip_first = false
 
         add_frame_from_file(path, options) if path
       end
@@ -53,21 +57,18 @@ module Phantom
 
       def save_svg(path)
         set_size
-        surface = Cairo::SVGSurface.new(path, @width, @height)
-        surface.finish
 
-        data = write_all_data(path)
-
-        File.write(path, data)
+        writer = Parser::SVGWriter.new(path, self)
       end
 
-      def save_svg_frame(path, frame, width = frame.width.to_f, height = frame.height.to_f)
-        surface = Cairo::SVGSurface.new(path, width, height)
-        surface.finish
-
-        data = write_frame_data(path, frame)
-
-        File.write(path, data)
+      def save_svg_frame(path, frame, width = nil, height = nil)
+        old_width = frame.width
+        old_height = frame.height
+        frame.width = width unless width.nil?
+        frame.height = height unless height.nil?
+        writer = Parser::SVGWriter.new(path, frame)
+        frame.width = old_width
+        frame.height = old_height
       end
 
       def save_apng(path)
@@ -77,11 +78,15 @@ module Phantom
       private
 
       def load_from_svg(path, options)
-        if has_frame?(path)
-          create_frame_from_xml(path)
-        else
-          @frames << Phantom::SVG::Frame.new(path, options)
+        reader = Parser::SVGReader.new(path, options)
+        if reader.has_animation?
+          @width = reader.width
+          @height = reader.height
+          @loops = reader.loops
+          @skip_first = reader.skip_first
         end
+
+        @frames += reader.frames
       end
 
       def load_from_png(path, options)
@@ -89,11 +94,21 @@ module Phantom
       end
 
       def load_from_json(path, options)
-        @frames += Phantom::Reader::JSONAnimationReader.new.read(path)
+        load_from_reader(Reader::JSONAnimationReader.new(path), options)
       end
 
       def load_from_xml(path, options)
-        @frames += Phantom::Reader::XMLAnimationReader.new.read(path)
+        load_from_reader(Reader::XMLAnimationReader.new(path), options)
+      end
+
+      def load_from_reader(reader, options)
+        if reader.skip_first
+          unless @frames.nil?
+            @frames += reader.frames.slice(1, reader.frames.length - 1)
+            return
+          end
+        end
+        @frames += reader.frames
       end
 
       def create_file_list(path)

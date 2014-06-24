@@ -19,8 +19,8 @@ describe Phantom::SVG::Base do
       expect(@loader.frames.size).to eq(1)
     end
 
-    it 'frame duration equal 1.' do
-      expect(@loader.frames[0].duration).to eq(1)
+    it 'frame duration equal 0.1.' do
+      expect(@loader.frames[0].duration).to eq(0.1)
     end
 
     it 'frame surface is not nil.' do
