@@ -19,7 +19,9 @@ module Phantom
           else                            return
           end
 
-          @root.write(File.new(path, 'w'), 2)
+          file = File.open(path, 'w')
+          @root.write(file, 2)
+          file.flush
         end
 
         private
