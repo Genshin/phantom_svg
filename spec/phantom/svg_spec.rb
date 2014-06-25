@@ -233,7 +233,7 @@ describe Phantom::SVG::Base do
       expect(@loader.frames.size).to eq(34)
 
       @loader.frames.each do |frame|
-        expect(frame.duration).to eq('0.1')
+        expect(frame.duration).to eq(0.1)
         expect(frame.width).to eq('64')
         expect(frame.height).to eq('64')
         expect(frame.surface.to_s.length).not_to eq(0)

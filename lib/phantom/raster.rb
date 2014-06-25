@@ -31,9 +31,9 @@ module Phantom
       pixbuf = Gdk::Pixbuf.new(path)
 
       frame = Phantom::SVG::Frame.new
-      frame.width = pixbuf.width
-      frame.height = pixbuf.height
-      frame.surface = get_base64(path, id, pixbuf.width, pixbuf.height)
+      frame.width = pixbuf.width.to_s + 'px'
+      frame.height = pixbuf.height.to_s + 'px'
+      frame.surface = [get_base64(path, id, pixbuf.width, pixbuf.height)[1..-1]]
       frame.duration = duration unless duration.nil?
 
       frame

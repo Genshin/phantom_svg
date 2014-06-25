@@ -52,6 +52,7 @@ module Phantom
               else                defs_svg.add_namespace(key, val)
               end
             end
+
             frame.surface.each do |surface|
               defs_svg.add_element(surface)
             end
