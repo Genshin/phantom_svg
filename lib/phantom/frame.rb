@@ -1,4 +1,3 @@
-require 'nokogiri'
 
 module Phantom
   module SVG

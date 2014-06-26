@@ -22,5 +22,4 @@ Gem::Specification.new do |s|
   s.add_dependency 'rapngasm', '~> 3.1'
   s.add_dependency 'gdk3', '~> 2.2'
   s.add_dependency 'rsvg2', '~> 2.2'
-  s.add_dependency 'nokogiri', '~> 1.6'
 end

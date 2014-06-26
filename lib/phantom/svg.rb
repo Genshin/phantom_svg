@@ -1,4 +1,3 @@
-require 'cairo'
 
 require_relative 'frame.rb'
 require_relative 'parser/raster.rb'
