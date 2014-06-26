@@ -271,6 +271,23 @@ describe Phantom::SVG::Base do
       expect(@loader.height).to eq('64px')
       expect(@loader.loops).to eq(2)
     end
+
+    it 'can save apng.' do
+      @loader.add_frame_from_file(@source)
+      @loader.loops = 2
+
+      write_size = @loader.save_apng(@destination_png)
+      expect(write_size).not_to eq(0)
+    end
+
+    it 'saved apng is succeeded.' do
+      @loader.add_frame_from_file(@destination_png)
+
+      expect(@loader.frames.size).to eq(12)
+      expect(@loader.width).to eq('64px')
+      expect(@loader.height).to eq('64px')
+      expect(@loader.loops).to eq(2)
+    end
   end
 
   describe 'skip_first test' do
