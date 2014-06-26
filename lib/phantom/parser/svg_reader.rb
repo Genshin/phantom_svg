@@ -95,7 +95,9 @@ module Phantom
           defs_symbol = defs.elements['symbol']
           i = 0
 
-          if defs_symbol.elements['use'].attributes['xlink:href'] != '#frame0'
+          if defs_symbol.elements['use'].attributes['xlink:href'] == '#frame0'
+            @skip_first = false
+          else
             @skip_first = true
             i = 1
           end

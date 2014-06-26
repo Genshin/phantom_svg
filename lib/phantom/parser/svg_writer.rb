@@ -65,6 +65,8 @@ module Phantom
           })
           begin_text = "0s;frame#{base.frames.length - 1}_anim.end"
           base.frames.each_with_index do |frame, i|
+            next if i == 0 && base.skip_first
+
             use = symbol.add_element('use', {
               'xlink:href' => "#frame#{i}",
               'visibility' => 'hidden'
