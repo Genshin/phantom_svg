@@ -2,7 +2,6 @@ require 'cairo'
 
 require_relative 'raster.rb'
 require_relative 'svg/frame.rb'
-require_relative 'svg/xml_parser.rb'
 require_relative 'parser/svg_reader.rb'
 require_relative 'parser/svg_writer.rb'
 require_relative 'reader/json_animation_reader.rb'
@@ -12,7 +11,6 @@ module Phantom
   module SVG
     class Base
       include Phantom::Raster
-      include Phantom::XMLParser
       attr_accessor :frames, :width, :height
 
       def initialize(path = nil, options = {})
