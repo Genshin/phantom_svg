@@ -89,7 +89,7 @@ module Phantom
             'id' => 'controller',
             'begin' => '0s',
             'dur' => "#{total_duration}s",
-            'repeatCount' => @loops.to_i == 0 ? 'indefinite' : @loops.to_s
+            'repeatCount' => base.loops.to_i == 0 ? 'indefinite' : base.loops.to_s
           })
           use = svg.add_element('use', {
             'xlink:href' => '#frame0'
