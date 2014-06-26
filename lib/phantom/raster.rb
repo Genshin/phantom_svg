@@ -27,6 +27,10 @@ module Phantom
       frame.height = pixbuf.height.to_s + 'px'
       frame.surface = create_surface(path, pixbuf.width, pixbuf.height)
       frame.duration = duration unless duration.nil?
+      frame.namespaces = {
+        'xmlns' => 'http://www.w3.org/2000/svg',
+        'xlink' => 'http://www.w3.org/1999/xlink'
+      }
 
       frame
     end
