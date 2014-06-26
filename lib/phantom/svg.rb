@@ -10,7 +10,7 @@ module Phantom
   module SVG
     class Base
       include Parser::Raster
-      attr_accessor :frames, :width, :height, :loops
+      attr_accessor :frames, :width, :height, :loops, :skip_first
 
       def initialize(path = nil, options = {})
         @frames = []

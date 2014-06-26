@@ -290,9 +290,56 @@ describe Phantom::SVG::Base do
     end
   end
 
-  describe 'skip_first test' do
-    it 'todo' do
-      expect(0).to eq(1)
+  describe 'when skip_first is true.' do
+    before(:all) do
+      @emoji_name = 'stuck_out_tongue'
+      @source = SPEC_SOURCE_DIR + '/' + @emoji_name + '/*.svg'
+      @source_skip_frame = SPEC_SOURCE_DIR + '/ninja.svg'
+      @destination_dir = SPEC_TEMP_DIR
+      @destination_svg = @destination_dir + '/skip_first_test.svg'
+      @destination_png = @destination_dir + '/skip_first_test.png'
+    end
+
+    before do
+      @loader = Phantom::SVG::Base.new
+    end
+
+    it 'can save animation svg' do
+      @loader.add_frame_from_file(@source_skip_frame)
+      @loader.add_frame_from_file(@source)
+      @loader.skip_first = true
+
+      write_size = @loader.save_svg(@destination_svg)
+      expect(write_size).not_to eq(0)
+    end
+
+    it 'saved animation svg is succeeded.' do
+      @loader.add_frame_from_file(@destination_svg)
+
+      expect(@loader.frames.size).to eq(13)
+      expect(@loader.width).to eq('64px')
+      expect(@loader.height).to eq('64px')
+      expect(@loader.loops).to eq(0)
+      expect(@loader.skip_first).to eq(true)
+    end
+
+    it 'can save apng' do
+      @loader.add_frame_from_file(@source_skip_frame)
+      @loader.add_frame_from_file(@source)
+      @loader.skip_first = true
+
+      write_size = @loader.save_apng(@destination_png)
+      expect(write_size).not_to eq(0)
+    end
+
+    it 'saved apng is succeeded.' do
+      @loader.add_frame_from_file(@destination_png)
+
+      expect(@loader.frames.size).to eq(13)
+      expect(@loader.width).to eq('64px')
+      expect(@loader.height).to eq('64px')
+      expect(@loader.loops).to eq(0)
+      expect(@loader.skip_first).to eq(true)
     end
   end
 end
