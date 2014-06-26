@@ -1,16 +1,16 @@
 require 'cairo'
 
-require_relative 'raster.rb'
-require_relative 'svg/frame.rb'
+require_relative 'frame.rb'
+require_relative 'parser/raster.rb'
 require_relative 'parser/svg_reader.rb'
 require_relative 'parser/svg_writer.rb'
-require_relative 'reader/json_animation_reader.rb'
-require_relative 'reader/xml_animation_reader.rb'
+require_relative 'parser/json_animation_reader.rb'
+require_relative 'parser/xml_animation_reader.rb'
 
 module Phantom
   module SVG
     class Base
-      include Phantom::Raster
+      include Parser::Raster
       attr_accessor :frames, :width, :height
 
       def initialize(path = nil, options = {})
@@ -92,11 +92,11 @@ module Phantom
       end
 
       def load_from_json(path, options)
-        load_from_reader(Reader::JSONAnimationReader.new(path), options)
+        load_from_reader(Parser::JSONAnimationReader.new(path), options)
       end
 
       def load_from_xml(path, options)
-        load_from_reader(Reader::XMLAnimationReader.new(path), options)
+        load_from_reader(Parser::XMLAnimationReader.new(path), options)
       end
 
       def load_from_reader(reader, options)

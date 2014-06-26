@@ -1,9 +1,9 @@
 
-require_relative '../parser/svg_reader.rb'
+require_relative 'svg_reader.rb'
 
 module Phantom
   module SVG
-    module Reader
+    module Parser
       # AnimationReader base.
       class AbstractAnimationReader
         attr_accessor :frames, :loops, :skip_first
@@ -113,6 +113,6 @@ module Phantom
           @delays << str2delay(delay)
         end
       end # class AbstractAnimationReader
-    end # module Reader
+    end # module Parser
   end # module SVG
 end # module Phantom

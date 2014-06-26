@@ -1,12 +1,12 @@
 
 require 'json'
 
-require_relative '../svg/frame.rb'
+require_relative '../frame.rb'
 require_relative 'abstract_animation_reader.rb'
 
 module Phantom
   module SVG
-    module Reader
+    module Parser
       # AnimationReader for JSON.
       class JSONAnimationReader < AbstractAnimationReader
         private
@@ -37,6 +37,6 @@ module Phantom
           end
         end
       end # class JSONAnimationReader < AbstractAnimationReader
-    end # module Reader
+    end # module Parser
   end # module SVG
 end # module Phantom

@@ -1,7 +1,7 @@
 
 require 'rexml/document'
 
-require_relative '../svg/frame.rb'
+require_relative '../frame.rb'
 
 module Phantom
   module SVG
