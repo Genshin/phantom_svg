@@ -30,8 +30,8 @@ module Phantom
           # Header.
           svg = @root.add_element('svg', {
             'id' => 'phantom_svg',
-            'width' => base.width.to_s,
-            'height' => base.height.to_s,
+            'width' => base.width.is_a?(String) ? base.width : base.width.to_i.to_s + 'px',
+            'height' => base.height.is_a?(String) ? base.height : base.height.to_i.to_s + 'px',
             'version' => '1.1'
           })
           svg.add_namespace('http://www.w3.org/2000/svg')
@@ -108,8 +108,8 @@ module Phantom
 
         def parse_svg(frame)
           svg = @root.add_element('svg', {
-            'width' => frame.width.to_i.to_s + 'pt',
-            'height' => frame.height.to_i.to_s + 'pt',
+            'width' => frame.width.is_a?(String) ? frame.width : frame.width.to_i.to_s + 'px',
+            'height' => frame.height.is_a?(String) ? frame.height : frame.height.to_i.to_s + 'px',
             'viewBox' => frame.viewbox.to_s,
             'version' => '1.1'
           })

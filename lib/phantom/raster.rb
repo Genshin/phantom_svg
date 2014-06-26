@@ -20,20 +20,12 @@ module Phantom
     end
 
     def create_frame_from_png(path, id, duration = nil)
-      # handle = RSVG::Handle.new_from_file(path)
-
-      # antom::SVG::Frame.new
-      # frame.width = handle.dimentions.width
-      # frame.height = handle.dimentions.height
-      # frame.surface = get_base64(path, id)
-      # frame.duration = duration unless duration.nil?
-
       pixbuf = Gdk::Pixbuf.new(path)
 
       frame = Phantom::SVG::Frame.new
       frame.width = pixbuf.width.to_s + 'px'
       frame.height = pixbuf.height.to_s + 'px'
-      frame.surface = [get_base64(path, id, pixbuf.width, pixbuf.height)[1..-1]]
+      frame.surface = create_surface(path, pixbuf.width, pixbuf.height)
       frame.duration = duration unless duration.nil?
 
       frame
@@ -41,21 +33,33 @@ module Phantom
 
     def create_frame_from_apng(apngasm, id)
       png_frames = apngasm.get_frames
+      width = 0
+      height = 0
       Dir::mktmpdir(nil, File.dirname(__FILE__)) do |dir|
         apngasm.save_pngs(dir)
         png_frames.each_with_index do |png_frame, i|
+          width = png_frame.width if width < png_frame.width
+          height = png_frame.height if height < png_frame.height
           duration = png_frame.delay_numerator.to_f / png_frame.delay_denominator.to_f
           @frames << create_frame_from_png("#{dir}/#{i}.png", id, duration)
         end
       end
+      @width = width.to_s + 'px'
+      @height = height.to_s + 'px'
     end
 
-    def get_base64(path, id, width, height)
+    def create_surface(path, width, height)
       bin = File.binread(path)
       base64 = [bin].pack('m')
 
-      "<image id='image#{id}' width='#{width}' height='#{height}'
-       xlink:href='data:image/png;base64,#{base64}'"
+      image = REXML::Element.new('image')
+      image.add_attributes({
+        'width' => width,
+        'height' => height,
+        'xlink:href' => "data:image/png;base64,#{base64}"
+      })
+
+      [image]
     end
 
     def save_rasterized(path)

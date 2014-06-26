@@ -56,7 +56,7 @@ module Phantom
       end
 
       def save_svg(path)
-        set_size
+        set_size if @width.to_i == 0 || @height.to_i == 0
 
         writer = Parser::SVGWriter.new(path, self)
       end
