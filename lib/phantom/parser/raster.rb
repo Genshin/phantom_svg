@@ -28,8 +28,8 @@ module Phantom
           pixbuf = Gdk::Pixbuf.new(path)
 
           frame = Phantom::SVG::Frame.new
-          frame.width = pixbuf.width.to_s + 'px'
-          frame.height = pixbuf.height.to_s + 'px'
+          frame.width = "#{pixbuf.width}px"
+          frame.height = "#{pixbuf.height}px"
           frame.surface = create_surface(path, pixbuf.width, pixbuf.height)
           frame.duration = duration unless duration.nil?
           frame.namespaces = {
@@ -53,8 +53,8 @@ module Phantom
               @frames << create_frame_from_png("#{dir}/#{i}.png", id, duration)
             end
           end
-          @width = width.to_s + 'px'
-          @height = height.to_s + 'px'
+          @width = "#{width}px"
+          @height = "#{height}px"
         end
 
         def create_surface(path, width, height)
@@ -84,7 +84,7 @@ module Phantom
           end
 
           result = apngasm.assemble(path)
-          #apngasm.reset
+          apngasm.reset
 
           result
         end

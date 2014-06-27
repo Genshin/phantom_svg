@@ -8,7 +8,7 @@ describe Phantom::SVG::Base do
   describe 'when load no animation svg' do
     before(:all) do
       @emoji_name = 'ninja'
-      @source = SPEC_SOURCE_DIR + '/' + @emoji_name + '.svg'
+      @source = "#{SPEC_SOURCE_DIR}/#{@emoji_name}.svg"
     end
 
     before do
@@ -51,9 +51,9 @@ describe Phantom::SVG::Base do
   describe 'when create animation svg' do
     before(:all) do
       @emoji_name = 'stuck_out_tongue'
-      @source = SPEC_SOURCE_DIR + '/' + @emoji_name + '/*.svg'
-      @destination_dir = SPEC_TEMP_DIR + '/' + @emoji_name + '/'
-      @destination = @destination_dir + @emoji_name + '.svg'
+      @source = "#{SPEC_SOURCE_DIR}/#{@emoji_name}/*.svg"
+      @destination_dir = "#{SPEC_TEMP_DIR}/#{@emoji_name}"
+      @destination = "#{@destination_dir}/#{@emoji_name}.svg"
       FileUtils.mkdir_p(@destination_dir)
     end
 
@@ -80,7 +80,7 @@ describe Phantom::SVG::Base do
         frame = @loader.frames[i]
         expect(frame.surface.to_s.length).not_to eq(1)
 
-        @loader.save_svg_frame(@destination_dir + i.to_s + '.svg', frame)
+        @loader.save_svg_frame("#{@destination_dir}/#{i}.svg", frame)
       end
     end
 
@@ -92,7 +92,7 @@ describe Phantom::SVG::Base do
   describe 'when create animation svg from file of json' do
     before(:all) do
       @emoji_name = 'stuck_out_tongue'
-      @source_dir = SPEC_SOURCE_DIR + '/' + @emoji_name
+      @source_dir = "#{SPEC_SOURCE_DIR}/#{@emoji_name}"
       @destination_dir = SPEC_TEMP_DIR
     end
 
@@ -102,7 +102,7 @@ describe Phantom::SVG::Base do
 
     it 'load frames from "test1.json".' do
       test_name = 'test1'
-      @loader.add_frame_from_file(@source_dir + '/' + test_name + '.json')
+      @loader.add_frame_from_file("#{@source_dir}/#{test_name}.json")
       expect(@loader.frames.size).to eq(12)
       @loader.frames.each do |frame|
         expect(frame.duration.instance_of?(Float)).to eq(true)
@@ -113,13 +113,13 @@ describe Phantom::SVG::Base do
         expect(frame.surface.to_s.length).not_to eq(1)
         expect(frame.namespaces).not_to be_empty
       end
-      write_size = @loader.save_svg(@destination_dir + '/json_' + test_name + '.svg')
+      write_size = @loader.save_svg("#{@destination_dir}/json_#{test_name}.svg")
       expect(write_size).not_to eq(0)
     end
 
     it 'load frames from "test2.json".' do
       test_name = 'test2'
-      @loader.add_frame_from_file(@source_dir + '/' + test_name + '.json')
+      @loader.add_frame_from_file("#{@source_dir}/#{test_name}.json")
       expect(@loader.frames.size).to eq(12)
       @loader.frames.each do |frame|
         expect(frame.duration.instance_of?(Float)).to eq(true)
@@ -130,7 +130,7 @@ describe Phantom::SVG::Base do
         expect(frame.surface.to_s.length).not_to eq(1)
         expect(frame.namespaces).not_to be_empty
       end
-      write_size = @loader.save_svg(@destination_dir + '/json_' + test_name + '.svg')
+      write_size = @loader.save_svg("#{@destination_dir}/json_#{test_name}.svg")
       expect(write_size).not_to eq(0)
     end
   end
@@ -138,7 +138,7 @@ describe Phantom::SVG::Base do
   describe 'when create animation svg from file of xml' do
     before(:all) do
       @emoji_name = 'stuck_out_tongue'
-      @source_dir = SPEC_SOURCE_DIR + '/' + @emoji_name
+      @source_dir = "#{SPEC_SOURCE_DIR}/#{@emoji_name}"
       @destination_dir = SPEC_TEMP_DIR
     end
 
@@ -148,7 +148,7 @@ describe Phantom::SVG::Base do
 
     it 'load frames from "test1.xml".' do
       test_name = 'test1'
-      @loader.add_frame_from_file(@source_dir + '/' + test_name + '.xml')
+      @loader.add_frame_from_file("#{@source_dir}/#{test_name}.xml")
       expect(@loader.frames.size).to eq(12)
       @loader.frames.each do |frame|
         expect(frame.duration.instance_of?(Float)).to eq(true)
@@ -159,13 +159,13 @@ describe Phantom::SVG::Base do
         expect(frame.surface.to_s.length).not_to eq(1)
         expect(frame.namespaces).not_to be_empty
       end
-      write_size = @loader.save_svg(@destination_dir + '/xml_' + test_name + '.svg')
+      write_size = @loader.save_svg("#{@destination_dir}/xml_#{test_name}.svg")
       expect(write_size).not_to eq(0)
     end
 
     it 'load frames from "test2.xml".' do
       test_name = 'test2'
-      @loader.add_frame_from_file(@source_dir + '/' + test_name + '.xml')
+      @loader.add_frame_from_file("#{@source_dir}/#{test_name}.xml")
       expect(@loader.frames.size).to eq(12)
       @loader.frames.each do |frame|
         expect(frame.duration.instance_of?(Float)).to eq(true)
@@ -176,7 +176,7 @@ describe Phantom::SVG::Base do
         expect(frame.surface.to_s.length).not_to eq(1)
         expect(frame.namespaces).not_to be_empty
       end
-      write_size = @loader.save_svg(@destination_dir + '/xml_' + test_name + '.svg')
+      write_size = @loader.save_svg("#{@destination_dir}/xml_#{test_name}.svg")
       expect(write_size).not_to eq(0)
     end
   end
@@ -184,8 +184,8 @@ describe Phantom::SVG::Base do
   describe 'when convert animation svg to apng' do
     before(:all) do
       @emoji_name = 'stuck_out_tongue'
-      @source = SPEC_SOURCE_DIR + '/' + @emoji_name + '/*.svg'
-      @destination = SPEC_TEMP_DIR + '/svg2apng.png'
+      @source = "#{SPEC_SOURCE_DIR}/#{@emoji_name}/*.svg"
+      @destination = "#{SPEC_TEMP_DIR}/svg2apng.png"
     end
 
     before do
@@ -203,9 +203,9 @@ describe Phantom::SVG::Base do
   describe 'when convert apng to animation svg' do
     before(:all) do
       @apng_name = 'apngasm'
-      @source = SPEC_SOURCE_DIR + '/' + @apng_name + '.png'
-      @destination_dir = SPEC_TEMP_DIR + '/' + @apng_name
-      @destination = @destination_dir + '/' + @apng_name + '.svg'
+      @source = "#{SPEC_SOURCE_DIR}/#{@apng_name}.png"
+      @destination_dir = "#{SPEC_TEMP_DIR}/#{@apng_name}"
+      @destination = "#{@destination_dir}/#{@apng_name}.svg"
       FileUtils.mkdir_p(@destination_dir)
     end
 
@@ -223,7 +223,7 @@ describe Phantom::SVG::Base do
       range = 0..(@loader.frames.length - 1)
       range.each do |i|
         frame = @loader.frames[i]
-        write_size = @loader.save_svg_frame(@destination_dir + '/' + i.to_s + '.svg', frame)
+        write_size = @loader.save_svg_frame("#{@destination_dir}/#{i}.svg", frame)
         expect(write_size).not_to eq(0)
       end
     end
@@ -245,10 +245,10 @@ describe Phantom::SVG::Base do
   describe 'when loops is 2' do
     before(:all) do
       @emoji_name = 'stuck_out_tongue'
-      @source = SPEC_SOURCE_DIR + '/' + @emoji_name + '/*.svg'
+      @source = "#{SPEC_SOURCE_DIR}/#{@emoji_name}/*.svg"
       @destination_dir = SPEC_TEMP_DIR
-      @destination_svg = @destination_dir + '/loops_test.svg'
-      @destination_png = @destination_dir + '/loops_test.png'
+      @destination_svg = "#{@destination_dir}/loops_test.svg"
+      @destination_png = "#{@destination_dir}/loops_test.png"
     end
 
     before do
@@ -293,11 +293,11 @@ describe Phantom::SVG::Base do
   describe 'when skip_first is true.' do
     before(:all) do
       @emoji_name = 'stuck_out_tongue'
-      @source = SPEC_SOURCE_DIR + '/' + @emoji_name + '/*.svg'
-      @source_skip_frame = SPEC_SOURCE_DIR + '/ninja.svg'
+      @source = "#{SPEC_SOURCE_DIR}/#{@emoji_name}/*.svg"
+      @source_skip_frame = "#{SPEC_SOURCE_DIR}/ninja.svg"
       @destination_dir = SPEC_TEMP_DIR
-      @destination_svg = @destination_dir + '/skip_first_test.svg'
-      @destination_png = @destination_dir + '/skip_first_test.png'
+      @destination_svg = "#{@destination_dir}/skip_first_test.svg"
+      @destination_png = "#{@destination_dir}/skip_first_test.png"
     end
 
     before do

@@ -9,7 +9,7 @@ module Phantom
         @surface = options[:surface].nil? ? nil : options[:surface]
         @width = options[:width].nil? ? 64 : options[:width]
         @height = options[:height].nil? ? 64 : options[:height]
-        @viewbox = 
+        @viewbox =
           if options[:viewbox].nil?               then  ViewBox.new
           elsif options[:viewbox].is_a?(ViewBox)  then  options[:viewbox]
           elsif options[:viewbox].is_a?(String)   then  ViewBox.new.set_from_text(options[:viewbox])

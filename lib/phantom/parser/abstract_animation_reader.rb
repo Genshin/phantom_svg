@@ -81,8 +81,8 @@ module Phantom
           if result.empty?
             result <<
               if    File.exist?(path)           then  path
-              elsif File.exist?(path + '.svg')  then  path + '.svg'
-              elsif File.exist?(path + '.png')  then  path + '.png'
+              elsif File.exist?("#{path}.svg")  then  "#{path}.svg"
+              elsif File.exist?("#{path}.png")  then  "#{path}.png"
               else                                    path # Illegal path.
               end
           end

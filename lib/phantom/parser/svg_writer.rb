@@ -34,8 +34,8 @@ module Phantom
           svg = @root.add_element('svg')
           svg.add_attributes([
             %w(id phantom_svg),
-            ['width', base.width.is_a?(String) ? base.width : base.width.to_i.to_s + 'px'],
-            ['height', base.height.is_a?(String) ? base.height : base.height.to_i.to_s + 'px'],
+            ['width', base.width.is_a?(String) ? base.width : "#{base.width.to_i}px"],
+            ['height', base.height.is_a?(String) ? base.height : "#{base.height.to_i}px"],
             %w(version 1.1)
           ])
           svg.add_namespace('http://www.w3.org/2000/svg')
@@ -123,8 +123,8 @@ module Phantom
         def parse_svg(frame)
           svg = @root.add_element('svg')
           svg.add_attributes([
-            ['width', frame.width.is_a?(String) ? frame.width : frame.width.to_i.to_s + 'px'],
-            ['height', frame.height.is_a?(String) ? frame.height : frame.height.to_i.to_s + 'px'],
+            ['width', frame.width.is_a?(String) ? frame.width : "#{frame.width.to_i}px"],
+            ['height', frame.height.is_a?(String) ? frame.height : "#{frame.height.to_i}px"],
             ['viewBox', frame.viewbox.to_s],
             %w(version 1.1)
           ])
