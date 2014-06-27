@@ -16,6 +16,8 @@ module Phantom
         def read(path, options = {})
           reset
 
+          return if path.nil? || path.empty?
+
           @root = REXML::Document.new(open(path))
 
           if @root.elements['svg'].attributes['id'] == 'phantom_svg'
