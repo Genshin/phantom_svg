@@ -62,11 +62,11 @@ module Phantom
           base64 = [bin].pack('m')
 
           image = REXML::Element.new('image')
-          image.add_attributes({
-            'width' => width,
-            'height' => height,
-            'xlink:href' => "data:image/png;base64,#{base64}"
-          })
+          image.add_attributes([
+            ['width', width],
+            ['height', height],
+            ['xlink:href', "data:image/png;base64,#{base64}"]
+          ])
 
           [image]
         end

@@ -9,11 +9,12 @@ module Phantom
         @surface = options[:surface].nil? ? nil : options[:surface]
         @width = options[:width].nil? ? 64 : options[:width]
         @height = options[:height].nil? ? 64 : options[:height]
-        if options[:viewbox].nil?                     then  @viewbox = ViewBox.new
-        elsif options[:viewbox].instance_of?(ViewBox) then  @viewbox = options[:viewbox]
-        elsif options[:viewbox].instance_of?(String)  then  @viewbox = ViewBox.new.set_from_text(options[:viewbox])
-        else                                                @viewbox = ViewBox.new
-        end
+        @viewbox = 
+          if options[:viewbox].nil?               then  ViewBox.new
+          elsif options[:viewbox].is_a?(ViewBox)  then  options[:viewbox]
+          elsif options[:viewbox].is_a?(String)   then  ViewBox.new.set_from_text(options[:viewbox])
+          else                                          ViewBox.new
+          end
         @namespaces = options[:namespaces].nil? ? {} : options[:namespaces]
       end
 
@@ -30,10 +31,11 @@ module Phantom
         def set_from_text(text)
           values = text.split(' ', 4)
           initialize(values[0], values[1], values[2], values[3])
+          self
         end
 
         def to_s
-          return "#{@x.to_i} #{@y.to_i} #{@width.to_i} #{@height.to_i}"
+          "#{@x.to_i} #{@y.to_i} #{@width.to_i} #{@height.to_i}"
         end
       end
     end

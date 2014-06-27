@@ -20,20 +20,24 @@ module Phantom
           end
 
           file = File.open(path, 'w')
-          @root.write(file, 2)
+          write_size = @root.write(file, 2)
           file.flush
+
+          # Return.
+          write_size
         end
 
         private
 
         def parse_animation_svg(base)
           # Header.
-          svg = @root.add_element('svg', {
-            'id' => 'phantom_svg',
-            'width' => base.width.is_a?(String) ? base.width : base.width.to_i.to_s + 'px',
-            'height' => base.height.is_a?(String) ? base.height : base.height.to_i.to_s + 'px',
-            'version' => '1.1'
-          })
+          svg = @root.add_element('svg')
+          svg.add_attributes([
+            %w(id phantom_svg),
+            ['width', base.width.is_a?(String) ? base.width : base.width.to_i.to_s + 'px'],
+            ['height', base.height.is_a?(String) ? base.height : base.height.to_i.to_s + 'px'],
+            %w(version 1.1)
+          ])
           svg.add_namespace('http://www.w3.org/2000/svg')
           svg.add_namespace('xlink', 'http://www.w3.org/1999/xlink')
 
@@ -42,10 +46,11 @@ module Phantom
           # Images.
           REXML::Comment.new(' Images. ', defs)
           base.frames.each_with_index do |frame, i|
-            defs_svg = defs.add_element('svg', {
-              'id' => "frame#{i}",
-              'viewBox' => frame.viewbox.to_s
-            })
+            defs_svg = defs.add_element('svg')
+            defs_svg.add_attributes([
+              ['id', "frame#{i}"],
+              ['viewBox', frame.viewbox.to_s]
+            ])
             frame.namespaces.each do |key, val|
               case key
               when 'xmlns'  then  defs_svg.add_namespace(val)
@@ -60,24 +65,27 @@ module Phantom
 
           # Animation.
           REXML::Comment.new(' Animation. ', defs)
-          symbol = defs.add_element('symbol', {
-            'id' => 'animation'
-          })
+          symbol = defs.add_element('symbol')
+          symbol.add_attributes([
+            %w(id animation)
+          ])
           begin_text = "0s;frame#{base.frames.length - 1}_anim.end"
           base.frames.each_with_index do |frame, i|
             next if i == 0 && base.skip_first
 
-            use = symbol.add_element('use', {
-              'xlink:href' => "#frame#{i}",
-              'visibility' => 'hidden'
-            })
-            use.add_element('set', {
-              'id' => "frame#{i}_anim",
-              'attributeName' => 'visibility',
-              'to' => 'visible',
-              'begin' => begin_text,
-              'dur' => "#{frame.duration}s"
-            })
+            use = symbol.add_element('use')
+            use.add_attributes([
+              ['xlink:href', "#frame#{i}"],
+              %w(visibility hidden)
+            ])
+            set = use.add_element('set')
+            set.add_attributes([
+              ['id', "frame#{i}_anim"],
+              %w(attributeName visibility),
+              %w(to visible),
+              ['begin', begin_text],
+              ['dur', "#{frame.duration}s"]
+            ])
             begin_text = "frame#{i}_anim.end"
           end
 
@@ -87,34 +95,39 @@ module Phantom
           base.frames.each do |frame|
             total_duration += frame.duration
           end
-          svg.add_element('animate', {
-            'id' => 'controller',
-            'begin' => '0s',
-            'dur' => "#{total_duration}s",
-            'repeatCount' => base.loops.to_i == 0 ? 'indefinite' : base.loops.to_s
-          })
-          use = svg.add_element('use', {
-            'xlink:href' => '#frame0'
-          })
-          use.add_element('set', {
-            'attributeName' => 'xlink:href',
-            'to' => '#animation',
-            'begin' => 'controller.begin'
-          })
-          use.add_element('set', {
-            'attributeName' => 'xlink:href',
-            'to' => "#frame#{base.frames.length - 1}",
-            'begin' => 'controller.end'
-          })
+          animate = svg.add_element('animate')
+          animate.add_attributes([
+            %w(id controller),
+            %w(begin 0s),
+            ['dur', "#{total_duration}s"],
+            ['repeatCount', base.loops.to_i == 0 ? 'indefinite' : base.loops.to_s]
+          ])
+          use = svg.add_element('use')
+          use.add_attributes([
+            %w(xlink:href #frame0)
+          ])
+          set = use.add_element('set')
+          set.add_attributes([
+            %w(attributeName xlink:href),
+            %w(to #animation),
+            %w(begin controller.begin)
+          ])
+          set = use.add_element('set')
+          set.add_attributes([
+            %w(attributeName xlink:href),
+            ['to', "#frame#{base.frames.length - 1}"],
+            %w(begin controller.end)
+          ])
         end
 
         def parse_svg(frame)
-          svg = @root.add_element('svg', {
-            'width' => frame.width.is_a?(String) ? frame.width : frame.width.to_i.to_s + 'px',
-            'height' => frame.height.is_a?(String) ? frame.height : frame.height.to_i.to_s + 'px',
-            'viewBox' => frame.viewbox.to_s,
-            'version' => '1.1'
-          })
+          svg = @root.add_element('svg')
+          svg.add_attributes([
+            ['width', frame.width.is_a?(String) ? frame.width : frame.width.to_i.to_s + 'px'],
+            ['height', frame.height.is_a?(String) ? frame.height : frame.height.to_i.to_s + 'px'],
+            ['viewBox', frame.viewbox.to_s],
+            %w(version 1.1)
+          ])
           frame.namespaces.each do |key, val|
             case key
             when 'xmlns'  then  svg.add_namespace(val)

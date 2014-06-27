@@ -55,7 +55,10 @@ module Phantom
       def save_svg(path)
         set_size if @width.to_i == 0 || @height.to_i == 0
 
-        writer = Parser::SVGWriter.new(path, self)
+        writer = Parser::SVGWriter.new
+        write_size = writer.write(path, self)
+
+        write_size
       end
 
       def save_svg_frame(path, frame, width = nil, height = nil)
@@ -63,9 +66,14 @@ module Phantom
         old_height = frame.height
         frame.width = width unless width.nil?
         frame.height = height unless height.nil?
-        writer = Parser::SVGWriter.new(path, frame)
+
+        writer = Parser::SVGWriter.new
+        write_size = writer.write(path, frame)
+
         frame.width = old_width
         frame.height = old_height
+
+        write_size
       end
 
       def save_apng(path)

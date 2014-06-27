@@ -10,7 +10,7 @@ module Phantom
         attr_reader :frames, :width, :height, :loops, :skip_first
 
         def initialize(path = nil, options = {})
-          read(path)
+          read(path, options)
         end
 
         def read(path, options = {})
@@ -28,7 +28,7 @@ module Phantom
         end
 
         def has_animation?
-          return @has_animation
+          @has_animation
         end
 
         private
@@ -105,7 +105,7 @@ module Phantom
           defs_symbol.elements.each('use') do |use|
             current_frame = @frames[i]
             current_frame.duration = use.elements['set'].attributes['dur'].to_f if options[:duration].nil?
-            i = i + 1
+            i += 1
           end
 
           # Read loop count.
