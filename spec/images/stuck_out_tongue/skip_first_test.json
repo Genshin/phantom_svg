@@ -4,6 +4,7 @@
   "skip_first": true,
   "default_delay": "50/1000",
   "frames": [
+    "../ninja.svg",
     "*.svg"
   ]
 }

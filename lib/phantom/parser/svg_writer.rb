@@ -51,6 +51,8 @@ module Phantom
             defs_svg = defs.add_element('svg')
             defs_svg.add_attributes([
               ['id', "frame#{i}"],
+              ['width', frame.width.is_a?(String) ? frame.width : "#{frame.width.to_i}px"],
+              ['height', frame.height.is_a?(String) ? frame.height : "#{frame.height.to_i}px"],
               ['viewBox', frame.viewbox.to_s]
             ])
             frame.namespaces.each do |key, val|
@@ -94,7 +96,8 @@ module Phantom
           # Show controll.
           REXML::Comment.new(' Main control. ', svg)
           total_duration = 0.0
-          base.frames.each do |frame|
+          base.frames.each_with_index do |frame, i|
+            next if i == 0 && base.skip_first
             total_duration += frame.duration
           end
           animate = svg.add_element('animate')

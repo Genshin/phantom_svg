@@ -13,11 +13,17 @@ module Phantom
       attr_accessor :frames, :width, :height, :loops, :skip_first
 
       def initialize(path = nil, options = {})
-        @frames = []
-        @loops = 0
-        @skip_first = false
+        reset
 
         add_frame_from_file(path, options) if path
+      end
+
+      def reset
+        @frames = []
+        @width = 0
+        @height = 0
+        @loops = 0
+        @skip_first = false
       end
 
       def add_frame_from_file(path, options = {})
@@ -107,13 +113,16 @@ module Phantom
       end
 
       def load_from_reader(reader, options)
-        if reader.skip_first
-          unless @frames.nil?
-            @frames += reader.frames.slice(1, reader.frames.length - 1)
-            return
-          end
+        if @frames.empty?
+          @loops = reader.loops
+          @skip_first = reader.skip_first
+          @frames += reader.frames
+          set_size
+        elsif reader.skip_first
+          @frames += reader.frames.slice(1, reader.frames.length - 1)
+        else
+          @frames += reader.frames
         end
-        @frames += reader.frames
       end
 
       def create_file_list(path)

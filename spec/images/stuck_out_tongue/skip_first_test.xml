@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <animation name="myanimation" loops="0" skip_first="true" default_delay="50/1000">
+  <frame src="../ninja.svg" />
   <frame src="*.svg" />
 </animation>

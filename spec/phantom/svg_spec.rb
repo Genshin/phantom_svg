@@ -234,8 +234,8 @@ describe Phantom::SVG::Base do
 
       @loader.frames.each do |frame|
         expect(frame.duration).to eq(0.1)
-        expect(frame.width).to eq(64)
-        expect(frame.height).to eq(64)
+        expect(frame.width).to eq('64px')
+        expect(frame.height).to eq('64px')
         expect(frame.surface.to_s.length).not_to eq(0)
         expect(frame.namespaces.length).not_to eq(0)
       end
@@ -392,12 +392,12 @@ describe Phantom::SVG::Base do
       @loader.reset
       @loader.add_frame_from_file(destination)
 
-      expect(@loader.frames.size).to eq(12)
+      expect(@loader.frames.size).to eq(13)
       expect(@loader.width).to eq('64px')
       expect(@loader.height).to eq('64px')
       expect(@loader.loops).to eq(0)
       expect(@loader.skip_first).to eq(true)
-      expect(@loader.frames[0].duration).to eq(0.05)
+      expect(@loader.frames[1].duration).to eq(0.05)
     end
 
     it 'can load from xml file.' do
@@ -410,12 +410,12 @@ describe Phantom::SVG::Base do
       @loader.reset
       @loader.add_frame_from_file(destination)
 
-      expect(@loader.frames.size).to eq(12)
+      expect(@loader.frames.size).to eq(13)
       expect(@loader.width).to eq('64px')
       expect(@loader.height).to eq('64px')
       expect(@loader.loops).to eq(0)
       expect(@loader.skip_first).to eq(true)
-      expect(@loader.frames[0].duration).to eq(0.05)
+      expect(@loader.frames[1].duration).to eq(0.05)
     end
   end
 end
