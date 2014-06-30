@@ -245,7 +245,8 @@ describe Phantom::SVG::Base do
   describe 'when loops is 2' do
     before(:all) do
       @emoji_name = 'stuck_out_tongue'
-      @source = "#{SPEC_SOURCE_DIR}/#{@emoji_name}/*.svg"
+      @source_dir = "#{SPEC_SOURCE_DIR}/#{@emoji_name}"
+      @source = "#{@source_dir}/*.svg"
       @destination_dir = SPEC_TEMP_DIR
       @destination_svg = "#{@destination_dir}/loops_test.svg"
       @destination_png = "#{@destination_dir}/loops_test.png"
@@ -270,6 +271,7 @@ describe Phantom::SVG::Base do
       expect(@loader.width).to eq('64px')
       expect(@loader.height).to eq('64px')
       expect(@loader.loops).to eq(2)
+      expect(@loader.skip_first).to eq(false)
     end
 
     it 'can save apng.' do
@@ -287,13 +289,51 @@ describe Phantom::SVG::Base do
       expect(@loader.width).to eq('64px')
       expect(@loader.height).to eq('64px')
       expect(@loader.loops).to eq(2)
+      expect(@loader.skip_first).to eq(false)
+    end
+
+    it 'can load from json file.' do
+      test_name = 'loops_test'
+      source = "#{@source_dir}/#{test_name}.json"
+      destination = "#{@destination_dir}/#{test_name}_json.svg"
+
+      @loader.add_frame_from_file(source)
+      @loader.save_svg(destination)
+      @loader.reset
+      @loader.add_frame_from_file(destination)
+
+      expect(@loader.frames.size).to eq(12)
+      expect(@loader.width).to eq('64px')
+      expect(@loader.height).to eq('64px')
+      expect(@loader.loops).to eq(3)
+      expect(@loader.skip_first).to eq(false)
+      expect(@loader.frames[0].duration).to eq(0.05)
+    end
+
+    it 'can load from xml file.' do
+      test_name = 'loops_test'
+      source = "#{@source_dir}/#{test_name}.xml"
+      destination = "#{@destination_dir}/#{test_name}_xml.svg"
+
+      @loader.add_frame_from_file(source)
+      @loader.save_svg(destination)
+      @loader.reset
+      @loader.add_frame_from_file(destination)
+
+      expect(@loader.frames.size).to eq(12)
+      expect(@loader.width).to eq('64px')
+      expect(@loader.height).to eq('64px')
+      expect(@loader.loops).to eq(3)
+      expect(@loader.skip_first).to eq(false)
+      expect(@loader.frames[0].duration).to eq(0.05)
     end
   end
 
   describe 'when skip_first is true.' do
     before(:all) do
       @emoji_name = 'stuck_out_tongue'
-      @source = "#{SPEC_SOURCE_DIR}/#{@emoji_name}/*.svg"
+      @source_dir = "#{SPEC_SOURCE_DIR}/#{@emoji_name}"
+      @source = "#{@source_dir}/*.svg"
       @source_skip_frame = "#{SPEC_SOURCE_DIR}/ninja.svg"
       @destination_dir = SPEC_TEMP_DIR
       @destination_svg = "#{@destination_dir}/skip_first_test.svg"
@@ -340,6 +380,42 @@ describe Phantom::SVG::Base do
       expect(@loader.height).to eq('64px')
       expect(@loader.loops).to eq(0)
       expect(@loader.skip_first).to eq(true)
+    end
+
+    it 'can load from json file.' do
+      test_name = 'skip_first_test'
+      source = "#{@source_dir}/#{test_name}.json"
+      destination = "#{@destination_dir}/#{test_name}_json.svg"
+
+      @loader.add_frame_from_file(source)
+      @loader.save_svg(destination)
+      @loader.reset
+      @loader.add_frame_from_file(destination)
+
+      expect(@loader.frames.size).to eq(12)
+      expect(@loader.width).to eq('64px')
+      expect(@loader.height).to eq('64px')
+      expect(@loader.loops).to eq(0)
+      expect(@loader.skip_first).to eq(true)
+      expect(@loader.frames[0].duration).to eq(0.05)
+    end
+
+    it 'can load from xml file.' do
+      test_name = 'skip_first_test'
+      source = "#{@source_dir}/#{test_name}.xml"
+      destination = "#{@destination_dir}/#{test_name}_xml.svg"
+
+      @loader.add_frame_from_file(source)
+      @loader.save_svg(destination)
+      @loader.reset
+      @loader.add_frame_from_file(destination)
+
+      expect(@loader.frames.size).to eq(12)
+      expect(@loader.width).to eq('64px')
+      expect(@loader.height).to eq('64px')
+      expect(@loader.loops).to eq(0)
+      expect(@loader.skip_first).to eq(true)
+      expect(@loader.frames[0].duration).to eq(0.05)
     end
   end
 end
