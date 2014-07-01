@@ -5,17 +5,12 @@ module Phantom
       attr_accessor :duration, :surface, :width, :height, :viewbox, :namespaces
 
       def initialize(options = {})
-        @duration = options[:duration].nil? ? 0.1 : options[:duration]
-        @surface = options[:surface].nil? ? nil : options[:surface]
-        @width = options[:width].nil? ? 64 : options[:width]
-        @height = options[:height].nil? ? 64 : options[:height]
-        @viewbox =
-          if options[:viewbox].nil?               then  ViewBox.new
-          elsif options[:viewbox].is_a?(ViewBox)  then  options[:viewbox]
-          elsif options[:viewbox].is_a?(String)   then  ViewBox.new.set_from_text(options[:viewbox])
-          else                                          ViewBox.new
-          end
-        @namespaces = options[:namespaces].nil? ? {} : options[:namespaces]
+        set_duration(options[:duration])
+        set_surface(options[:surface])
+        set_width(options[:width])
+        set_height(options[:height])
+        set_viewbox(options[:viewbox])
+        set_namespaces(options[:namespaces])
       end
 
       class ViewBox
@@ -37,6 +32,37 @@ module Phantom
         def to_s
           "#{@x.to_i} #{@y.to_i} #{@width.to_i} #{@height.to_i}"
         end
+      end
+
+      private
+
+      def set_duration(val)
+        @duration = val.nil? ? 0.1 : val
+      end
+
+      def set_surface(val)
+        @surface = val.nil? ? nil : val
+      end
+
+      def set_width(val)
+        @width = val.nil? ? 64 : val
+      end
+
+      def set_height(val)
+        @height = val.nil? ? 64 : val
+      end
+
+      def set_viewbox(val)
+        @viewbox =
+          if val.nil?               then  ViewBox.new
+          elsif val.is_a?(ViewBox)  then  val
+          elsif val.is_a?(String)   then  ViewBox.new.set_from_text(val)
+          else                            ViewBox.new
+          end
+      end
+
+      def set_namespaces(val)
+        @namespaces = val.nil? ? {} : val
       end
     end
   end

@@ -6,8 +6,10 @@ require_relative '../frame.rb'
 module Phantom
   module SVG
     module Parser
+      # SVG reader.
       class SVGReader
-        attr_reader :frames, :width, :height, :loops, :skip_first
+        attr_reader :frames, :width, :height, :loops, :skip_first, :has_animation
+        alias_method :has_animation?, :has_animation
 
         def initialize(path = nil, options = {})
           read(path, options)
@@ -29,10 +31,6 @@ module Phantom
           end
         end
 
-        def has_animation?
-          @has_animation
-        end
-
         private
 
         def reset
@@ -45,21 +43,23 @@ module Phantom
         end
 
         def read_svg(options)
-          new_frame = Frame.new(options)
+          new_frame = Frame.new
           svg = @root.elements['svg']
 
           new_frame.namespaces = svg.namespaces
+          new_frame.namespaces.merge!(options[:namespaces]) unless options[:namespaces].nil?
 
           svg.attributes.each do |key, val|
             case key
-            when 'width'    then  new_frame.width = val if options[:width].nil?
-            when 'height'   then  new_frame.height = val if options[:height].nil?
-            when 'viewBox'  then  new_frame.viewbox.set_from_text(val) if options[:viewbox].nil?
-            else                  # nop
+            when 'width'    then  new_frame.width = choice_value(val, options[:width])
+            when 'height'   then  new_frame.height = choice_value(val, options[:height])
+            when 'viewBox'  then  new_frame.viewbox.set_from_text(choice_value(val, options[:viewbox]).to_s)
+            else                    # nop
             end
           end
 
-          new_frame.surface = svg.elements
+          new_frame.surface = choice_value(svg.elements, options[:surface])
+          new_frame.duration = options[:duration] unless options[:duration].nil?
 
           # Add frame to array.
           @frames << new_frame
@@ -71,8 +71,8 @@ module Phantom
 
           svg.attributes.each do |key, val|
             case key
-            when 'width'    then  @width = options[:width].nil? ? val : options[:width]
-            when 'height'   then  @height = options[:height].nil? ? val : options[:height]
+            when 'width'    then  @width = choice_value(val, options[:width])
+            when 'height'   then  @height = choice_value(val, options[:height])
             else                  # nop
             end
           end
@@ -112,6 +112,10 @@ module Phantom
 
           # Read loop count.
           @loops = svg.elements['animate'].attributes['repeatCount'].to_i
+        end
+
+        def choice_value(val, default)
+          default.nil? ? val : default
         end
       end # class SVGReader
     end # module Parser
