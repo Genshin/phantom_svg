@@ -11,10 +11,12 @@ module Phantom
         attr_reader :frames, :width, :height, :loops, :skip_first, :has_animation
         alias_method :has_animation?, :has_animation
 
+        # Construct SVGReader object.
         def initialize(path = nil, options = {})
           read(path, options)
         end
 
+        # Read svg file from path.
         def read(path, options = {})
           reset
 
@@ -33,6 +35,7 @@ module Phantom
 
         private
 
+        # Reset SVGReader object.
         def reset
           @frames = []
           @width = nil
@@ -42,6 +45,7 @@ module Phantom
           @has_animation = false
         end
 
+        # Read no animation svg.
         def read_svg(options)
           new_frame = Frame.new
           svg = @root.elements['svg']
@@ -65,6 +69,7 @@ module Phantom
           @frames << new_frame
         end
 
+        # Read animation svg.
         def read_animation_svg(options)
           svg = @root.elements['svg']
           defs = svg.elements['defs']
@@ -114,8 +119,11 @@ module Phantom
           @loops = svg.elements['animate'].attributes['repeatCount'].to_i
         end
 
-        def choice_value(val, default)
-          default.nil? ? val : default
+        # Helper method.
+        # Return val if override is nil.
+        # Return override if override is not nil.
+        def choice_value(val, override)
+          override.nil? ? val : override
         end
       end # class SVGReader
     end # module Parser
