@@ -1,6 +1,7 @@
 
 module Phantom
   module SVG
+    # Frame class for "Key Frames" implementation in SVG
     class Frame
       attr_accessor :duration, :surface, :width, :height, :viewbox, :namespaces
 
