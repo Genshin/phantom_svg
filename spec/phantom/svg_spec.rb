@@ -5,21 +5,21 @@ Dir.chdir(SPEC_ROOT_DIR)
 
 describe Phantom::SVG::Base do
 
-  describe 'when load no animation svg' do
+  describe 'loading a non-animated svg' do
     before(:all) do
-      @emoji_name = 'ninja'
-      @source = "#{SPEC_SOURCE_DIR}/#{@emoji_name}.svg"
+      @image_name = 'ninja'
+      @source = "#{SPEC_SOURCE_DIR}/#{@image_name}.svg"
     end
 
     before do
       @loader = Phantom::SVG::Base.new(@source)
     end
 
-    it 'frames vector size equal 1.' do
+    it 'frames vector has a size of 1.' do
       expect(@loader.frames.size).to eq(1)
     end
 
-    it 'frame duration equal 0.1.' do
+    it 'frame duration equals 0.1.' do
       expect(@loader.frames[0].duration).to eq(0.1)
     end
 
@@ -31,11 +31,11 @@ describe Phantom::SVG::Base do
       expect(@loader.frames[0].surface).not_to be_empty
     end
 
-    it 'frame width equal \'64px\'.' do
+    it 'frame width equal to \'64px\'.' do
       expect(@loader.frames[0].width).to eq('64px')
     end
 
-    it 'frame height equal \'64px\'.' do
+    it 'frame height equal to \'64px\'.' do
       expect(@loader.frames[0].height).to eq('64px')
     end
 
@@ -48,12 +48,12 @@ describe Phantom::SVG::Base do
     end
   end
 
-  describe 'when create animation svg' do
+  describe 'creating an animated SVG' do
     before(:all) do
-      @emoji_name = 'stuck_out_tongue'
-      @source = "#{SPEC_SOURCE_DIR}/#{@emoji_name}/*.svg"
-      @destination_dir = "#{SPEC_TEMP_DIR}/#{@emoji_name}"
-      @destination = "#{@destination_dir}/#{@emoji_name}.svg"
+      @image_name = 'stuck_out_tongue'
+      @source = "#{SPEC_SOURCE_DIR}/#{@image_name}/*.svg"
+      @destination_dir = "#{SPEC_TEMP_DIR}/#{@image_name}"
+      @destination = "#{@destination_dir}/#{@image_name}.svg"
       FileUtils.mkdir_p(@destination_dir)
     end
 
@@ -61,18 +61,18 @@ describe Phantom::SVG::Base do
       @loader = Phantom::SVG::Base.new
     end
 
-    it 'save file size is not equal 0.' do
+    it 'saves a non-zero-byte file.' do
       @loader.add_frame_from_file(@source)
       write_size = @loader.save_svg(@destination)
       expect(write_size).not_to eq(0)
     end
 
-    it 'animation svg file frames size equal 12.' do
+    it 'is an animation with a frame vector size of 12.' do
       @loader.add_frame_from_file(@destination)
       expect(@loader.frames.size).to eq(12)
     end
 
-    it 'frame surface length is not equal 1.' do
+    it ' has a frame surface length not equal to 1.' do
       @loader.add_frame_from_file(@destination)
 
       range = 0..(@loader.frames.length - 1)
@@ -89,10 +89,10 @@ describe Phantom::SVG::Base do
     end
   end
 
-  describe 'when create animation svg from file of json' do
+  describe 'creating an animated SVG file from a JSON animation spec file' do
     before(:all) do
-      @emoji_name = 'stuck_out_tongue'
-      @source_dir = "#{SPEC_SOURCE_DIR}/#{@emoji_name}"
+      @image_name = 'stuck_out_tongue'
+      @source_dir = "#{SPEC_SOURCE_DIR}/#{@image_name}"
       @destination_dir = SPEC_TEMP_DIR
     end
 
@@ -100,7 +100,7 @@ describe Phantom::SVG::Base do
       @loader = Phantom::SVG::Base.new
     end
 
-    it 'load frames from "test1.json".' do
+    it 'loads frames from "test1.json".' do
       test_name = 'test1'
       @loader.add_frame_from_file("#{@source_dir}/#{test_name}.json")
       expect(@loader.frames.size).to eq(12)
@@ -117,7 +117,7 @@ describe Phantom::SVG::Base do
       expect(write_size).not_to eq(0)
     end
 
-    it 'load frames from "test2.json".' do
+    it 'loads frames from "test2.json".' do
       test_name = 'test2'
       @loader.add_frame_from_file("#{@source_dir}/#{test_name}.json")
       expect(@loader.frames.size).to eq(12)
@@ -135,10 +135,10 @@ describe Phantom::SVG::Base do
     end
   end
 
-  describe 'when create animation svg from file of xml' do
+  describe 'creating an animated SVG from file from an XML animation spec' do
     before(:all) do
-      @emoji_name = 'stuck_out_tongue'
-      @source_dir = "#{SPEC_SOURCE_DIR}/#{@emoji_name}"
+      @image_name = 'stuck_out_tongue'
+      @source_dir = "#{SPEC_SOURCE_DIR}/#{@image_name}"
       @destination_dir = SPEC_TEMP_DIR
     end
 
@@ -146,7 +146,7 @@ describe Phantom::SVG::Base do
       @loader = Phantom::SVG::Base.new
     end
 
-    it 'load frames from "test1.xml".' do
+    it 'loads frames from "test1.xml".' do
       test_name = 'test1'
       @loader.add_frame_from_file("#{@source_dir}/#{test_name}.xml")
       expect(@loader.frames.size).to eq(12)
@@ -181,10 +181,10 @@ describe Phantom::SVG::Base do
     end
   end
 
-  describe 'when convert animation svg to apng' do
+  describe 'converting a keyframe animated SVG to APNG' do
     before(:all) do
-      @emoji_name = 'stuck_out_tongue'
-      @source = "#{SPEC_SOURCE_DIR}/#{@emoji_name}/*.svg"
+      @image_name = 'stuck_out_tongue'
+      @source = "#{SPEC_SOURCE_DIR}/#{@image_name}/*.svg"
       @destination = "#{SPEC_TEMP_DIR}/svg2apng.png"
     end
 
@@ -193,14 +193,14 @@ describe Phantom::SVG::Base do
       @loader = Phantom::SVG::Base.new(@source, options)
     end
 
-    it 'succeeded convert.' do
+    it 'successfully converts.' do
       expect(@loader.frames.size).to eq(12)
       is_succeeded = @loader.save_apng(@destination)
       expect(is_succeeded).to eq(true)
     end
   end
 
-  describe 'when convert apng to animation svg' do
+  describe 'converting an APNG to a keyframe animated SVG' do
     before(:all) do
       @apng_name = 'apngasm'
       @source = "#{SPEC_SOURCE_DIR}/#{@apng_name}.png"
@@ -213,7 +213,7 @@ describe Phantom::SVG::Base do
       @loader = Phantom::SVG::Base.new
     end
 
-    it 'load apng and save animation svg.' do
+    it 'loads an APNG and saves a keyframe animated SVG.' do
       @loader.add_frame_from_file(@source)
       expect(@loader.frames.size).to eq(34)
 
@@ -228,7 +228,7 @@ describe Phantom::SVG::Base do
       end
     end
 
-    it 'new svg load test.' do
+    it 'adds frames.' do
       @loader.add_frame_from_file(@destination)
       expect(@loader.frames.size).to eq(34)
 
@@ -242,10 +242,10 @@ describe Phantom::SVG::Base do
     end
   end
 
-  describe 'when loops is 2' do
+  describe 'using a finite loop count' do
     before(:all) do
-      @emoji_name = 'stuck_out_tongue'
-      @source_dir = "#{SPEC_SOURCE_DIR}/#{@emoji_name}"
+      @image_name = 'stuck_out_tongue'
+      @source_dir = "#{SPEC_SOURCE_DIR}/#{@image_name}"
       @source = "#{@source_dir}/*.svg"
       @destination_dir = SPEC_TEMP_DIR
       @destination_svg = "#{@destination_dir}/loops_test.svg"
@@ -256,7 +256,7 @@ describe Phantom::SVG::Base do
       @loader = Phantom::SVG::Base.new
     end
 
-    it 'can save animation svg.' do
+    it 'saves a keyframe animated SVG.' do
       @loader.add_frame_from_file(@source)
       @loader.loops = 2
 
@@ -264,7 +264,7 @@ describe Phantom::SVG::Base do
       expect(write_size).not_to eq(0)
     end
 
-    it 'saved animation svg is succeeded.' do
+    it 'correctly saved the keyframe animated SVG.' do
       @loader.add_frame_from_file(@destination_svg)
 
       expect(@loader.frames.size).to eq(12)
@@ -274,7 +274,7 @@ describe Phantom::SVG::Base do
       expect(@loader.skip_first).to eq(false)
     end
 
-    it 'can save apng.' do
+    it 'exports/saves to APNG.' do
       @loader.add_frame_from_file(@source)
       @loader.loops = 2
 
@@ -282,7 +282,7 @@ describe Phantom::SVG::Base do
       expect(write_size).not_to eq(0)
     end
 
-    it 'saved apng is succeeded.' do
+    it 'correctly saved the APNG.' do
       @loader.add_frame_from_file(@destination_png)
 
       expect(@loader.frames.size).to eq(12)
@@ -292,7 +292,7 @@ describe Phantom::SVG::Base do
       expect(@loader.skip_first).to eq(false)
     end
 
-    it 'can load from json file.' do
+    it 'loads an animation spec from a JSON file.' do
       test_name = 'loops_test'
       source = "#{@source_dir}/#{test_name}.json"
       destination = "#{@destination_dir}/#{test_name}_json.svg"
@@ -310,7 +310,7 @@ describe Phantom::SVG::Base do
       expect(@loader.frames[0].duration).to eq(0.05)
     end
 
-    it 'can load from xml file.' do
+    it 'loads an animation spec from an XML file.' do
       test_name = 'loops_test'
       source = "#{@source_dir}/#{test_name}.xml"
       destination = "#{@destination_dir}/#{test_name}_xml.svg"
@@ -329,10 +329,10 @@ describe Phantom::SVG::Base do
     end
   end
 
-  describe 'when skip_first is true.' do
+  describe 'using the skip_first flag' do
     before(:all) do
-      @emoji_name = 'stuck_out_tongue'
-      @source_dir = "#{SPEC_SOURCE_DIR}/#{@emoji_name}"
+      @image_name = 'stuck_out_tongue'
+      @source_dir = "#{SPEC_SOURCE_DIR}/#{@image_name}"
       @source = "#{@source_dir}/*.svg"
       @source_skip_frame = "#{SPEC_SOURCE_DIR}/ninja.svg"
       @destination_dir = SPEC_TEMP_DIR
@@ -344,7 +344,7 @@ describe Phantom::SVG::Base do
       @loader = Phantom::SVG::Base.new
     end
 
-    it 'can save animation svg' do
+    it 'can save a keyframe animated SVG' do
       @loader.add_frame_from_file(@source_skip_frame)
       @loader.add_frame_from_file(@source)
       @loader.skip_first = true
@@ -353,7 +353,7 @@ describe Phantom::SVG::Base do
       expect(write_size).not_to eq(0)
     end
 
-    it 'saved animation svg is succeeded.' do
+    it 'successfully saves a keyframe animated SVG.' do
       @loader.add_frame_from_file(@destination_svg)
 
       expect(@loader.frames.size).to eq(13)
@@ -363,7 +363,7 @@ describe Phantom::SVG::Base do
       expect(@loader.skip_first).to eq(true)
     end
 
-    it 'can save apng' do
+    it 'exports/saves to APNG' do
       @loader.add_frame_from_file(@source_skip_frame)
       @loader.add_frame_from_file(@source)
       @loader.skip_first = true
@@ -372,7 +372,7 @@ describe Phantom::SVG::Base do
       expect(write_size).not_to eq(0)
     end
 
-    it 'saved apng is succeeded.' do
+    it 'correctly saved an APNG.' do
       @loader.add_frame_from_file(@destination_png)
 
       expect(@loader.frames.size).to eq(13)
@@ -382,7 +382,7 @@ describe Phantom::SVG::Base do
       expect(@loader.skip_first).to eq(true)
     end
 
-    it 'can load from json file.' do
+    it 'loads an animation spec from a JSON.' do
       test_name = 'skip_first_test'
       source = "#{@source_dir}/#{test_name}.json"
       destination = "#{@destination_dir}/#{test_name}_json.svg"
@@ -400,7 +400,7 @@ describe Phantom::SVG::Base do
       expect(@loader.frames[1].duration).to eq(0.05)
     end
 
-    it 'can load from xml file.' do
+    it 'loads an animation spec from an XML file.' do
       test_name = 'skip_first_test'
       source = "#{@source_dir}/#{test_name}.xml"
       destination = "#{@destination_dir}/#{test_name}_xml.svg"
