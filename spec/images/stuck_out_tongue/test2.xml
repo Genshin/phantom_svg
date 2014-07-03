@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<animation name="myanimation" loops="0" skip_first="false" default_delay="200/1000">
+  <frame src="*.svg" />
+</animation>

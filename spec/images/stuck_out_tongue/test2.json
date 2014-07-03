@@ -1,0 +1,13 @@
+{
+	"name": "stuck_out_tongue",
+	"loops": 0,
+  "skip_first": false,
+  "default_delay": "200/1000",
+	"frames": [
+    "*.svg"
+  ],
+  "delays": [
+    "2/1",
+    3000
+  ]
+}
