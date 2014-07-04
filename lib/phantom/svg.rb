@@ -33,7 +33,6 @@ module Phantom
           when '.png'   then  load_from_png(file, options)
           when '.json'  then  load_from_json(file, options)
           when '.xml'   then  load_from_xml(file, options)
-          else                # nop
           end
         end
       end
@@ -45,7 +44,6 @@ module Phantom
         elsif frame.instance_of?(Phantom::SVG::Frame) then @frames << frame
         elsif frame.instance_of?(Phantom::SVG::Base)  then @frames += frame.frames
         elsif frame.instance_of?(String)              then add_frame_from_file(frame, options)
-        else  # nop
         end
       end
 
@@ -61,10 +59,7 @@ module Phantom
       def save_svg(path)
         set_size if @width.to_i == 0 || @height.to_i == 0
 
-        writer = Parser::SVGWriter.new
-        write_size = writer.write(path, self)
-
-        write_size
+        Parser::SVGWriter.new.write(path, self)
       end
 
       def save_svg_frame(path, frame, width = nil, height = nil)
@@ -73,8 +68,7 @@ module Phantom
         frame.width = width unless width.nil?
         frame.height = height unless height.nil?
 
-        writer = Parser::SVGWriter.new
-        write_size = writer.write(path, frame)
+        write_size = Parser::SVGWriter.new.write(path, frame)
 
         frame.width = old_width
         frame.height = old_height
@@ -84,6 +78,16 @@ module Phantom
 
       def save_apng(path)
         save_rasterized(path)
+      end
+
+      # Calculate and return total duration.
+      def total_duration
+        result = 0.0
+        @frames.each_with_index do |frame, i|
+          next if i == 0 && @skip_first
+          result += frame.duration
+        end
+        result
       end
 
       private

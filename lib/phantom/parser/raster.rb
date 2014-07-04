@@ -30,7 +30,7 @@ module Phantom
           frame = Phantom::SVG::Frame.new
           frame.width = "#{pixbuf.width}px"
           frame.height = "#{pixbuf.height}px"
-          frame.surface = create_surface(path, pixbuf.width, pixbuf.height)
+          frame.surfaces = create_surfaces(path, pixbuf.width, pixbuf.height)
           frame.duration = duration unless duration.nil?
           frame.namespaces = {
             'xmlns' => 'http://www.w3.org/2000/svg',
@@ -57,16 +57,16 @@ module Phantom
           @height = "#{height}px"
         end
 
-        def create_surface(path, width, height)
+        def create_surfaces(path, width, height)
           bin = File.binread(path)
           base64 = [bin].pack('m')
 
           image = REXML::Element.new('image')
-          image.add_attributes([
-            ['width', width],
-            ['height', height],
-            ['xlink:href', "data:image/png;base64,#{base64}"]
-          ])
+          image.add_attributes(
+            'width' => width,
+            'height' => height,
+            'xlink:href' => "data:image/png;base64,#{base64}"
+          )
 
           [image]
         end
