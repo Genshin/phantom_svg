@@ -55,6 +55,8 @@ module Phantom
           end
           @width = "#{width}px"
           @height = "#{height}px"
+          @loops = apngasm.get_loops
+          @skip_first = apngasm.is_skip_first
         end
 
         def create_surfaces(path, width, height)
@@ -75,6 +77,8 @@ module Phantom
           set_size
 
           apngasm = APNGAsm.new
+          apngasm.set_loops(@loops)
+          apngasm.set_skip_first(@skip_first)
 
           Dir::mktmpdir(nil, File.dirname(__FILE__)) do |dir|
             @frames.each_with_index do |frame, i|
