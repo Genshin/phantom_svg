@@ -3,6 +3,6 @@ rvm:
   - 2.1.2
 
 before_install:
-  - sudo add-apt-repository ppa:zero-tsuki/ppa
+  - sudo add-apt-repository -y ppa:zero-tsuki/ppa
   - sudo apt-get update -q
-  - sudo apt-get install libapngasm
+  - sudo apt-get install -y libapngasm
