@@ -101,7 +101,6 @@ module Phantom
           when 'loops'          then  @loops = val.to_i
           when 'skip_first'     then  @skip_first = (val.to_s == 'true' ? true : false)
           when 'default_delay'  then  @default_delay = str2delay(val)
-          else                        # nop
           end
         end
 

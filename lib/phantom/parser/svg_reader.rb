@@ -47,26 +47,7 @@ module Phantom
 
         # Read no animation svg.
         def read_svg(options)
-          new_frame = Frame.new
-          svg = @root.elements['svg']
-
-          new_frame.namespaces = svg.namespaces
-          new_frame.namespaces.merge!(options[:namespaces]) unless options[:namespaces].nil?
-
-          svg.attributes.each do |key, val|
-            case key
-            when 'width'    then  new_frame.width = choice_value(val, options[:width])
-            when 'height'   then  new_frame.height = choice_value(val, options[:height])
-            when 'viewBox'  then  new_frame.viewbox.set_from_text(choice_value(val, options[:viewbox]).to_s)
-            else                    # nop
-            end
-          end
-
-          new_frame.surface = choice_value(svg.elements, options[:surface])
-          new_frame.duration = options[:duration] unless options[:duration].nil?
-
-          # Add frame to array.
-          @frames << new_frame
+          read_images(@root, options)
         end
 
         # Read animation svg.
@@ -74,49 +55,68 @@ module Phantom
           svg = @root.elements['svg']
           defs = svg.elements['defs']
 
-          svg.attributes.each do |key, val|
+          read_size(svg, self, options)
+          read_images(defs, options)
+          read_skip_first
+          read_durations(options)
+          read_loops
+        end
+
+        # Read size from node to dest.
+        def read_size(node, dest, options = {})
+          node.attributes.each do |key, val|
             case key
-            when 'width'    then  @width = choice_value(val, options[:width])
-            when 'height'   then  @height = choice_value(val, options[:height])
-            else                  # nop
+            when 'width'
+              dest.instance_variable_set(:@width, choice_value(val, options[:width]))
+            when 'height'
+              dest.instance_variable_set(:@height, choice_value(val, options[:height]))
+            when 'viewBox'
+              dest.viewbox.set_from_text(choice_value(val, options[:viewbox]).to_s)
             end
           end
+        end
 
-          # Read images.
-          defs.elements.each('svg') do |defs_svg|
-            new_frame = Frame.new(options)
-            defs_svg.attributes.each do |key, val|
-              case key
-              when 'width'    then  new_frame.width = val
-              when 'height'   then  new_frame.height = val
-              when 'viewBox'  then  new_frame.viewbox.set_from_text(val)
-              else                  # nop
-              end
-            end
-            new_frame.namespaces = defs_svg.namespaces if options[:namespaces].nil?
-            new_frame.surface = defs_svg.elements
+        # Read images from svg.
+        def read_images(parent_node, options)
+          parent_node.elements.each('svg') do |svg|
+            new_frame = Phantom::SVG::Frame.new
+
+            # Read namespaces.
+            new_frame.namespaces = svg.namespaces.clone
+            new_frame.namespaces.merge!(options[:namespaces]) unless options[:namespaces].nil?
+
+            # Read image size.
+            read_size(svg, new_frame, options)
+
+            # Read image surfaces.
+            new_frame.surfaces = choice_value(svg.elements, options[:surfaces])
+
+            # Read frame duration.
+            new_frame.duration = choice_value(new_frame.duration, options[:duration])
+
+            # Add frame to array.
             @frames << new_frame
           end
+        end
 
-          # Read animation.
-          defs_symbol = defs.elements['symbol']
-          i = 0
+        # Read skip_first.
+        def read_skip_first
+          @skip_first = @root.elements['svg/defs/symbol/use'].attributes['xlink:href'] != '#frame0'
+        end
 
-          if defs_symbol.elements['use'].attributes['xlink:href'] == '#frame0'
-            @skip_first = false
-          else
-            @skip_first = true
-            i = 1
-          end
-
-          defs_symbol.elements.each('use') do |use|
-            current_frame = @frames[i]
-            current_frame.duration = use.elements['set'].attributes['dur'].to_f if options[:duration].nil?
+        # Read frame durations.
+        def read_durations(options)
+          i = @skip_first ? 1 : 0
+          @root.elements['svg/defs/symbol'].elements.each('use') do |use|
+            duration = use.elements['set'].attributes['dur'].to_f
+            @frames[i].duration = choice_value(duration, options[:duration])
             i += 1
           end
+        end
 
-          # Read loop count.
-          @loops = svg.elements['animate'].attributes['repeatCount'].to_i
+        # Read animation loop count.
+        def read_loops
+          @loops = @root.elements['svg/animate'].attributes['repeatCount'].to_i
         end
 
         # Helper method.

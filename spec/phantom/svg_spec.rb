@@ -23,12 +23,12 @@ describe Phantom::SVG::Base do
       expect(@loader.frames[0].duration).to eq(0.1)
     end
 
-    it 'frame surface is not nil.' do
-      expect(@loader.frames[0].surface).not_to be_nil
+    it 'frame surfaces is not nil.' do
+      expect(@loader.frames[0].surfaces).not_to be_nil
     end
 
-    it 'frame surface is not empty.' do
-      expect(@loader.frames[0].surface).not_to be_empty
+    it 'frame surfaces is not empty.' do
+      expect(@loader.frames[0].surfaces).not_to be_empty
     end
 
     it 'frame width equal to \'64px\'.' do
@@ -72,13 +72,13 @@ describe Phantom::SVG::Base do
       expect(@loader.frames.size).to eq(12)
     end
 
-    it ' has a frame surface length not equal to 1.' do
+    it ' has a frame surfaces length not equal to 1.' do
       @loader.add_frame_from_file(@destination)
 
       range = 0..(@loader.frames.length - 1)
       range.each do |i|
         frame = @loader.frames[i]
-        expect(frame.surface.to_s.length).not_to eq(1)
+        expect(frame.surfaces.to_s.length).not_to eq(1)
 
         @loader.save_svg_frame("#{@destination_dir}/#{i}.svg", frame)
       end
@@ -108,9 +108,9 @@ describe Phantom::SVG::Base do
         expect(frame.duration.instance_of?(Float)).to eq(true)
         expect(frame.width).to eq('64px')
         expect(frame.height).to eq('64px')
-        expect(frame.surface).not_to be_nil
-        expect(frame.surface).not_to be_empty
-        expect(frame.surface.to_s.length).not_to eq(1)
+        expect(frame.surfaces).not_to be_nil
+        expect(frame.surfaces).not_to be_empty
+        expect(frame.surfaces.to_s.length).not_to eq(1)
         expect(frame.namespaces).not_to be_empty
       end
       write_size = @loader.save_svg("#{@destination_dir}/json_#{test_name}.svg")
@@ -125,9 +125,9 @@ describe Phantom::SVG::Base do
         expect(frame.duration.instance_of?(Float)).to eq(true)
         expect(frame.width).to eq('64px')
         expect(frame.height).to eq('64px')
-        expect(frame.surface).not_to be_nil
-        expect(frame.surface).not_to be_empty
-        expect(frame.surface.to_s.length).not_to eq(1)
+        expect(frame.surfaces).not_to be_nil
+        expect(frame.surfaces).not_to be_empty
+        expect(frame.surfaces.to_s.length).not_to eq(1)
         expect(frame.namespaces).not_to be_empty
       end
       write_size = @loader.save_svg("#{@destination_dir}/json_#{test_name}.svg")
@@ -154,9 +154,9 @@ describe Phantom::SVG::Base do
         expect(frame.duration.instance_of?(Float)).to eq(true)
         expect(frame.width).to eq('64px')
         expect(frame.height).to eq('64px')
-        expect(frame.surface).not_to be_nil
-        expect(frame.surface).not_to be_empty
-        expect(frame.surface.to_s.length).not_to eq(1)
+        expect(frame.surfaces).not_to be_nil
+        expect(frame.surfaces).not_to be_empty
+        expect(frame.surfaces.to_s.length).not_to eq(1)
         expect(frame.namespaces).not_to be_empty
       end
       write_size = @loader.save_svg("#{@destination_dir}/xml_#{test_name}.svg")
@@ -171,9 +171,9 @@ describe Phantom::SVG::Base do
         expect(frame.duration.instance_of?(Float)).to eq(true)
         expect(frame.width).to eq('64px')
         expect(frame.height).to eq('64px')
-        expect(frame.surface).not_to be_nil
-        expect(frame.surface).not_to be_empty
-        expect(frame.surface.to_s.length).not_to eq(1)
+        expect(frame.surfaces).not_to be_nil
+        expect(frame.surfaces).not_to be_empty
+        expect(frame.surfaces.to_s.length).not_to eq(1)
         expect(frame.namespaces).not_to be_empty
       end
       write_size = @loader.save_svg("#{@destination_dir}/xml_#{test_name}.svg")
@@ -236,7 +236,7 @@ describe Phantom::SVG::Base do
         expect(frame.duration).to eq(0.1)
         expect(frame.width).to eq('64px')
         expect(frame.height).to eq('64px')
-        expect(frame.surface.to_s.length).not_to eq(0)
+        expect(frame.surfaces.to_s.length).not_to eq(0)
         expect(frame.namespaces.length).not_to eq(0)
       end
     end

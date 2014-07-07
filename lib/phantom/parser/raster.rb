@@ -30,7 +30,7 @@ module Phantom
           frame = Phantom::SVG::Frame.new
           frame.width = "#{pixbuf.width}px"
           frame.height = "#{pixbuf.height}px"
-          frame.surface = create_surface(path, pixbuf.width, pixbuf.height)
+          frame.surfaces = create_surfaces(path, pixbuf.width, pixbuf.height)
           frame.duration = duration unless duration.nil?
           frame.namespaces = {
             'xmlns' => 'http://www.w3.org/2000/svg',
@@ -55,18 +55,20 @@ module Phantom
           end
           @width = "#{width}px"
           @height = "#{height}px"
+          @loops = apngasm.get_loops
+          @skip_first = apngasm.is_skip_first
         end
 
-        def create_surface(path, width, height)
+        def create_surfaces(path, width, height)
           bin = File.binread(path)
           base64 = [bin].pack('m')
 
           image = REXML::Element.new('image')
-          image.add_attributes([
-            ['width', width],
-            ['height', height],
-            ['xlink:href', "data:image/png;base64,#{base64}"]
-          ])
+          image.add_attributes(
+            'width' => width,
+            'height' => height,
+            'xlink:href' => "data:image/png;base64,#{base64}"
+          )
 
           [image]
         end
@@ -75,6 +77,8 @@ module Phantom
           set_size
 
           apngasm = APNGAsm.new
+          apngasm.set_loops(@loops)
+          apngasm.set_skip_first(@skip_first)
 
           Dir::mktmpdir(nil, File.dirname(__FILE__)) do |dir|
             @frames.each_with_index do |frame, i|

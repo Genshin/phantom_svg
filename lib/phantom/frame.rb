@@ -3,17 +3,18 @@ module Phantom
   module SVG
     # Frame class for "Key Frames" implementation in SVG
     class Frame
-      attr_accessor :duration, :surface, :width, :height, :viewbox, :namespaces
+      attr_accessor :duration, :surfaces, :width, :height, :viewbox, :namespaces
 
       def initialize(options = {})
         set_duration(options[:duration])
-        set_surface(options[:surface])
+        set_surfaces(options[:surfaces])
         set_width(options[:width])
         set_height(options[:height])
         set_viewbox(options[:viewbox])
         set_namespaces(options[:namespaces])
       end
 
+      # ViewBox helper.
       class ViewBox
         attr_accessor :x, :y, :width, :height
 
@@ -41,8 +42,8 @@ module Phantom
         @duration = val.nil? ? 0.1 : val
       end
 
-      def set_surface(val)
-        @surface = val.nil? ? nil : val
+      def set_surfaces(val)
+        @surfaces = val.nil? ? nil : val
       end
 
       def set_width(val)
