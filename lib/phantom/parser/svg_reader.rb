@@ -89,7 +89,7 @@ module Phantom
             read_size(svg, new_frame, options)
 
             # Read image surfaces.
-            new_frame.surfaces = choice_value(svg.elements, options[:surfaces])
+            new_frame.surfaces = choice_value(svg.elements.to_a, options[:surfaces])
 
             # Read frame duration.
             new_frame.duration = choice_value(new_frame.duration, options[:duration])
