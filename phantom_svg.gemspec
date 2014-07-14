@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.platform      = Gem::Platform::RUBY
   s.name          = 'phantom_svg'
-  s.version       = '0.0.2'
+  s.version       = '0.0.3'
   s.license       = 'LGPL-3.0'
   s.summary       = 'Hight end SVG manipulation tools for Ruby'
   s.description   = 'Hight end SVG manipulation tools for Ruby.\n' \
@@ -9,8 +9,6 @@ Gem::Specification.new do |s|
   s.authors      = ['Rika Yoshida', 'Rei Kagetsuki', 'Naoki Iwakawa']
   s.email        = 'info@genshin.org'
   s.homepage     = 'http://github.com/Genshin/phantom_svg'
-
-  s.required_ruby_version = '~> 2.0.0'
 
   s.files = `git ls-files`.split($RS)
   s.test_files = s.files.grep(/^spec\//)
