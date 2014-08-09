@@ -1,6 +1,5 @@
-
 require 'rapngasm'
-require 'gdk3'
+#require 'gdk3'
 require 'rsvg2'
 require 'tmpdir'
 require 'cairo'

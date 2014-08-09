@@ -18,6 +18,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'cairo', '~> 1.12'
   s.add_dependency 'rapngasm', '~> 3.1'
-  s.add_dependency 'gdk3', '~> 2.2'
+ # s.add_dependency 'gdk3', '~> 2.2'
   s.add_dependency 'rsvg2', '~> 2.2'
 end
