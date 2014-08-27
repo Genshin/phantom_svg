@@ -7,7 +7,7 @@ describe Phantom::SVG::Base do
 
   describe 'loading a non-animated svg' do
     before(:all) do
-      @image_name = 'ninja'
+      @image_name = 'compiled'
       @source = "#{SPEC_SOURCE_DIR}/#{@image_name}.svg"
     end
 
@@ -50,7 +50,7 @@ describe Phantom::SVG::Base do
 
   describe 'creating an animated SVG' do
     before(:all) do
-      @image_name = 'stuck_out_tongue'
+      @image_name = 'test_frames'
       @source = "#{SPEC_SOURCE_DIR}/#{@image_name}/*.svg"
       @destination_dir = "#{SPEC_TEMP_DIR}/#{@image_name}"
       @destination = "#{@destination_dir}/#{@image_name}.svg"
@@ -91,7 +91,7 @@ describe Phantom::SVG::Base do
 
   describe 'creating an animated SVG file from a JSON animation spec file' do
     before(:all) do
-      @image_name = 'stuck_out_tongue'
+      @image_name = 'test_frames'
       @source_dir = "#{SPEC_SOURCE_DIR}/#{@image_name}"
       @destination_dir = SPEC_TEMP_DIR
     end
@@ -137,7 +137,7 @@ describe Phantom::SVG::Base do
 
   describe 'creating an animated SVG from file from an XML animation spec' do
     before(:all) do
-      @image_name = 'stuck_out_tongue'
+      @image_name = 'test_frames'
       @source_dir = "#{SPEC_SOURCE_DIR}/#{@image_name}"
       @destination_dir = SPEC_TEMP_DIR
     end
@@ -183,7 +183,7 @@ describe Phantom::SVG::Base do
 
   describe 'converting a keyframe animated SVG to APNG' do
     before(:all) do
-      @image_name = 'stuck_out_tongue'
+      @image_name = 'test_frames'
       @source = "#{SPEC_SOURCE_DIR}/#{@image_name}/*.svg"
       @destination = "#{SPEC_TEMP_DIR}/svg2apng.png"
     end
@@ -244,7 +244,7 @@ describe Phantom::SVG::Base do
 
   describe 'using a finite loop count' do
     before(:all) do
-      @image_name = 'stuck_out_tongue'
+      @image_name = 'test_frames'
       @source_dir = "#{SPEC_SOURCE_DIR}/#{@image_name}"
       @source = "#{@source_dir}/*.svg"
       @destination_dir = SPEC_TEMP_DIR
@@ -331,10 +331,10 @@ describe Phantom::SVG::Base do
 
   describe 'using the skip_first flag' do
     before(:all) do
-      @image_name = 'stuck_out_tongue'
+      @image_name = 'test_frames'
       @source_dir = "#{SPEC_SOURCE_DIR}/#{@image_name}"
       @source = "#{@source_dir}/*.svg"
-      @source_skip_frame = "#{SPEC_SOURCE_DIR}/ninja.svg"
+      @source_skip_frame = "#{SPEC_SOURCE_DIR}/compiled.svg"
       @destination_dir = SPEC_TEMP_DIR
       @destination_svg = "#{@destination_dir}/skip_first_test.svg"
       @destination_png = "#{@destination_dir}/skip_first_test.png"
