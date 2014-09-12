@@ -99,9 +99,11 @@ module Phantom
         def convert_to_png(path, frame)
           handle = RSVG::Handle.new_from_file("#{path}.svg")
 
-          surface = Cairo::ImageSurface.new(Cairo::FORMAT_ARGB32, @width, @height)
+          w = @width.to_i
+          h = @height.to_i
+          surface = Cairo::ImageSurface.new(Cairo::FORMAT_ARGB32, w, h)
           context = Cairo::Context.new(surface)
-          context.scale(@width / handle.dimensions.width, @height / handle.dimensions.height)
+          context.scale(w / handle.dimensions.width, h / handle.dimensions.height)
           context.render_rsvg_handle(handle)
 
           surface.write_to_png("#{path}.png")

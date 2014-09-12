@@ -1,10 +1,10 @@
 {
-  "name": "stuck_out_tongue",
+  "name": "test",
   "loops": 0,
   "skip_first": true,
   "default_delay": "50/1000",
   "frames": [
-    "../ninja.svg",
+    "../compiled.svg",
     "*.svg"
   ]
 }
