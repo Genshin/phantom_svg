@@ -7,7 +7,7 @@ describe Phantom::SVG::Base do
 
   describe 'loading a non-animated svg' do
     before(:all) do
-      @image_name = 'compiled'
+      @image_name = 'plain'
       @source = "#{SPEC_SOURCE_DIR}/#{@image_name}.svg"
     end
 
@@ -31,12 +31,12 @@ describe Phantom::SVG::Base do
       expect(@loader.frames[0].surfaces).not_to be_empty
     end
 
-    it 'frame width equal to \'64px\'.' do
-      expect(@loader.frames[0].width).to eq('64px')
+    it 'frame width equal to 64.' do
+      expect(@loader.frames[0].width).to eq('64')
     end
 
-    it 'frame height equal to \'64px\'.' do
-      expect(@loader.frames[0].height).to eq('64px')
+    it 'frame height equal to 64.' do
+      expect(@loader.frames[0].height).to eq('64')
     end
 
     it 'frame namespaces is not empty.' do
@@ -356,7 +356,7 @@ describe Phantom::SVG::Base do
     it 'successfully saves a keyframe animated SVG.' do
       @loader.add_frame_from_file(@destination_svg)
 
-      expect(@loader.frames.size).to eq(13)
+      expect(@loader.frames.size).to eq(24)
       expect(@loader.width).to eq('64px')
       expect(@loader.height).to eq('64px')
       expect(@loader.loops).to eq(0)
@@ -375,7 +375,7 @@ describe Phantom::SVG::Base do
     it 'correctly saved an APNG.' do
       @loader.add_frame_from_file(@destination_png)
 
-      expect(@loader.frames.size).to eq(13)
+      expect(@loader.frames.size).to eq(24)
       expect(@loader.width).to eq('64px')
       expect(@loader.height).to eq('64px')
       expect(@loader.loops).to eq(0)
@@ -392,7 +392,7 @@ describe Phantom::SVG::Base do
       @loader.reset
       @loader.add_frame_from_file(destination)
 
-      expect(@loader.frames.size).to eq(13)
+      expect(@loader.frames.size).to eq(24)
       expect(@loader.width).to eq('64px')
       expect(@loader.height).to eq('64px')
       expect(@loader.loops).to eq(0)
@@ -410,7 +410,7 @@ describe Phantom::SVG::Base do
       @loader.reset
       @loader.add_frame_from_file(destination)
 
-      expect(@loader.frames.size).to eq(13)
+      expect(@loader.frames.size).to eq(24)
       expect(@loader.width).to eq('64px')
       expect(@loader.height).to eq('64px')
       expect(@loader.loops).to eq(0)
