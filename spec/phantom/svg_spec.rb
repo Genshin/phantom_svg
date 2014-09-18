@@ -215,7 +215,6 @@ describe Phantom::SVG::Base do
     before(:all) do
       @apng_name = 'apngasm'
       @source = "#{SPEC_SOURCE_DIR}/#{@apng_name}.png"
-      @static_source = "#{SPEC_SOURCE_DIR}/test_raster.png"
       @destination_dir = "#{SPEC_TEMP_DIR}/#{@apng_name}"
       @destination = "#{@destination_dir}/#{@apng_name}.svg"
       FileUtils.mkdir_p(@destination_dir)
@@ -226,7 +225,7 @@ describe Phantom::SVG::Base do
     end
 
     it 'loads and saves PNG.' do
-      @loader.add_frame_from_file(@static_source)
+      @loader.add_frame_from_file("#{SPEC_SOURCE_DIR}/test_raster.png")
       expect(@loader.frames.size).to eq(1)
       expect(@loader.frames.first.width).to eq("256px")
       expect(@loader.frames.first.height).to eq("128px")
@@ -241,6 +240,23 @@ describe Phantom::SVG::Base do
       expect(write_size).not_to eq(0)
     end
 
+    it 'loads and saves an irrigularly proportioned PNG' do
+      @loader.add_frame_from_file("#{SPEC_SOURCE_DIR}/small_v_raster.png")
+      expect(@loader.frames.size).to eq(1)
+      expect(@loader.frames.first.width).to eq("33px")
+      expect(@loader.frames.first.height).to eq("54px")
+      expect(@loader.frames.first.viewbox.width).to eq(33)
+      expect(@loader.frames.first.viewbox.height).to eq(54)
+
+      write_size = @loader.save_svg("#{SPEC_TEMP_DIR}/small_v_same.svg")
+      expect(write_size).not_to eq(0)
+
+      @loader.width = 64
+      @loader.height = 32
+      write_size = @loader.save_svg("#{SPEC_TEMP_DIR}/small_v_scaled.svg")
+      expect(write_size).not_to eq(0)
+    end
+
     it 'loads an APNG and saves a smaller APNG.' do
       @loader.add_frame_from_file(@source)
       expect(@loader.frames.size).to eq(34)
@@ -248,6 +264,16 @@ describe Phantom::SVG::Base do
       @loader.width = 12
       @loader.height = 12
       write_size = @loader.save_apng("#{SPEC_TEMP_DIR}/apng_scaled.png")
+      expect(write_size).not_to eq(0)
+    end
+
+    it 'loads an APNG and saves a bigger APNG.' do
+      @loader.add_frame_from_file(@source)
+      expect(@loader.frames.size).to eq(34)
+
+      @loader.width = 128
+      @loader.height = 128
+      write_size = @loader.save_apng("#{SPEC_TEMP_DIR}/apng_scaled_up.png")
       expect(write_size).not_to eq(0)
     end
 
