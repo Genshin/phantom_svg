@@ -51,8 +51,8 @@ module Phantom
         @width = 0
         @height = 0
         frames.each do |frame|
-          @width = frame.width.to_f if frame.width.to_f > @width
-          @height = frame.height.to_f if frame.height.to_f > @height
+          @width = frame.width.to_i if frame.width.to_i > @width
+          @height = frame.height.to_i if frame.height.to_i > @height
         end
       end
 
