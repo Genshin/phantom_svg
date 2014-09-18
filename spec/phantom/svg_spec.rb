@@ -207,7 +207,6 @@ describe Phantom::SVG::Base do
       @static_source = "#{SPEC_SOURCE_DIR}/test_raster.png"
       @destination_dir = "#{SPEC_TEMP_DIR}/#{@apng_name}"
       @destination = "#{@destination_dir}/#{@apng_name}.svg"
-      @static_destination = "#{@destination_dir}/static_raster.svg"
       FileUtils.mkdir_p(@destination_dir)
     end
 
@@ -223,7 +222,11 @@ describe Phantom::SVG::Base do
       expect(@loader.frames.first.viewbox.width).to eq(256)
       expect(@loader.frames.first.viewbox.height).to eq(128)
 
-      write_size = @loader.save_svg(@static_destination)
+      write_size = @loader.save_svg("#{SPEC_TEMP_DIR}/static_same.svg")
+      expect(write_size).not_to eq(0)
+      @loader.width = 64
+      @loader.height = 32
+      write_size = @loader.save_svg("#{SPEC_TEMP_DIR}/static_scaled.svg")
       expect(write_size).not_to eq(0)
     end
 
