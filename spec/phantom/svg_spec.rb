@@ -230,6 +230,16 @@ describe Phantom::SVG::Base do
       expect(write_size).not_to eq(0)
     end
 
+    it 'loads an APNG and saves a smaller APNG.' do
+      @loader.add_frame_from_file(@source)
+      expect(@loader.frames.size).to eq(34)
+
+      @loader.width = 12
+      @loader.height = 12
+      write_size = @loader.save_apng("#{SPEC_TEMP_DIR}/apng_scaled.png")
+      expect(write_size).not_to eq(0)
+    end
+
     it 'loads an APNG and saves a keyframe animated SVG.' do
       @loader.add_frame_from_file(@source)
       expect(@loader.frames.size).to eq(34)
