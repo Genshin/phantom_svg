@@ -195,8 +195,19 @@ describe Phantom::SVG::Base do
 
     it 'successfully converts.' do
       expect(@loader.frames.size).to eq(12)
-      is_succeeded = @loader.save_apng(@destination)
-      expect(is_succeeded).to eq(true)
+      expect(@loader.save_apng(@destination)).to eq(true)
+    end
+
+    it 'stretches horizontally' do
+      expect(@loader.frames.size).to eq(12)
+      @loader.width = 128
+      expect(@loader.save_apng("#{SPEC_TEMP_DIR}/svg2apng_h.png")).to eq(true)
+    end
+
+    it 'stretches vertically' do
+      expect(@loader.frames.size).to eq(12)
+      @loader.height = 128
+      expect(@loader.save_apng("#{SPEC_TEMP_DIR}/svg2apng_v.png")).to eq(true)
     end
   end
 
@@ -237,6 +248,26 @@ describe Phantom::SVG::Base do
       @loader.width = 12
       @loader.height = 12
       write_size = @loader.save_apng("#{SPEC_TEMP_DIR}/apng_scaled.png")
+      expect(write_size).not_to eq(0)
+    end
+
+    it 'loads an APNG and saves a horizontally stretched APNG.' do
+      @loader.add_frame_from_file(@source)
+      expect(@loader.frames.size).to eq(34)
+
+      @loader.width = 80
+      @loader.height = 20
+      write_size = @loader.save_apng("#{SPEC_TEMP_DIR}/apng_h_stretched.png")
+      expect(write_size).not_to eq(0)
+    end
+
+    it 'loads an APNG and saves a vertically stretched APNG.' do
+      @loader.add_frame_from_file(@source)
+      expect(@loader.frames.size).to eq(34)
+
+      @loader.width = 20
+      @loader.height = 80
+      write_size = @loader.save_apng("#{SPEC_TEMP_DIR}/apng_v_stretched.png")
       expect(write_size).not_to eq(0)
     end
 
