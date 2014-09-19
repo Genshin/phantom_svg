@@ -69,6 +69,10 @@ module Phantom
         def write_size(s, d)
           d.add_attribute('width', s.width.is_a?(String) ? s.width : "#{s.width.to_i}px")
           d.add_attribute('height', s.height.is_a?(String) ? s.height : "#{s.height.to_i}px")
+        end
+
+        # Write viewbox.
+        def write_viewbox(s, d)
           d.add_attribute('viewBox', s.viewbox.to_s) if s.instance_variable_defined?(:@viewbox)
         end
 
@@ -90,7 +94,9 @@ module Phantom
         def write_image(frame, parent_node, id = nil)
           svg = parent_node.add_element('svg')
           svg.add_attribute('id', id) unless id.nil?
-          write_size(frame, svg)
+          write_size(frame, svg) if parent_node == @root
+          write_viewbox(frame, svg)
+          svg.add_attribute('preserveAspectRatio', 'none')
           write_namespaces(frame, svg)
           write_surfaces(frame.surfaces, svg)
         end

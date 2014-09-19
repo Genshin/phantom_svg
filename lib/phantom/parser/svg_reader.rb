@@ -64,15 +64,18 @@ module Phantom
 
         # Read size from node to dest.
         def read_size(node, dest, options = {})
-          node.attributes.each do |key, val|
-            case key
-            when 'width'
-              dest.instance_variable_set(:@width, choice_value(val, options[:width]))
-            when 'height'
-              dest.instance_variable_set(:@height, choice_value(val, options[:height]))
-            when 'viewBox'
-              dest.viewbox.set_from_text(choice_value(val, options[:viewbox]).to_s)
-            end
+          dest.viewbox.set_from_text(choice_value(node.attributes['viewBox'], options[:viewbox]).to_s) unless node.attributes['viewBox'].nil?
+
+          if node.attributes['width'].nil? then
+            dest.instance_variable_set(:@width, choice_value("#{dest.viewbox.width}px", options[:width]))
+          else
+            dest.instance_variable_set(:@width, choice_value(node.attributes['width'], options[:width]))
+          end
+
+          if node.attributes['height'].nil? then
+            dest.instance_variable_set(:@height, choice_value("#{dest.viewbox.height}px", options[:height]))
+          else
+            dest.instance_variable_set(:@height, choice_value(node.attributes['height'], options[:height]))
           end
         end
 

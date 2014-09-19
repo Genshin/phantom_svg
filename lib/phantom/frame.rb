@@ -56,10 +56,10 @@ module Phantom
 
       def set_viewbox(val)
         @viewbox =
-          if val.nil?               then  ViewBox.new
+          if val.nil?               then  ViewBox.new(0, 0, @width, @height)
           elsif val.is_a?(ViewBox)  then  val
           elsif val.is_a?(String)   then  ViewBox.new.set_from_text(val)
-          else                            ViewBox.new
+          else                            ViewBox.new(0, 0, @width, @height)
           end
       end
 

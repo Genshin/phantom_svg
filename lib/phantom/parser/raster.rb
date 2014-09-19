@@ -25,7 +25,7 @@ module Phantom
         def create_frame_from_png(path, id, duration = nil)
           pixbuf = Gdk::Pixbuf.new(path)
 
-          frame = Phantom::SVG::Frame.new
+          frame = Phantom::SVG::Frame.new( { width: pixbuf.width, height: pixbuf.height } )
           frame.width = "#{pixbuf.width}px"
           frame.height = "#{pixbuf.height}px"
           frame.surfaces = create_surfaces(path, pixbuf.width, pixbuf.height)
