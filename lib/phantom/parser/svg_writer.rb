@@ -91,6 +91,7 @@ module Phantom
           svg = parent_node.add_element('svg')
           svg.add_attribute('id', id) unless id.nil?
           write_size(frame, svg)
+          svg.add_attribute('preserveAspectRatio', 'none')
           write_namespaces(frame, svg)
           write_surfaces(frame.surfaces, svg)
         end
