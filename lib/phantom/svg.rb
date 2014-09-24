@@ -47,17 +47,32 @@ module Phantom
         end
       end
 
-      def set_size
-        @width = 0
-        @height = 0
-        frames.each do |frame|
-          @width = frame.width.to_i if frame.width.to_i > @width
-          @height = frame.height.to_i if frame.height.to_i > @height
+      def set_size(width, height)
+        # width
+        if width.nil? then
+          if @width.nil? || @width == 0 then
+            frames.each do |frame|
+              @width = frame.width.to_i if frame.width.to_i > @width
+            end
+          end
+        else
+          @width = width
+        end
+
+        # height
+        if height.nil? then
+          if @height.nil? || @height == 0 then
+            frames.each do |frame|
+              @height = frame.height.to_i if frame.height.to_i > @height
+            end
+          end
+        else
+          @height = height
         end
       end
 
       def save_svg(path)
-        set_size if @width.to_i == 0 || @height.to_i == 0
+        set_size(nil, nil)
 
         Parser::SVGWriter.new.write(path, self)
       end
@@ -121,7 +136,7 @@ module Phantom
           @loops = reader.loops
           @skip_first = reader.skip_first
           @frames += reader.frames
-          set_size
+          set_size(nil, nil)
         elsif reader.skip_first
           @frames += reader.frames.slice(1, reader.frames.length - 1)
         else
