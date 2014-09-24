@@ -71,6 +71,16 @@ module Phantom
         end
       end
 
+      def scale_w(width)
+        @height = (@height.to_i * width.to_i / @width.to_i).to_i
+        @width = width.to_i
+      end
+
+      def scale_h(height)
+        @width = (@width.to_i * height.to_i / @height.to_i).to_i
+        @height = height.to_i
+      end
+
       def save_svg(path)
         set_size(nil, nil)
 
