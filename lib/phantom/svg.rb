@@ -48,7 +48,7 @@ module Phantom
         end
       end
 
-      def set_size(width, height)
+      def set_size(width = nil, height = nil)
         # width
         if width.nil? then
           if @width.nil? || @width == 0 then
@@ -83,7 +83,7 @@ module Phantom
       end
 
       def save_svg(path)
-        set_size(nil, nil)
+        set_size
 
         Parser::SVGWriter.new.write(path, self)
       end
@@ -155,7 +155,7 @@ module Phantom
           @loops = reader.loops
           @skip_first = reader.skip_first
           @frames += reader.frames
-          set_size(nil, nil)
+          set_size
         elsif reader.skip_first
           @frames += reader.frames.slice(1, reader.frames.length - 1)
         else

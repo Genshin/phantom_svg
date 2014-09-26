@@ -72,7 +72,7 @@ module Phantom
         end
 
         def save_rasterized(path)
-          set_size(nil, nil)
+          set_size
 
           apngasm = APNGAsm.new
           apngasm.set_loops(@loops)
