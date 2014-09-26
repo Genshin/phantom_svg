@@ -2,20 +2,13 @@
 require 'rexml/document'
 
 require_relative '../frame.rb'
+require_relative 'abstract_image_reader.rb'
 
 module Phantom
   module SVG
     module Parser
       # SVG reader.
-      class SVGReader
-        attr_reader :frames, :width, :height, :loops, :skip_first, :has_animation
-        alias_method :has_animation?, :has_animation
-
-        # Construct SVGReader object.
-        def initialize(path = nil, options = {})
-          read(path, options)
-        end
-
+      class SVGReader < AbstractImageReader
         # Read svg file from path.
         def read(path, options = {})
           reset
@@ -34,16 +27,6 @@ module Phantom
         end
 
         private
-
-        # Reset SVGReader object.
-        def reset
-          @frames = []
-          @width = nil
-          @height = nil
-          @loops = nil
-          @skip_first = nil
-          @has_animation = false
-        end
 
         # Read no animation svg.
         def read_svg(options)

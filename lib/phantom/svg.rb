@@ -1,6 +1,7 @@
 
 require_relative 'frame.rb'
 require_relative 'parser/raster.rb'
+require_relative 'parser/png_reader.rb'
 require_relative 'parser/svg_reader.rb'
 require_relative 'parser/svg_writer.rb'
 require_relative 'parser/json_animation_reader.rb'
@@ -130,7 +131,15 @@ module Phantom
       end
 
       def load_from_png(path, options)
-        load_raster(path, @frames.size)
+        reader = Parser::PNGReader.new(path, options)
+        if reader.has_animation?
+          @width = reader.width
+          @height = reader.height
+          @loops = reader.loops
+          @skip_first = reader.skip_first
+        end
+
+        @frames += reader.frames
       end
 
       def load_from_json(path, options)

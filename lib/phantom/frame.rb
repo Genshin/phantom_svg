@@ -27,7 +27,7 @@ module Phantom
 
         def set_from_text(text)
           values = text.split(' ', 4)
-          initialize(values[0], values[1], values[2], values[3])
+          initialize(values[0].to_i, values[1].to_i, values[2].to_i, values[3].to_i)
           self
         end
 
