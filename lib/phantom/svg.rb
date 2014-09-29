@@ -2,6 +2,7 @@
 require_relative 'frame.rb'
 require_relative 'parser/raster.rb'
 require_relative 'parser/png_reader.rb'
+require_relative 'parser/png_writer.rb'
 require_relative 'parser/svg_reader.rb'
 require_relative 'parser/svg_writer.rb'
 require_relative 'parser/json_animation_reader.rb'
@@ -103,7 +104,7 @@ module Phantom
       end
 
       def save_apng(path)
-        save_rasterized(path)
+        Parser::PNGWriter.new.write(path, self)
       end
 
       # Calculate and return total duration.

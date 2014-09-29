@@ -1,16 +1,13 @@
 
 require 'rexml/document'
 
+require_relative 'abstract_image_writer.rb'
+
 module Phantom
   module SVG
     module Parser
       # SVG writer.
-      class SVGWriter
-        # Construct SVGWriter object.
-        def initialize(path = nil, object = nil)
-          write(path, object)
-        end
-
+      class SVGWriter < AbstractImageWriter
         # Write svg file from object to path.
         # Return write size.
         def write(path, object)
