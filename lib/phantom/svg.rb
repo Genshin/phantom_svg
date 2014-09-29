@@ -1,6 +1,5 @@
 
 require_relative 'frame.rb'
-require_relative 'parser/raster.rb'
 require_relative 'parser/png_reader.rb'
 require_relative 'parser/png_writer.rb'
 require_relative 'parser/svg_reader.rb'
@@ -11,7 +10,6 @@ require_relative 'parser/xml_animation_reader.rb'
 module Phantom
   module SVG
     class Base
-      include Parser::Raster
       attr_accessor :frames, :width, :height, :loops, :skip_first
 
       def initialize(path = nil, options = {})
