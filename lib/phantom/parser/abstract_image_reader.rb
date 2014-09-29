@@ -14,7 +14,7 @@ module Phantom
 
         # Read image file from path.
         def read(path, options = {})
-          raise 'Called abstract method.'
+          fail 'Called abstract method.'
         end
 
         private

@@ -12,8 +12,7 @@ module Phantom
         # Write image file from object to path.
         # Return write size.
         def write(path, object)
-          raise 'Called abstract method.'
-          0
+          fail 'Called abstract method.'
         end
       end # class AbstractImageWriter
     end # module Parser

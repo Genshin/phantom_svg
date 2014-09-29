@@ -19,6 +19,15 @@ module Phantom
           object.set_size
 
           apngasm = APNGAsm.new
+          convert_frames(apngasm, object)
+          result = apngasm.assemble(path)
+
+          result
+        end
+
+        private
+
+        def convert_frames(apngasm, object)
           apngasm.set_loops(object.loops)
           apngasm.set_skip_first(object.skip_first)
 
@@ -29,15 +38,10 @@ module Phantom
               apngasm.add_frame_file("#{tmp_file_path}.png", frame.duration.to_f * 1000, 1000)
             end
           end
-
-          result = apngasm.assemble(path)
-          result
         end
 
-        private 
-
         def create_temporary_file(path, frame)
-          write_size = Parser::SVGWriter.new.write("#{path}.svg", frame)
+          Parser::SVGWriter.new.write("#{path}.svg", frame)
 
           handle = RSVG::Handle.new_from_file("#{path}.svg")
           w = frame.width.to_i

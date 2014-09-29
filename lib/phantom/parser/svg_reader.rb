@@ -49,13 +49,13 @@ module Phantom
         def read_size(node, dest, options = {})
           dest.viewbox.set_from_text(choice_value(node.attributes['viewBox'], options[:viewbox]).to_s) unless node.attributes['viewBox'].nil?
 
-          if node.attributes['width'].nil? then
+          if node.attributes['width'].nil?
             dest.instance_variable_set(:@width, choice_value("#{dest.viewbox.width}px", options[:width]))
           else
             dest.instance_variable_set(:@width, choice_value(node.attributes['width'], options[:width]))
           end
 
-          if node.attributes['height'].nil? then
+          if node.attributes['height'].nil?
             dest.instance_variable_set(:@height, choice_value("#{dest.viewbox.height}px", options[:height]))
           else
             dest.instance_variable_set(:@height, choice_value(node.attributes['height'], options[:height]))

@@ -227,8 +227,8 @@ describe Phantom::SVG::Base do
     it 'loads and saves PNG.' do
       @loader.add_frame_from_file("#{SPEC_SOURCE_DIR}/test_raster.png")
       expect(@loader.frames.size).to eq(1)
-      expect(@loader.frames.first.width).to eq("256px")
-      expect(@loader.frames.first.height).to eq("128px")
+      expect(@loader.frames.first.width).to eq('256px')
+      expect(@loader.frames.first.height).to eq('128px')
       expect(@loader.frames.first.viewbox.width).to eq(256)
       expect(@loader.frames.first.viewbox.height).to eq(128)
 
@@ -243,8 +243,8 @@ describe Phantom::SVG::Base do
     it 'loads and saves an irrigularly proportioned PNG' do
       @loader.add_frame_from_file("#{SPEC_SOURCE_DIR}/small_v_raster.png")
       expect(@loader.frames.size).to eq(1)
-      expect(@loader.frames.first.width).to eq("33px")
-      expect(@loader.frames.first.height).to eq("54px")
+      expect(@loader.frames.first.width).to eq('33px')
+      expect(@loader.frames.first.height).to eq('54px')
       expect(@loader.frames.first.viewbox.width).to eq(33)
       expect(@loader.frames.first.viewbox.height).to eq(54)
 
