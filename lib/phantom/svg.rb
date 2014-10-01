@@ -4,6 +4,7 @@ require_relative 'parser/png_reader.rb'
 require_relative 'parser/png_writer.rb'
 require_relative 'parser/svg_reader.rb'
 require_relative 'parser/svg_writer.rb'
+require_relative 'parser/jpeg_reader.rb'
 require_relative 'parser/json_animation_reader.rb'
 require_relative 'parser/xml_animation_reader.rb'
 
@@ -31,6 +32,8 @@ module Phantom
           case File.extname(file)
           when '.svg'   then  load_from_svg(file, options)
           when '.png'   then  load_from_png(file, options)
+          when '.jpg'   then  load_from_jpeg(file, options)
+          when '.jpeg'  then  load_from_jpeg(file, options)
           when '.json'  then  load_from_json(file, options)
           when '.xml'   then  load_from_xml(file, options)
           end
@@ -131,6 +134,18 @@ module Phantom
 
       def load_from_png(path, options)
         reader = Parser::PNGReader.new(path, options)
+        if reader.has_animation?
+          @width = reader.width
+          @height = reader.height
+          @loops = reader.loops
+          @skip_first = reader.skip_first
+        end
+
+        @frames += reader.frames
+      end
+
+      def load_from_jpeg(path, options)
+        reader = Parser::JPEGReader.new(path, options)
         if reader.has_animation?
           @width = reader.width
           @height = reader.height
