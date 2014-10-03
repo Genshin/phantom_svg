@@ -158,6 +158,18 @@ module Phantom
         @frames += reader.frames
       end
 
+      def load_from_gif(path, option)
+        reader = Parser::GIFReader.new(path, option)
+        if reader.has_animation?
+          @width = reader.width
+          @height = reader.height
+          @loops = reader.loops
+          @skip_first = reader.skip_first
+        end
+
+        @frames += reader.frames
+      end
+
       def load_from_json(path, options)
         load_from_reader(Parser::JSONAnimationReader.new(path), options)
       end
