@@ -36,15 +36,13 @@ module Phantom
             frame.height = "#{img.rows}px"
             frame.viewbox.set_from_text("0 0 #{img.columns} #{img.rows}")
             frame.surfaces = create_surfaces(path, img.columns, img.rows)
-            frame.duration = img.delay * 10 unless duration.nil?
+            frame.duration = img.delay * 10.0 unless img.delay.nil?
             frame.namespaces = {
               'xmlns' => 'http://www.w3.org/2000/svg',
               'xlink' => 'http://www.w3.org/1999/xlink'
             }
             frames << frame
           end
-         # 
-         # animation = Gdk::PixbufAnimation(path)
          frames
         end
 
@@ -57,7 +55,7 @@ module Phantom
           image.add_attributes(
             'width' => width,
             'height' => height,
-            'xlink:href' => "data:image/jpeg;base64,#{base64}"
+            'xlink:href' => "data:image/gif;base64,#{base64}"
           )
 
           [image]

@@ -545,7 +545,7 @@ describe Phantom::SVG::Base do
       @loader = Phantom::SVG::Base.new
     end
 
-    it "loads frames." do
+    it "loads frames / saves to SVG and PNG" do
       test_name = 'gif_test'
       @loader.add_frame_from_file(@source)
       expect(@loader.frames.size).to eq(34)
