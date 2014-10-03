@@ -1,9 +1,8 @@
-
 require 'rsvg2'
 require 'rexml/document'
 
-require_relative '../frame.rb'
-require_relative 'abstract_image_reader.rb'
+require_relative '../frame'
+require_relative 'abstract_image_reader'
 
 module Phantom
   module SVG

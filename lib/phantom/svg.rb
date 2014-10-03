@@ -1,12 +1,13 @@
 
-require_relative 'frame.rb'
-require_relative 'parser/png_reader.rb'
-require_relative 'parser/png_writer.rb'
-require_relative 'parser/svg_reader.rb'
-require_relative 'parser/svg_writer.rb'
-require_relative 'parser/jpeg_reader.rb'
-require_relative 'parser/json_animation_reader.rb'
-require_relative 'parser/xml_animation_reader.rb'
+require_relative 'frame'
+require_relative 'parser/png_reader'
+require_relative 'parser/png_writer'
+require_relative 'parser/svg_reader'
+require_relative 'parser/svg_writer'
+require_relative 'parser/jpeg_reader'
+require_relative 'parser/gif_reader'
+require_relative 'parser/json_animation_reader'
+require_relative 'parser/xml_animation_reader'
 
 module Phantom
   module SVG
@@ -34,6 +35,7 @@ module Phantom
           when '.png'   then  load_from_png(file, options)
           when '.jpg'   then  load_from_jpeg(file, options)
           when '.jpeg'  then  load_from_jpeg(file, options)
+          when '.gif'   then  load_from_gif(file, options)
           when '.json'  then  load_from_json(file, options)
           when '.xml'   then  load_from_xml(file, options)
           end
