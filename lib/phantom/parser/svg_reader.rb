@@ -2,20 +2,13 @@
 require 'rexml/document'
 
 require_relative '../frame.rb'
+require_relative 'abstract_image_reader.rb'
 
 module Phantom
   module SVG
     module Parser
       # SVG reader.
-      class SVGReader
-        attr_reader :frames, :width, :height, :loops, :skip_first, :has_animation
-        alias_method :has_animation?, :has_animation
-
-        # Construct SVGReader object.
-        def initialize(path = nil, options = {})
-          read(path, options)
-        end
-
+      class SVGReader < AbstractImageReader
         # Read svg file from path.
         def read(path, options = {})
           reset
@@ -34,16 +27,6 @@ module Phantom
         end
 
         private
-
-        # Reset SVGReader object.
-        def reset
-          @frames = []
-          @width = nil
-          @height = nil
-          @loops = nil
-          @skip_first = nil
-          @has_animation = false
-        end
 
         # Read no animation svg.
         def read_svg(options)
@@ -66,13 +49,13 @@ module Phantom
         def read_size(node, dest, options = {})
           dest.viewbox.set_from_text(choice_value(node.attributes['viewBox'], options[:viewbox]).to_s) unless node.attributes['viewBox'].nil?
 
-          if node.attributes['width'].nil? then
+          if node.attributes['width'].nil?
             dest.instance_variable_set(:@width, choice_value("#{dest.viewbox.width}px", options[:width]))
           else
             dest.instance_variable_set(:@width, choice_value(node.attributes['width'], options[:width]))
           end
 
-          if node.attributes['height'].nil? then
+          if node.attributes['height'].nil?
             dest.instance_variable_set(:@height, choice_value("#{dest.viewbox.height}px", options[:height]))
           else
             dest.instance_variable_set(:@height, choice_value(node.attributes['height'], options[:height]))

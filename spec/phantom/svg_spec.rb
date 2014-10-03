@@ -227,8 +227,8 @@ describe Phantom::SVG::Base do
     it 'loads and saves PNG.' do
       @loader.add_frame_from_file("#{SPEC_SOURCE_DIR}/test_raster.png")
       expect(@loader.frames.size).to eq(1)
-      expect(@loader.frames.first.width).to eq("256px")
-      expect(@loader.frames.first.height).to eq("128px")
+      expect(@loader.frames.first.width).to eq('256px')
+      expect(@loader.frames.first.height).to eq('128px')
       expect(@loader.frames.first.viewbox.width).to eq(256)
       expect(@loader.frames.first.viewbox.height).to eq(128)
 
@@ -243,8 +243,8 @@ describe Phantom::SVG::Base do
     it 'loads and saves an irrigularly proportioned PNG' do
       @loader.add_frame_from_file("#{SPEC_SOURCE_DIR}/small_v_raster.png")
       expect(@loader.frames.size).to eq(1)
-      expect(@loader.frames.first.width).to eq("33px")
-      expect(@loader.frames.first.height).to eq("54px")
+      expect(@loader.frames.first.width).to eq('33px')
+      expect(@loader.frames.first.height).to eq('54px')
       expect(@loader.frames.first.viewbox.width).to eq(33)
       expect(@loader.frames.first.viewbox.height).to eq(54)
 
@@ -500,6 +500,66 @@ describe Phantom::SVG::Base do
       expect(@loader.loops).to eq(0)
       expect(@loader.skip_first).to eq(true)
       expect(@loader.frames[1].duration).to eq(0.05)
+    end
+  end
+
+  describe 'creating an animated SVG file from a JPEG files.' do
+    before(:all) do
+      @image_name = 'jpeg_test'
+      @source_dir = "#{SPEC_SOURCE_DIR}/#{@image_name}"
+      @destination_dir = SPEC_TEMP_DIR
+    end
+
+    before do
+      @loader = Phantom::SVG::Base.new
+    end
+
+    it "loads frames." do
+      test_name = 'jpeg_test'
+      @loader.add_frame_from_file("#{@source_dir}/*.jpg")
+      expect(@loader.frames.size).to eq(34)
+      @loader.frames.each do |frame|
+        expect(frame.duration.instance_of?(Float)).to eq(true)
+        expect(frame.width).to eq('64px')
+        expect(frame.height).to eq('64px')
+        expect(frame.surfaces).not_to be_nil
+        expect(frame.surfaces).not_to be_empty
+        expect(frame.surfaces.to_s.length).not_to eq(1)
+        expect(frame.namespaces).not_to be_empty
+      end
+      write_size = @loader.save_svg("#{@destination_dir}/#{test_name}.svg")
+      expect(write_size).not_to eq(0)
+      write_size = @loader.save_apng("#{@destination_dir}/#{test_name}.png")
+      expect(write_size).not_to eq(0)
+    end
+  end
+
+  describe 'creating an animated SVG file from a GIF files.' do
+    before(:all) do
+      @image_name = 'apngasm'
+      @source = "#{SPEC_SOURCE_DIR}/#{@image_name}.gif"
+      @destination_dir = SPEC_TEMP_DIR
+    end
+
+    before do
+      @loader = Phantom::SVG::Base.new
+    end
+
+    it "loads frames." do
+      test_name = 'gif_test'
+      @loader.add_frame_from_file(@source)
+      expect(@loader.frames.size).to eq(34)
+      @loader.frames.each do |frame|
+        expect(frame.duration.instance_of?(Float)).to eq(true)
+        expect(frame.width).to eq('64px')
+        expect(frame.height).to eq('64px')
+        expect(frame.surfaces).not_to be_nil
+        expect(frame.surfaces).not_to be_empty
+        expect(frame.surfaces.to_s.length).not_to eq(1)
+        expect(frame.namespaces).not_to be_empty
+      end
+      write_size = @loader.save_svg("#{@destination_dir}/#{test_name}.svg")
+      expect(write_size).not_to eq(0)
     end
   end
 end

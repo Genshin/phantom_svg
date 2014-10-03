@@ -1,15 +1,17 @@
 
-require_relative 'frame.rb'
-require_relative 'parser/raster.rb'
-require_relative 'parser/svg_reader.rb'
-require_relative 'parser/svg_writer.rb'
-require_relative 'parser/json_animation_reader.rb'
-require_relative 'parser/xml_animation_reader.rb'
+require_relative 'frame'
+require_relative 'parser/png_reader'
+require_relative 'parser/png_writer'
+require_relative 'parser/svg_reader'
+require_relative 'parser/svg_writer'
+require_relative 'parser/jpeg_reader'
+require_relative 'parser/gif_reader'
+require_relative 'parser/json_animation_reader'
+require_relative 'parser/xml_animation_reader'
 
 module Phantom
   module SVG
     class Base
-      include Parser::Raster
       attr_accessor :frames, :width, :height, :loops, :skip_first
 
       def initialize(path = nil, options = {})
@@ -31,6 +33,9 @@ module Phantom
           case File.extname(file)
           when '.svg'   then  load_from_svg(file, options)
           when '.png'   then  load_from_png(file, options)
+          when '.jpg'   then  load_from_jpeg(file, options)
+          when '.jpeg'  then  load_from_jpeg(file, options)
+          when '.gif'   then  load_from_gif(file, options)
           when '.json'  then  load_from_json(file, options)
           when '.xml'   then  load_from_xml(file, options)
           end
@@ -47,17 +52,42 @@ module Phantom
         end
       end
 
-      def set_size
-        @width = 0
-        @height = 0
-        frames.each do |frame|
-          @width = frame.width.to_i if frame.width.to_i > @width
-          @height = frame.height.to_i if frame.height.to_i > @height
+      def set_size(width = nil, height = nil)
+        # width
+        if width.nil? then
+          if @width.nil? || @width == 0 then
+            frames.each do |frame|
+              @width = frame.width.to_i if frame.width.to_i > @width
+            end
+          end
+        else
+          @width = width
+        end
+
+        # height
+        if height.nil? then
+          if @height.nil? || @height == 0 then
+            frames.each do |frame|
+              @height = frame.height.to_i if frame.height.to_i > @height
+            end
+          end
+        else
+          @height = height
         end
       end
 
+      def scale_w(width)
+        @height = (@height.to_i * width.to_i / @width.to_i).to_i
+        @width = width.to_i
+      end
+
+      def scale_h(height)
+        @width = (@width.to_i * height.to_i / @height.to_i).to_i
+        @height = height.to_i
+      end
+
       def save_svg(path)
-        set_size if @width.to_i == 0 || @height.to_i == 0
+        set_size
 
         Parser::SVGWriter.new.write(path, self)
       end
@@ -77,7 +107,7 @@ module Phantom
       end
 
       def save_apng(path)
-        save_rasterized(path)
+        Parser::PNGWriter.new.write(path, self)
       end
 
       # Calculate and return total duration.
@@ -105,7 +135,39 @@ module Phantom
       end
 
       def load_from_png(path, options)
-        load_raster(path, @frames.size)
+        reader = Parser::PNGReader.new(path, options)
+        if reader.has_animation?
+          @width = reader.width
+          @height = reader.height
+          @loops = reader.loops
+          @skip_first = reader.skip_first
+        end
+
+        @frames += reader.frames
+      end
+
+      def load_from_jpeg(path, options)
+        reader = Parser::JPEGReader.new(path, options)
+        if reader.has_animation?
+          @width = reader.width
+          @height = reader.height
+          @loops = reader.loops
+          @skip_first = reader.skip_first
+        end
+
+        @frames += reader.frames
+      end
+
+      def load_from_gif(path, option)
+        reader = Parser::GIFReader.new(path, option)
+        if reader.has_animation?
+          @width = reader.width
+          @height = reader.height
+          @loops = reader.loops
+          @skip_first = reader.skip_first
+        end
+
+        @frames += reader.frames
       end
 
       def load_from_json(path, options)
