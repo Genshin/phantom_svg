@@ -560,6 +560,8 @@ describe Phantom::SVG::Base do
       end
       write_size = @loader.save_svg("#{@destination_dir}/#{test_name}.svg")
       expect(write_size).not_to eq(0)
+      write_size = @loader.save_apng("#{@destination_dir}/#{test_name}.png")
+      expect(write_size).not_to eq(0)
     end
   end
 end
