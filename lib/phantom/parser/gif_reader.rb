@@ -1,6 +1,7 @@
 require 'rexml/document'
 require 'RMagick'
 require 'rsvg2'
+require 'base64'
 
 require_relative '../frame'
 require_relative 'abstract_image_reader'
@@ -35,8 +36,8 @@ module Phantom
             frame.width = "#{img.columns}px"
             frame.height = "#{img.rows}px"
             frame.viewbox.set_from_text("0 0 #{img.columns} #{img.rows}")
-            frame.surfaces = create_surfaces(path, img.columns, img.rows)
-            frame.duration = img.delay * 10.0 unless img.delay.nil?
+            frame.surfaces = create_surfaces(img)
+            frame.duration = img.delay * 0.1 unless img.delay.nil?
             frame.namespaces = {
               'xmlns' => 'http://www.w3.org/2000/svg',
               'xlink' => 'http://www.w3.org/1999/xlink'
@@ -47,15 +48,15 @@ module Phantom
         end
 
         # Create surfaces.
-        def create_surfaces(path, width, height)
-          bin = File.binread(path)
-          base64 = [bin].pack('m')
+        def create_surfaces(img)
+          img.format = 'PNG'
+          base64 = Base64.encode64(img.to_blob)
 
           image = REXML::Element.new('image')
           image.add_attributes(
-            'width' => width,
-            'height' => height,
-            'xlink:href' => "data:image/gif;base64,#{base64}"
+            'width' => img.columns,
+            'height' => img.rows,
+            'xlink:href' => "data:image/png;base64,#{base64}"
           )
 
           [image]
