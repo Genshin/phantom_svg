@@ -1,12 +1,12 @@
 Gem::Specification.new do |s|
   s.platform      = Gem::Platform::RUBY
   s.name          = 'phantom_svg'
-  s.version       = '1.0.5'
-  s.license       = 'LGPL-3.0'
+  s.version       = '1.1.0'
+  s.license       = 'LGPL-3'
   s.summary       = 'Hight end SVG manipulation tools for Ruby'
   s.description   = 'Hight end SVG manipulation tools for Ruby.\n' \
                     'Includes chained keyframe generation, (A)PNG conversion and more.'
-  s.authors      = ['Rika Yoshida', 'Rei Kagetsuki', 'Naoki Iwakawa']
+  s.authors      = ['Rika Yoshida', 'Naoki Iwakawa', 'Rei Kagetsuki']
   s.email        = 'info@genshin.org'
   s.homepage     = 'http://github.com/Genshin/phantom_svg'
 
