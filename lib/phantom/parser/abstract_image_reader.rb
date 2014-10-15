@@ -13,7 +13,7 @@ module Phantom
         end
 
         # Read image file from path.
-        def read(path, options = {})
+        def read(_path, _options = {})
           fail 'Called abstract method.'
         end
 

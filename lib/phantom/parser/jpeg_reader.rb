@@ -10,7 +10,7 @@ module Phantom
       # JPEG reader.
       class JPEGReader < AbstractImageReader
         # Read jpeg file from path.
-        def read(path, options = {})
+        def read(path, _options = {})
           reset
 
           return if path.nil? || path.empty?
@@ -33,11 +33,8 @@ module Phantom
           frame.viewbox.set_from_text("0 0 #{pixbuf.width} #{pixbuf.height}")
           frame.surfaces = create_surfaces(path, pixbuf.width, pixbuf.height)
           frame.duration = duration unless duration.nil?
-          frame.namespaces = {
-            'xmlns' => 'http://www.w3.org/2000/svg',
-            'xlink' => 'http://www.w3.org/1999/xlink'
-          }
-
+          frame.namespaces = { 'xmlns' => 'http://www.w3.org/2000/svg',
+                               'xlink' => 'http://www.w3.org/1999/xlink' }
           frame
         end
 

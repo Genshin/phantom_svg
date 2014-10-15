@@ -13,7 +13,7 @@ module Phantom
       class GIFReader < AbstractImageReader
         include Magick
         # Read gif file from path.
-        def read(path, options = {})
+        def read(path, _options = {})
           reset
 
           return if path.nil? || path.empty?
@@ -27,24 +27,27 @@ module Phantom
         private
 
         # Create frames for each frame in the gif.
-        def create_frames(path, duration = nil)
+        def create_frames(path, _duration = nil)
           frames = []
           lst = ImageList.new path
 
           lst.each do |img|
-            frame = Phantom::SVG::Frame.new
-            frame.width = "#{img.columns}px"
-            frame.height = "#{img.rows}px"
-            frame.viewbox.set_from_text("0 0 #{img.columns} #{img.rows}")
-            frame.surfaces = create_surfaces(img)
-            frame.duration = img.delay * 0.1 unless img.delay.nil?
-            frame.namespaces = {
-              'xmlns' => 'http://www.w3.org/2000/svg',
-              'xlink' => 'http://www.w3.org/1999/xlink'
-            }
+            frame = set_param(img)
             frames << frame
           end
-         frames
+          frames
+        end
+
+        def set_param(img)
+          frame = Phantom::SVG::Frame.new
+          frame.width = "#{img.columns}px"
+          frame.height = "#{img.rows}px"
+          frame.viewbox.set_from_text("0 0 #{img.columns} #{img.rows}")
+          frame.surfaces = create_surfaces(img)
+          frame.duration = img.delay * 0.1 unless img.delay.nil?
+          frame.namespaces = { 'xmlns' => 'http://www.w3.org/2000/svg',
+                               'xlink' => 'http://www.w3.org/1999/xlink' }
+          frame
         end
 
         # Create surfaces.

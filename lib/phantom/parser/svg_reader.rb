@@ -47,18 +47,34 @@ module Phantom
 
         # Read size from node to dest.
         def read_size(node, dest, options = {})
-          dest.viewbox.set_from_text(choice_value(node.attributes['viewBox'], options[:viewbox]).to_s) unless node.attributes['viewBox'].nil?
+          set_view_box(node, dest, options)
+          set_width(node, dest, options)
+          set_height(node, dest, options)
+        end
 
+        def set_view_box(node, dest, options = {})
+          return if node.attributes['viewBox'].nil?
+          dest.viewbox.set_from_text(choice_value(node.attributes['viewBox'],
+                                                  options[:viewbox]).to_s)
+        end
+
+        def set_width(node, dest, options = {})
           if node.attributes['width'].nil?
-            dest.instance_variable_set(:@width, choice_value("#{dest.viewbox.width}px", options[:width]))
+            dest.instance_variable_set(:@width,
+                                       choice_value("#{dest.viewbox.width}px", options[:width]))
           else
-            dest.instance_variable_set(:@width, choice_value(node.attributes['width'], options[:width]))
+            dest.instance_variable_set(:@width,
+                                       choice_value(node.attributes['width'], options[:width]))
           end
+        end
 
+        def set_height(node, dest, options = {})
           if node.attributes['height'].nil?
-            dest.instance_variable_set(:@height, choice_value("#{dest.viewbox.height}px", options[:height]))
+            dest.instance_variable_set(:@height,
+                                       choice_value("#{dest.viewbox.height}px", options[:height]))
           else
-            dest.instance_variable_set(:@height, choice_value(node.attributes['height'], options[:height]))
+            dest.instance_variable_set(:@height,
+                                       choice_value(node.attributes['height'], options[:height]))
           end
         end
 

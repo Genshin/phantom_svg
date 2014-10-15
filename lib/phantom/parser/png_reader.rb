@@ -13,7 +13,7 @@ module Phantom
       # PNG reader.
       class PNGReader < AbstractImageReader
         # Read png file from path.
-        def read(path, options = {})
+        def read(path, _options = {})
           reset
 
           return if path.nil? || path.empty?
@@ -40,16 +40,7 @@ module Phantom
         def read_apng(apngasm)
           @width = @height = 0
           Dir.mktmpdir(nil, File.dirname(__FILE__)) do |dir|
-            # Create temporary file.
-            apngasm.save_pngs(dir)
-
-            # Create frames.
-            apngasm.get_frames.each_with_index do |png_frame, index|
-              @width = png_frame.width if @width < png_frame.width
-              @height = png_frame.height if @height < png_frame.height
-              duration = png_frame.delay_numerator.to_f / png_frame.delay_denominator.to_f
-              @frames << create_frame("#{dir}/#{index}.png", duration)
-            end
+            set_frame(apngasm, dir)
           end
 
           @width = "#{@width}px"
@@ -59,21 +50,36 @@ module Phantom
           @has_animation = true
         end
 
+        def set_frame(apngasm, dir)
+          # Create temporary file.
+          apngasm.save_pngs(dir)
+
+          # Create frames.
+          apngasm.get_frames.each_with_index do |png_frame, index|
+            @width = png_frame.width if @width < png_frame.width
+            @height = png_frame.height if @height < png_frame.height
+            duration = png_frame.delay_numerator.to_f / png_frame.delay_denominator.to_f
+            @frames << create_frame("#{dir}/#{index}.png", duration)
+          end
+        end
+
         # Create frame.
         def create_frame(path, duration = nil)
           pixbuf = Gdk::Pixbuf.new(path)
+          frame = set_param(path, pixbuf, duration)
 
+          frame
+        end
+
+        def set_param(path, pixbuf, duration)
           frame = Phantom::SVG::Frame.new
           frame.width = "#{pixbuf.width}px"
           frame.height = "#{pixbuf.height}px"
           frame.viewbox.set_from_text("0 0 #{pixbuf.width} #{pixbuf.height}")
           frame.surfaces = create_surfaces(path, pixbuf.width, pixbuf.height)
           frame.duration = duration unless duration.nil?
-          frame.namespaces = {
-            'xmlns' => 'http://www.w3.org/2000/svg',
-            'xlink' => 'http://www.w3.org/1999/xlink'
-          }
-
+          frame.namespaces = { 'xmlns' => 'http://www.w3.org/2000/svg',
+                               'xlink' => 'http://www.w3.org/1999/xlink' }
           frame
         end
 
@@ -91,7 +97,6 @@ module Phantom
 
           [image]
         end
-
       end # class PNGReader
     end # Parser
   end # SVG

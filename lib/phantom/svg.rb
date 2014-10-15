@@ -30,15 +30,19 @@ module Phantom
 
       def add_frame_from_file(path, options = {})
         create_file_list(path).each do |file|
-          case File.extname(file)
-          when '.svg'   then  load_from_svg(file, options)
-          when '.png'   then  load_from_png(file, options)
-          when '.jpg'   then  load_from_jpeg(file, options)
-          when '.jpeg'  then  load_from_jpeg(file, options)
-          when '.gif'   then  load_from_gif(file, options)
-          when '.json'  then  load_from_json(file, options)
-          when '.xml'   then  load_from_xml(file, options)
-          end
+          load_file(file, options)
+        end
+      end
+
+      def load_file(file, options)
+        case File.extname(file)
+        when '.svg'   then  load_from_svg(file, options)
+        when '.png'   then  load_from_png(file, options)
+        when '.jpg'   then  load_from_jpeg(file, options)
+        when '.jpeg'  then  load_from_jpeg(file, options)
+        when '.gif'   then  load_from_gif(file, options)
+        when '.json'  then  load_from_json(file, options)
+        when '.xml'   then  load_from_xml(file, options)
         end
       end
 
@@ -53,9 +57,13 @@ module Phantom
       end
 
       def set_size(width = nil, height = nil)
-        # width
-        if width.nil? then
-          if @width.nil? || @width == 0 then
+        set_width(width)
+        set_height(height)
+      end
+
+      def set_width(width)
+        if width.nil?
+          if @width.nil? || @width == 0
             frames.each do |frame|
               @width = frame.width.to_i if frame.width.to_i > @width
             end
@@ -63,10 +71,11 @@ module Phantom
         else
           @width = width
         end
+      end
 
-        # height
-        if height.nil? then
-          if @height.nil? || @height == 0 then
+      def set_height(height)
+        if height.nil?
+          if @height.nil? || @height == 0
             frames.each do |frame|
               @height = frame.height.to_i if frame.height.to_i > @height
             end
@@ -178,7 +187,7 @@ module Phantom
         load_from_reader(Parser::XMLAnimationReader.new(path), options)
       end
 
-      def load_from_reader(reader, options)
+      def load_from_reader(reader, _options)
         if @frames.empty?
           @loops = reader.loops
           @skip_first = reader.skip_first
