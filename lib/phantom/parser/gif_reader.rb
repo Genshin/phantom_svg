@@ -44,7 +44,7 @@ module Phantom
           frame.height = "#{img.rows}px"
           frame.viewbox.set_from_text("0 0 #{img.columns} #{img.rows}")
           frame.surfaces = create_surfaces(img)
-          frame.duration = img.delay * 0.1 unless img.delay.nil?
+          frame.duration = img.delay * 0.01 unless img.delay.nil?
           frame.namespaces = { 'xmlns' => 'http://www.w3.org/2000/svg',
                                'xlink' => 'http://www.w3.org/1999/xlink' }
           frame
