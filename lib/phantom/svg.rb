@@ -129,14 +129,6 @@ module Phantom
         result
       end
 
-      def run_gc
-        @frames = nil
-
-        disabled = GC.enable
-        GC.start
-        GC.disable if disabled
-      end
-
       private
 
       def load_from_svg(path, options)
