@@ -463,6 +463,7 @@ describe Phantom::SVG::Base do
       expect(@loader.width).to eq('64px')
       expect(@loader.height).to eq('64px')
       expect(@loader.loops).to eq(0)
+      expect(@loader.skip_first).to eq(true)
     end
 
     it 'loads an animation spec from a JSON.' do
