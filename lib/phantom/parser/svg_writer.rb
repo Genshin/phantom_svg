@@ -86,7 +86,7 @@ module Phantom
 
         # Write surfaces to dest.
         def write_surfaces(surfaces, dest)
-          surfaces.each { |surface| dest.add_element(surface) }
+          surfaces.each { |surface| dest.add_element(Marshal.load(Marshal.dump(surface))) }
         end
 
         # Write image.
@@ -98,6 +98,7 @@ module Phantom
           svg.add_attribute('preserveAspectRatio', 'none')
           write_namespaces(frame, svg)
           write_surfaces(frame.surfaces, svg)
+          convert_id_to_unique(svg, "#{id}_") unless id.nil?
         end
 
         # Write images.
@@ -161,6 +162,37 @@ module Phantom
           use.add_element('set',  'attributeName' => 'xlink:href',
                                   'to' => "#frame#{base.frames.length - 1}",
                                   'begin' => 'controller.end')
+        end
+
+        # Convert id.
+        def convert_id_to_unique(root_node, prefix)
+          id_array = []
+          overwrite_id(root_node, prefix, id_array)
+          overwrite_relative_id(root_node, prefix, id_array)
+        end
+
+        # Overwrite id in surfaces.
+        def overwrite_id(parent_node, prefix, out_id_array)
+          parent_node.elements.each do |child|
+            old_id = child.attributes['id']
+            unless old_id.nil?
+              out_id_array << old_id
+              child.add_attribute('id', "#{prefix}#{old_id}")
+            end
+            overwrite_id(child, prefix, out_id_array)
+          end
+        end
+
+        # Overwrite relative id in surfaces.
+        def overwrite_relative_id(parent_node, prefix, id_array)
+          parent_node.elements.each do |child|
+            child.attributes.each do |key, val|
+              id_array.each do |id|
+                val.gsub!("##{id}", "##{prefix}#{id}")
+              end
+            end
+            overwrite_relative_id(child, prefix, id_array)
+          end
         end
       end # class SVGWriter
     end # module Parser
