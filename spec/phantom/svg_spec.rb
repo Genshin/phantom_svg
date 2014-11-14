@@ -564,4 +564,23 @@ describe Phantom::SVG::Base do
       expect(write_size).not_to eq(0)
     end
   end
+
+  describe 'output test' do
+    before(:all) do
+      @source_dir = SPEC_SOURCE_DIR
+      @destination_dir = SPEC_TEMP_DIR
+    end
+
+    before do
+      @loader = Phantom::SVG::Base.new
+    end
+
+    it 'output animation svg has gradation.' do
+      test_name = 'gradation_test'
+      source = "#{@source_dir}/#{test_name}/animation.json"
+      destination = "#{@destination_dir}/#{test_name}.svg"
+      @loader.add_frame_from_file(source)
+      @loader.save_svg(destination)
+    end
+  end
 end
