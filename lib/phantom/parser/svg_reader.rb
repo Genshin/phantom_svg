@@ -103,13 +103,17 @@ module Phantom
 
         # Read skip_first.
         def read_skip_first
-          @skip_first = @root.elements['svg/defs/symbol/use'].attributes['xlink:href'] != '#frame0'
+          use = @root.elements['svg/defs/symbol/use']
+          @skip_first = use.nil? ? @frames.size > 1 : use.attributes['xlink:href'] != '#frame0'
         end
 
         # Read frame durations.
         def read_durations(options)
+          symbol = @root.elements['svg/defs/symbol']
+          return if symbol.nil?
+
           i = @skip_first ? 1 : 0
-          @root.elements['svg/defs/symbol'].elements.each('use') do |use|
+          symbol.elements.each('use') do |use|
             duration = use.elements['set'].attributes['dur'].to_f
             @frames[i].duration = choice_value(duration, options[:duration])
             i += 1
@@ -118,7 +122,8 @@ module Phantom
 
         # Read animation loop count.
         def read_loops
-          @loops = @root.elements['svg/animate'].attributes['repeatCount'].to_i
+          animate = @root.elements['svg/animate']
+          @loops = animate.nil? ? 0 : animate.attributes['repeatCount'].to_i
         end
 
         # Helper method.

@@ -113,6 +113,8 @@ module Phantom
 
         # Write animation.
         def write_animation(base, parent_node)
+          return if base.skip_first == true && base.frames.size == 2
+
           REXML::Comment.new(' Animation. ', parent_node)
           symbol = parent_node.add_element('symbol', 'id' => 'animation')
 
@@ -141,8 +143,12 @@ module Phantom
         def write_show_control(base, parent_node)
           REXML::Comment.new(' Main control. ', parent_node)
 
-          write_show_control_header(base, parent_node)
-          write_show_control_main(base, parent_node)
+          if base.skip_first == true && base.frames.size == 2
+            write_show_control_main_2(base, parent_node)
+          else
+            write_show_control_header(base, parent_node)
+            write_show_control_main(base, parent_node)
+          end
         end
 
         # Write show control header.
@@ -166,6 +172,15 @@ module Phantom
           use.add_element('set',  'attributeName' => 'xlink:href',
                                   'to' => "#frame#{base.frames.length - 1}",
                                   'begin' => 'controller.end')
+        end
+
+        # Write show control main.
+        def write_show_control_main_2(base, parent_node)
+          use = parent_node.add_element('use', 'xlink:href' => '#frame0')
+
+          use.add_element('set',  'attributeName' => 'xlink:href',
+                                  'to' => "#frame1",
+                                  'begin' => '0s')
         end
 
         # Convert id.
