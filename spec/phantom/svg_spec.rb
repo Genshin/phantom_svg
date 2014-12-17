@@ -590,5 +590,14 @@ describe Phantom::SVG::Base do
       @loader.add_frame_from_file(source)
       @loader.save_svg(destination)
     end
+
+    it 'output no animation and has skip frame svg.' do
+      test_name = 'no_animation_and has_skip_frame_test'
+      destination = "#{@destination_dir}/#{test_name}.svg"
+      @loader.add_frame_from_file("#{@source_dir}/test_frames/0.svg")
+      @loader.add_frame_from_file("#{@source_dir}/gradation_test/0.svg")
+      @loader.skip_first = true
+      @loader.save_svg(destination)
+    end
   end
 end
