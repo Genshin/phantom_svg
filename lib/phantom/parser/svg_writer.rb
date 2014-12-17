@@ -17,7 +17,11 @@ module Phantom
           reset
 
           # Parse object.
-          if object.is_a?(Base)     then  write_animation_svg(object)
+          if object.is_a?(Base)
+            if object.frames.size == 1    then  write_svg(object.frames[0])
+            elsif object.frames.size > 1  then  write_animation_svg(object)
+            else                                return 0
+            end
           elsif object.is_a?(Frame) then  write_svg(object)
           else                            return 0
           end
