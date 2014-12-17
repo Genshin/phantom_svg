@@ -582,5 +582,13 @@ describe Phantom::SVG::Base do
       @loader.add_frame_from_file(source)
       @loader.save_svg(destination)
     end
+
+    it 'output no animation svg.' do
+      test_name = 'no_animation_test'
+      source = "#{@source_dir}/gradation_test/0.svg"
+      destination = "#{@destination_dir}/#{test_name}.svg"
+      @loader.add_frame_from_file(source)
+      @loader.save_svg(destination)
+    end
   end
 end
