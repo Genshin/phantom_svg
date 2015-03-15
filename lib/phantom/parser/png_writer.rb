@@ -43,7 +43,11 @@ module Phantom
         def create_temporary_file(path, frame, width, height)
           Parser::SVGWriter.new.write("#{path}.svg", frame)
 
-          handle = RSVG::Handle.new_from_file("#{path}.svg")
+          #  !!Begin temporary fix
+          handle = RSVG::Handle.new
+          File.open("#{path}.svg", "rb") do |file|
+            handle.write(file.read)
+          end
           Cairo::ImageSurface.new(Cairo::FORMAT_ARGB32, width, height) do |surface|
             Cairo::Context.new(surface) do |context|
               context.scale(width.to_f / handle.dimensions.width,
@@ -54,6 +58,21 @@ module Phantom
             end
           end
           handle.close
+          #  !!End temporary fix
+          # While waiting for the next update of rsvg, the code below has been commented out
+          # once rsvg2 has been updated the code above should be switched for this
+          #
+          # handle = RSVG::Handle.new_from_file("#{path}.svg")
+          # Cairo::ImageSurface.new(Cairo::FORMAT_ARGB32, width, height) do |surface|
+          #   Cairo::Context.new(surface) do |context|
+          #     context.scale(width.to_f / handle.dimensions.width,
+          #                   height.to_f / handle.dimensions.height)
+          #     context.render_rsvg_handle(handle)
+          #     surface.write_to_png("#{path}.png")
+          #     surface.finish
+          #   end
+          # end
+          # handle.close
         end
       end # class PNGWriter
     end # module Parser

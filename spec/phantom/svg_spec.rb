@@ -601,31 +601,32 @@ describe Phantom::SVG::Base do
     end
   end
 
-  # describe 'leak test' do
-  #   before(:all) do
-  #     @source_dir = SPEC_SOURCE_DIR
-  #     @destination_dir = SPEC_TEMP_DIR
-  #   end
+  describe 'leak test' do
+    before(:all) do
+      @source_dir = SPEC_SOURCE_DIR
+      @destination_dir = SPEC_TEMP_DIR
+    end
 
-  #   it 'save_apng' do
-  #     source = "#{@source_dir}/gradation_test/animation.json"
-  #     destination = "#{@destination_dir}/leak_test.png"
+    xit 'save_apng' do
+      source = "#{@source_dir}/gradation_test/animation.json"
+      destination = "#{@destination_dir}/leak_test.png"
 
-  #     loop_count = 300
-  #     print_interval = (loop_count / 100).to_i
-  #     cr_interval = (loop_count / 10).to_i
+      loop_count = 300
+      print_interval = (loop_count / 100).to_i
+      cr_interval = (loop_count / 10).to_i
 
-  #     loader = Phantom::SVG::Base.new(source)
+      loader = Phantom::SVG::Base.new(source)
 
-  #     loop_count.times do |i|
-  #       loader.save_apng(destination)
+      loop_count.times do |i|
+        loader.save_apng(destination)
 
-  #       GC.start
+        GC.start
 
-  #       print '.' if ((i+1) % print_interval) == 0
-  #       print '|' if ((i+1) % cr_interval) == 0
-  #     end
-  #   end
+        print '.' if ((i+1) % print_interval) == 0
+        print '|' if ((i+1) % cr_interval) == 0
+      end
+    end
+  end
 
   #   # it 'simple test' do
   #   #   source = "#{@source_dir}/gradation_test/0.svg"
