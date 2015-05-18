@@ -514,6 +514,12 @@ describe Phantom::SVG::Base do
       @loader = Phantom::SVG::Base.new
     end
 
+    it 'loads reguardless of case' do
+      @loader.add_frame_from_file("#{SPEC_SOURCE_DIR}/uppercase.JPG")
+      write_size = @loader.save_svg("#{@destination_dir}/uppercase.svg")
+      expect(write_size).not_to eq(0)
+    end
+
     it 'loads frames.' do
       test_name = 'jpeg_test'
       @loader.add_frame_from_file("#{@source_dir}/*.jpg")

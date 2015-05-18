@@ -35,7 +35,7 @@ module Phantom
       end
 
       def load_file(file, options)
-        case File.extname(file)
+        case File.extname(file).downcase
         when '.svg'   then  load_from_svg(file, options)
         when '.png'   then  load_from_png(file, options)
         when '.jpg'   then  load_from_jpeg(file, options)
