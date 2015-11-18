@@ -1,6 +1,6 @@
 
 require 'tmpdir'
-require 'rapngasm'
+require 'RAPNGAsm'
 require 'cairo'
 
 require_relative 'svg_writer.rb'
@@ -18,7 +18,7 @@ module Phantom
 
           object.set_size
 
-          apngasm = APNGAsm.new
+          apngasm = APNGAsm::APNGAsm.new
           convert_frames(apngasm, object)
           result = apngasm.assemble(path)
 
@@ -35,7 +35,7 @@ module Phantom
             object.frames.each_with_index do |frame, index|
               tmp_file_path = "#{dir}/tmp#{index}"
               create_temporary_file(tmp_file_path, frame, object.width.to_i, object.height.to_i)
-              apngasm.add_frame_file("#{tmp_file_path}.png", frame.duration.to_f * 1000, 1000)
+              apngasm.add_frame_file("#{tmp_file_path}.png", (frame.duration.to_f * 1000).to_i, 1000)
             end
           end
         end

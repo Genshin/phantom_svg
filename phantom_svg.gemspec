@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.requirements << 'libapngasm'
 
   s.add_dependency 'cairo', '~> 1.14', '~> 1.14.1'
-  s.add_dependency 'rapngasm', '~> 3.1', '~> 3.1.6'
+#  s.add_dependency 'rapngasm', '~> 3.1', '~> 3.1.6'
   s.add_dependency 'rsvg2', '~> 2.2', '~> 2.2.5'
   s.add_dependency 'rmagick', '~> 2.15', '~> 2.15.0'
 end

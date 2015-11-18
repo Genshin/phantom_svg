@@ -1,5 +1,5 @@
 
-require 'rapngasm'
+require 'RAPNGAsm'
 require 'rsvg2'
 require 'tmpdir'
 require 'rexml/document'
@@ -18,7 +18,7 @@ module Phantom
 
           return if path.nil? || path.empty?
 
-          apngasm = APNGAsm.new
+          apngasm = APNGAsm::APNGAsm.new
           apngasm.disassemble(path)
 
           if apngasm.frame_count == 1
