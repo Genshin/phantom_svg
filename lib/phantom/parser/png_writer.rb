@@ -1,6 +1,5 @@
-
 require 'tmpdir'
-require 'RAPNGAsm'
+require 'rapngasm'
 require 'cairo'
 
 require_relative 'svg_writer.rb'

@@ -1,5 +1,4 @@
-
-require 'RAPNGAsm'
+require 'rapngasm'
 require 'rsvg2'
 require 'tmpdir'
 require 'rexml/document'
