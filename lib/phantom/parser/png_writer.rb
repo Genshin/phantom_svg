@@ -18,7 +18,7 @@ module Phantom
 
           object.set_size
 
-          apngasm = APNGAsm::APNGAsm.new
+          apngasm = APNG::APNGAsm.new
           convert_frames(apngasm, object)
           result = apngasm.assemble(path)
 

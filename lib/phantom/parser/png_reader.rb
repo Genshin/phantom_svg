@@ -18,7 +18,7 @@ module Phantom
 
           return if path.nil? || path.empty?
 
-          apngasm = APNGAsm::APNGAsm.new
+          apngasm = APNG::APNGAsm.new
           apngasm.disassemble(path)
 
           if apngasm.frame_count == 1
