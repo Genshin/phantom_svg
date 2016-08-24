@@ -25,7 +25,7 @@ module Phantom
 
         # Create frame.
         def create_frame(path, duration = nil)
-          pixbuf = Gdk::Pixbuf.new(path)
+          pixbuf = Gdk::Pixbuf.new(file: path)
 
           frame = Phantom::SVG::Frame.new
           frame.width = "#{pixbuf.width}px"

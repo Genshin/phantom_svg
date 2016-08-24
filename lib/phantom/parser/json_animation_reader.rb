@@ -1,4 +1,3 @@
-
 require 'json'
 
 require_relative '../frame.rb'

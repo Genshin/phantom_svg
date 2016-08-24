@@ -1,4 +1,3 @@
-
 module Phantom
   module SVG
     # Frame class for "Key Frames" implementation in SVG

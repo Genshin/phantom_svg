@@ -64,7 +64,7 @@ module Phantom
 
         # Create frame.
         def create_frame(path, duration = nil)
-          pixbuf = Gdk::Pixbuf.new(path)
+          pixbuf = Gdk::Pixbuf.new(file: path)
           frame = set_param(path, pixbuf, duration)
 
           frame

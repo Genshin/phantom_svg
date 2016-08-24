@@ -1,4 +1,3 @@
-
 require_relative 'svg_reader.rb'
 
 module Phantom

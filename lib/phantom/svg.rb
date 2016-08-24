@@ -1,4 +1,3 @@
-
 require_relative 'frame'
 require_relative 'parser/png_reader'
 require_relative 'parser/png_writer'

@@ -1,4 +1,3 @@
-
 module Phantom
   module SVG
     module Parser
