@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.platform      = Gem::Platform::RUBY
   s.name          = 'phantom_svg'
-  s.version       = '1.2.4'
+  s.version       = '1.2.3'
   s.license       = 'LGPL-3.0'
   s.summary       = 'Hight end SVG manipulation tools for Ruby'
   s.description   = 'Hight end SVG manipulation tools for Ruby.\n' \
@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
 
   s.requirements << 'libapngasm'
 
-  #s.add_dependency 'gobject-introspection', '~> 3.0', '~> 3.0.9'
+  s.add_dependency 'gobject-introspection', '~> 3.0', '~> 3.0.9'
   s.add_dependency 'gio2', '~> 3.0', '~> 3.0.9'
   s.add_dependency 'cairo', '~> 1.15', '~> 1.15.2'
   s.add_dependency 'rapngasm', '~> 3.2', '~> 3.2.0'
