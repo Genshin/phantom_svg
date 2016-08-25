@@ -2,7 +2,7 @@ Gem::Specification.new do |s|
   s.platform      = Gem::Platform::RUBY
   s.name          = 'phantom_svg'
   s.version       = '1.2.3'
-  s.license       = 'LGPL-3'
+  s.license       = 'LGPL-3.0'
   s.summary       = 'Hight end SVG manipulation tools for Ruby'
   s.description   = 'Hight end SVG manipulation tools for Ruby.\n' \
                     'Includes chained keyframe generation, (A)PNG conversion and more.'
