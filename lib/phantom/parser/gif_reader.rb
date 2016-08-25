@@ -1,5 +1,5 @@
 require 'rexml/document'
-require 'RMagick'
+require 'rmagick'
 require 'rsvg2'
 require 'base64'
 
