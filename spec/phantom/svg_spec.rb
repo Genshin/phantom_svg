@@ -613,7 +613,7 @@ describe Phantom::SVG::Base do
       @destination_dir = SPEC_TEMP_DIR
     end
 
-    it 'combine non-animated svg.' do
+    it 'combine non-animated images.' do
       source1 = "#{@source_dir}/combine_test/dad_01(p).svg"
       source2 = "#{@source_dir}/combine_test/mom_01.svg"
       source3 = "#{@source_dir}/combine_test/boy_01(p).svg"
@@ -622,6 +622,16 @@ describe Phantom::SVG::Base do
       loader = Phantom::SVG::Base.new(source1)
       loader.combine(source2)
       loader.combine(source3)
+      loader.save_svg(destination)
+    end
+
+    it 'combine animated images.' do
+      source1 = "#{@source_dir}/compiled.svg"
+      source2 = "#{@source_dir}/apngasm.gif"
+      destination = "#{@destination_dir}/combined_anim.svg"
+
+      loader = Phantom::SVG::Base.new(source1)
+      loader.combine(source2)
       loader.save_svg(destination)
     end
   end
