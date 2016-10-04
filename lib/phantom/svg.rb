@@ -128,6 +128,20 @@ module Phantom
         result
       end
 
+      # Combine image.
+      def combine(path)
+        src = Base.new(path)
+
+        if @width != src.width || @height != src.height
+          STDERR.puts "Can't combine source images of different sizes."
+          return
+        end
+
+        return if @frames.length != 1 || src.frames.length != 1
+
+        @frames[0].surfaces += src.frames[0].surfaces
+      end
+
       private
 
       def load_from_svg(path, options)
