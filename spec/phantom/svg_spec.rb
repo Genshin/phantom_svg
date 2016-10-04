@@ -607,6 +607,25 @@ describe Phantom::SVG::Base do
     end
   end
 
+  describe 'combine test' do
+    before(:all) do
+      @source_dir = SPEC_SOURCE_DIR
+      @destination_dir = SPEC_TEMP_DIR
+    end
+
+    it 'combine non-animated svg.' do
+      source1 = "#{@source_dir}/combine_test/dad_01(p).svg"
+      source2 = "#{@source_dir}/combine_test/mom_01.svg"
+      source3 = "#{@source_dir}/combine_test/boy_01(p).svg"
+      destination = "#{@destination_dir}/combined.svg"
+
+      loader = Phantom::SVG::Base.new(source1)
+      loader.combine(source2)
+      loader.combine(source3)
+      loader.save_svg(destination)
+    end
+  end
+
   describe 'leak test' do
     before(:all) do
       @source_dir = SPEC_SOURCE_DIR
