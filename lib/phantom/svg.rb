@@ -133,7 +133,7 @@ module Phantom
         src = Base.new(path)
 
         if @width != src.width || @height != src.height
-          STDERR.puts "Can't combine source images of different sizes."
+          fail "Can't combine source images of different sizes."
           return
         end
 
