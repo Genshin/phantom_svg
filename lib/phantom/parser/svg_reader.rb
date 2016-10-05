@@ -31,6 +31,8 @@ module Phantom
         # Read no animation svg.
         def read_svg(options)
           read_images(@root, options)
+          @width = @frames.first.width
+          @height = @frames.first.height
         end
 
         # Read animation svg.

@@ -146,50 +146,66 @@ module Phantom
 
       def load_from_svg(path, options)
         reader = Parser::SVGReader.new(path, options)
+        
         if reader.has_animation?
-          @width = reader.width
-          @height = reader.height
           @loops = reader.loops
           @skip_first = reader.skip_first
+        else
+          @loops = 0
+          @skip_first = false
         end
 
         @frames += reader.frames
+        @width = reader.width
+        @height = reader.height
       end
 
       def load_from_png(path, options)
         reader = Parser::PNGReader.new(path, options)
+        
         if reader.has_animation?
-          @width = reader.width
-          @height = reader.height
           @loops = reader.loops
           @skip_first = reader.skip_first
+        else
+          @loops = 0
+          @skip_first = false
         end
 
         @frames += reader.frames
+        @width = reader.width
+        @height = reader.height
       end
 
       def load_from_jpeg(path, options)
         reader = Parser::JPEGReader.new(path, options)
+        
         if reader.has_animation?
-          @width = reader.width
-          @height = reader.height
           @loops = reader.loops
           @skip_first = reader.skip_first
+        else
+          @loops = 0
+          @skip_first = false
         end
 
         @frames += reader.frames
+        @width = reader.width
+        @height = reader.height
       end
 
       def load_from_gif(path, option)
         reader = Parser::GIFReader.new(path, option)
+        
         if reader.has_animation?
-          @width = reader.width
-          @height = reader.height
           @loops = reader.loops
           @skip_first = reader.skip_first
+        else
+          @loops = 0
+          @skip_first = false
         end
 
         @frames += reader.frames
+        @width = reader.width
+        @height = reader.height
       end
 
       def load_from_json(path, options)

@@ -32,8 +32,8 @@ module Phantom
         def read_png(path)
           frame = create_frame(path)
           @frames << frame
-          @width = "#{frame.width}px"
-          @height = "#{frame.height}px"
+          @width = "#{frame.width}"
+          @height = "#{frame.height}"
         end
 
         def read_apng(apngasm)

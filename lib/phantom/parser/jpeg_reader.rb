@@ -17,8 +17,8 @@ module Phantom
 
           frame = create_frame(path)
           @frames << frame
-          @width = "#{frame.width}px"
-          @height = "#{frame.height}px"
+          @width = "#{frame.width}"
+          @height = "#{frame.height}"
         end
 
         private

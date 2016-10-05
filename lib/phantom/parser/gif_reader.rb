@@ -20,8 +20,11 @@ module Phantom
 
           frames = create_frames(path)
           @frames += frames
-          @width = "#{frames.first.width}px"
-          @height = "#{frames.first.height}px"
+          @width = "#{frames.first.width}"
+          @height = "#{frames.first.height}"
+          @loops = 0
+          @skip_first = false
+          @has_animation = true
         end
 
         private
@@ -35,6 +38,7 @@ module Phantom
             frame = set_param(img)
             frames << frame
           end
+
           frames
         end
 

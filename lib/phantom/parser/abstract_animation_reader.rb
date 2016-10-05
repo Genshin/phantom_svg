@@ -55,6 +55,8 @@ module Phantom
             create_file_list(frame_info[:name]).each do |file|
               reader = Parser::SVGReader.new(file, create_options(i, frame_info[:delay]))
               @frames += reader.frames
+              @width = reader.width if @width.to_i < reader.width.to_i
+              @height = reader.height if @height.to_i < reader.height.to_i
               i += 1
             end
           end
