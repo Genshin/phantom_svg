@@ -137,9 +137,42 @@ module Phantom
           return
         end
 
-        return if @frames.length != 1 || src.frames.length != 1
+        rest_duration = (total_duration * 1000).to_i.lcm((src.total_duration * 1000).to_i)
+        @frames[0].duration = rest_duration * 0.001 if @frames.length == 1
+        src.frames[0].duration = rest_duration * 0.001 if src.frames.length == 1
 
-        @frames[0].surfaces += src.frames[0].surfaces
+        base_i = src_i = -1
+        base_duration = src_duration = 0;
+        base_frame = src_frame = nil
+        new_frames = []
+
+        begin
+          if base_duration == 0
+            base_i = (base_i + 1) % @frames.length
+            base_frame = @frames[base_i]
+            base_duration = (base_frame.duration * 1000).to_i
+          end
+
+          if src_duration == 0
+            src_i = (src_i + 1) % src.frames.length
+            src_frame = src.frames[src_i]
+            src_duration = (src_frame.duration * 1000).to_i
+          end
+
+          elapsed = [base_duration, src_duration].min
+
+          new_frame = base_frame.clone
+          new_frame.duration = elapsed * 0.001
+          new_frame.surfaces += src_frame.surfaces
+          new_frame.namespaces = src_frame.namespaces.merge(new_frame.namespaces)
+          new_frames << new_frame
+
+          base_duration -= elapsed
+          src_duration -= elapsed
+          rest_duration -= elapsed
+        end while rest_duration > 0
+
+        @frames = new_frames
       end
 
       private
