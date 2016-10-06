@@ -626,8 +626,8 @@ describe Phantom::SVG::Base do
     end
 
     it 'combine animated images.' do
-      source1 = "#{@source_dir}/compiled.svg"
-      source2 = "#{@source_dir}/apngasm.gif"
+      source1 = "#{@source_dir}/apngasm.png"
+      source2 = "#{@source_dir}/compiled.svg"
       destination = "#{@destination_dir}/combined_anim.svg"
 
       loader = Phantom::SVG::Base.new(source1)
