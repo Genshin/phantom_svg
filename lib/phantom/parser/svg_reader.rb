@@ -49,9 +49,9 @@ module Phantom
 
         def _replace_id_refs(id, new_id)
           @root.elements.each("//*") do |element|
-            element.attributes['style'].gsub!(/fill:url\(\##{id}\)/, "fill:url(\##{new_id})") if element.attributes['style'] != nil
-            element.attributes['fill'].gsub!(/\##{id}/, "\##{new_id}") if element.attributes['fill'] != nil
-            element.attributes['xlink:href'].gsub!(/\##{id}/, "\##{new_id}") if element.attributes['xlink:href'] != nil
+            element.attributes['style'].gsub!(/url\(\##{id}\)/, "url(\##{new_id})") if element.attributes['style'] != nil
+            element.attributes['fill'].gsub!(/\##{id}$/, "\##{new_id}") if element.attributes['fill'] != nil
+            element.attributes['xlink:href'].gsub!(/\##{id}$/, "\##{new_id}") if element.attributes['xlink:href'] != nil
           end
         end
 
