@@ -130,7 +130,7 @@ module Phantom
 
       # Combine image.
       def combine(path)
-        src = Base.new(path)
+        src = Base.new(path, {unique_ids: true})
 
         if @width != src.width || @height != src.height
           fail "Can't combine source images of different sizes."

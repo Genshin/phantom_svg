@@ -1,5 +1,6 @@
 
 require 'rexml/document'
+require 'digest/md5'
 
 require_relative '../frame.rb'
 require_relative 'abstract_image_reader.rb'
@@ -15,7 +16,11 @@ module Phantom
 
           return if path.nil? || path.empty?
 
+          @path = path
+          @marker = Digest::MD5.hexdigest(open(@path).read)
+
           @root = REXML::Document.new(open(path))
+          make_ids_unique() if options[:unique_ids] == true
 
           if @root.elements['svg'].attributes['id'] == 'phantom_svg'
             read_animation_svg(options)
@@ -27,6 +32,28 @@ module Phantom
         end
 
         private
+
+        # Make ID's and their references unique so they don't collide with other layers/frames.
+        def make_ids_unique(element_types = ['linearGradient', 'radialGradient'])
+          element_types.each { |element_type| make_id_unique(element_type) }
+        end
+
+        def make_id_unique(element_type)
+          @root.elements.each("//#{element_type}") do |element|
+            id = element.attributes['id']
+            new_id = id + @marker
+            element.attributes['id'] = new_id
+            _replace_id_refs(id, new_id)
+          end
+        end
+
+        def _replace_id_refs(id, new_id)
+          @root.elements.each("//*") do |element|
+            element.attributes['style'].gsub!(/fill:url\(\##{id}\)/, "fill:url(\##{new_id})") if element.attributes['style'] != nil
+            element.attributes['fill'].gsub!(/\##{id}/, "\##{new_id}") if element.attributes['fill'] != nil
+            element.attributes['xlink:href'].gsub!(/\##{id}/, "\##{new_id}") if element.attributes['xlink:href'] != nil
+          end
+        end
 
         # Read no animation svg.
         def read_svg(options)
