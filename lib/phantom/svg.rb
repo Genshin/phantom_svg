@@ -137,9 +137,15 @@ module Phantom
           return
         end
 
-        rest_duration = (total_duration * 1000).to_i.lcm((src.total_duration * 1000).to_i)
-        @frames[0].duration = rest_duration * 0.001 if @frames.length == 1
-        src.frames[0].duration = rest_duration * 0.001 if src.frames.length == 1
+        if @frames.length == 1
+          rest_duration = (src.total_duration * 1000).to_i
+          @frames[0].duration = rest_duration * 0.001
+        elsif src.frames.length == 1
+          rest_duration = (total_duration * 1000).to_i
+          src.frames[0].duration = rest_duration * 0.001
+        else
+          rest_duration = (total_duration * 1000).to_i.lcm((src.total_duration * 1000).to_i)
+        end
 
         base_i = src_i = -1
         base_duration = src_duration = 0;
