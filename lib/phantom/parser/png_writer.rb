@@ -1,6 +1,7 @@
 require 'tmpdir'
 require 'rapngasm'
 require 'cairo'
+require 'cairo-gobject'
 
 require_relative 'svg_writer.rb'
 require_relative 'abstract_image_writer.rb'
