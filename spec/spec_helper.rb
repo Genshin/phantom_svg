@@ -14,6 +14,17 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+require 'test-prof'
+TestProf.configure do |config|
+  # the directory to put artifacts (reports) in ("tmp/test_prof" by default)
+  config.output_dir = "../tmp/test_prof"
+
+  # use unique filenames for reports (by simply appending current timestamp)
+  config.timestamps = true
+
+  # color output
+  config.color = true
+end
 RSpec.configure do |config|
   SPEC_ROOT_DIR = File.dirname(__FILE__)
   SPEC_SOURCE_DIR = SPEC_ROOT_DIR + '/images'
