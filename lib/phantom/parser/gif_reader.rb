@@ -33,6 +33,7 @@ module Phantom
         def create_frames(path, _duration = nil)
           frames = []
           lst = ImageList.new path
+          lst = lst.coalesce
 
           lst.each do |img|
             frame = set_param(img)
