@@ -602,6 +602,37 @@ describe Phantom::SVG::Base do
     end
   end
 
+  describe 'creating an animated SVG file from a COMPLEX PROBLEMATIC GIF file.' do
+    before(:all) do
+      @image_name = 'complex_gif'
+      @source = "#{SPEC_SOURCE_DIR}/#{@image_name}.gif"
+      @destination_dir = SPEC_TEMP_DIR
+    end
+
+    before do
+      @loader = Phantom::SVG::Base.new
+    end
+
+    it 'loads frames / saves to SVG and PNG' do
+      test_name = 'complex_gif_test'
+      @loader.add_frame_from_file(@source)
+      expect(@loader.frames.size).to eq(74)
+      @loader.frames.each do |frame|
+        expect(frame.duration.instance_of?(Float)).to eq(true)
+        expect(frame.width).to eq('450px')
+        expect(frame.height).to eq('450px')
+        expect(frame.surfaces).not_to be_nil
+        expect(frame.surfaces).not_to be_empty
+        expect(frame.surfaces.to_s.length).not_to eq(1)
+        expect(frame.namespaces).not_to be_empty
+      end
+      write_size = @loader.save_svg("#{@destination_dir}/#{test_name}.svg")
+      expect(write_size).not_to eq(0)
+      write_size = @loader.save_apng("#{@destination_dir}/#{test_name}.png")
+      expect(write_size).not_to eq(0)
+    end
+  end
+
   describe 'output test' do
     before(:all) do
       @source_dir = SPEC_SOURCE_DIR
