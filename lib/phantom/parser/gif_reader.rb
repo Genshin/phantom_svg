@@ -23,7 +23,7 @@ module Phantom
           @width = "#{frames.first.width}"
           @height = "#{frames.first.height}"
           @loops = 0
-          @skip_first = false
+          @skip_first = frames[0].duration == 0.0
           @has_animation = true
         end
 
@@ -33,6 +33,7 @@ module Phantom
         def create_frames(path, _duration = nil)
           frames = []
           lst = ImageList.new path
+          lst = lst.coalesce
 
           lst.each do |img|
             frame = set_param(img)
