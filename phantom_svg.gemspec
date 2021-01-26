@@ -15,11 +15,11 @@ Gem::Specification.new do |s|
 
   s.requirements << 'libapngasm'
 
-  s.add_dependency 'gobject-introspection', '~> 3.1', '~> 3.1.6'
-  s.add_dependency 'cairo-gobject', '~> 3.1', '~> 3.1.6'
-  s.add_dependency 'cairo', '~> 1.15', '~> 1.15.9'
-  s.add_dependency 'gio2', '~> 3.1', '~> 3.1.6'
-  s.add_dependency 'rapngasm', '~> 3.2', '~> 3.2.0'
-  s.add_dependency 'rsvg2', '~> 3.1', '~> 3.1.6'
-  s.add_dependency 'rmagick', '~> 2.16', '~> 2.16.0'
+  s.add_dependency 'gobject-introspection', '~> 3.4'
+  s.add_dependency 'cairo-gobject', '~> 3.4'
+  s.add_dependency 'cairo', '~> 1.17'
+  s.add_dependency 'gio2', '~> 3.4'
+  s.add_dependency 'rapngasm', '~> 3.2'
+  s.add_dependency 'rsvg2', '~> 3.4'
+  s.add_dependency 'rmagick', '~> 4.1'
 end
